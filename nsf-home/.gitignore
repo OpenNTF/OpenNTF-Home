@@ -1,0 +1,4 @@
+!*.jar
+!/odp/.project
+!/odp/.classpath
+!/odp/.settings/

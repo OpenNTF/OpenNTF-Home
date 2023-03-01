@@ -1,0 +1,212 @@
+package model.projects;
+
+import java.time.LocalDate;
+import java.time.temporal.Temporal;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
+import org.openntf.xsp.nosql.communication.driver.DominoConstants;
+import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.nosql.mapping.extension.ItemFlags;
+import org.openntf.xsp.nosql.mapping.extension.ItemStorage;
+import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.nosql.mapping.extension.ViewDocuments;
+import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
+
+import bean.EncoderBean;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Convert;
+import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.Id;
+import jakarta.nosql.mapping.Pagination;
+import jakarta.nosql.mapping.Sorts;
+import jakarta.servlet.ServletContext;
+import model.blog.BooleanYNConveter;
+
+@Entity("Release")
+public class ProjectRelease {
+	public static final String VIEW_RELEASES = "ReleasesByDate"; //$NON-NLS-1$
+	public static final String VIEW_PENDING_RELEASES = "IP Management\\Pending Releases"; //$NON-NLS-1$
+	/** The admin role to be added to modified authors fields */
+	public static final String ROLE_ADMIN = "[Admin]"; //$NON-NLS-1$
+	
+	@RepositoryProvider("projectsRepository")
+	public interface Repository extends DominoRepository<ProjectRelease, String> {
+		@ViewEntries(VIEW_RELEASES)
+		Stream<ProjectRelease> findRecent(Pagination pagination);
+
+		Stream<ProjectRelease> findByProjectName(String projectName, Sorts sorts);
+		
+		@ViewDocuments(VIEW_PENDING_RELEASES)
+		Stream<ProjectRelease> findPendingReleases();
+	}
+	
+	public enum ReleaseStatus {
+		Yes, No
+	}
+	
+	@Id
+	private String documentId;
+	@Column("ProjectName")
+	private String projectName;
+	@Column("ReleaseNumber")
+	private String version;
+	@Column("ReleaseDate")
+	private Temporal releaseDate;
+	@Column("WhatsNew")
+	@ItemStorage(type=ItemStorage.Type.MIME)
+	private String description;
+	@Column("DownloadsRelease")
+	private int downloadCount;
+	@Column("MainID")
+	private String mainId;
+	@Column("ReleaseInCatalog")
+	private ReleaseStatus releaseStatus;
+	@Column("DocAuthors")
+	@ItemFlags(authors=true)
+	private List<String> docAuthors;
+	@Column(DominoConstants.FIELD_ATTACHMENTS)
+	private List<EntityAttachment> attachments;
+	@Column("LicenseType")
+	private String licenseType;
+	@Column("Status")
+	@Convert(BooleanYNConveter.class)
+	private boolean released;
+	@Column("MasterChef")
+	private List<String> masterChef;
+	@Column(DominoConstants.FIELD_ETAG)
+	private String etag;
+	
+	public ProjectRelease() {
+	
+	}
+	
+	public String getDocumentId() {
+		return documentId;
+	}
+	public void setDocumentId(String documentId) {
+		this.documentId = documentId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public Temporal getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(Temporal released) {
+		this.releaseDate = released;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Date getReleasedDate() {
+		return new Date(LocalDate.from(releaseDate).toEpochDay());
+	}
+	
+	public int getDownloadCount() {
+		return downloadCount;
+	}
+	public void setDownloadCount(int downloadCount) {
+		this.downloadCount = downloadCount;
+	}
+	
+	public String getMainId() {
+		return mainId;
+	}
+	public void setMainId(String mainId) {
+		this.mainId = mainId;
+	}
+	
+	public ReleaseStatus getReleaseStatus() {
+		return releaseStatus;
+	}
+	public void setReleaseStatus(ReleaseStatus releaseStatus) {
+		this.releaseStatus = releaseStatus;
+	}
+	
+	public List<EntityAttachment> getAttachments() {
+		return attachments;
+	}
+	public void setAttachments(List<EntityAttachment> attachments) {
+		this.attachments = attachments;
+	}
+	
+	public String getLicenseType() {
+		return licenseType;
+	}
+	public void setLicenseType(String licenseType) {
+		this.licenseType = licenseType;
+	}
+	
+	public boolean isReleased() {
+		return released;
+	}
+	public void setReleased(boolean released) {
+		this.released = released;
+	}
+	
+	public List<String> getMasterChef() {
+		return masterChef;
+	}
+	public void setMasterChef(List<String> masterChef) {
+		this.masterChef = masterChef;
+	}
+	
+	public String getEtag() {
+		return etag;
+	}
+	public void setEtag(String etag) {
+		this.etag = etag;
+	}
+	
+	public List<Download> getDownloads() {
+		EncoderBean encoder = CDI.current().select(EncoderBean.class).get();
+		String contextPath = CDI.current().select(ServletContext.class).get().getContextPath();
+		String unid = getDocumentId();
+		return getAttachments()
+			.stream()
+			.map(att -> {
+				Download download = new Download();
+				download.setName(att.getName());
+				String url = contextPath + "/0/" + unid + "/$FILE/" + encoder.urlEncode(att.getName());
+				download.setUrl(url);
+				return download;
+			})
+			.collect(Collectors.toList());
+	}
+	
+	public void markApprovedForCatalog(boolean approved) {
+		if(approved) {
+			this.releaseStatus = ReleaseStatus.Yes;
+			this.docAuthors = Arrays.asList(ROLE_ADMIN);
+		} else {
+			this.releaseStatus = ReleaseStatus.No;
+		}
+	}
+}
