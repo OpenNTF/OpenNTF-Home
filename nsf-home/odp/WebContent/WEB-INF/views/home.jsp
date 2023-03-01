@@ -18,7 +18,7 @@
 					<c:forEach items="${recentReleases}" var="release">
 						<li>
 							<a href="xsp/app/projects/${encoder.urlEncode(release.projectName)}">${fn:escapeXml(release.projectName)}</a>
-							<span class="release-date">${fn:escapeXml(temporalBean.timeAgo(release.releaseDate))}</span>
+							<span class="release-date"><time-ago value="${fn:escapeXml(release.releaseDate)}" /></span>
 						</li>
 					</c:forEach>
 				</ol>

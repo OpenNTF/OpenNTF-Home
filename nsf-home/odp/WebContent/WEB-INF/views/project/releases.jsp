@@ -46,7 +46,7 @@
 					</div>
 					
 					<dt>Released On</dt>
-					<dd><c:out value="${temporalBean.timeAgo(release.releaseDate)}"/></dd>
+					<dd><time-ago value="${fn:escapeXml(release.releaseDate)}" /></dd>
 					
 					<dt>Released By</dt>
 					<dd>

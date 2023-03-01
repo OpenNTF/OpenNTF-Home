@@ -7,7 +7,7 @@
 	<h3>
 		${fn:escapeXml(encoder.toCommonName(pageScope.value.author))}
 		|
-		${fn:escapeXml(temporalBean.timeAgo(pageScope.value.date))}
+		<time-ago value="${fn:escapeXml(pageScope.value.date)}" />
 		|
 		<a href="xsp/app/blog/${pageScope.value.unid}">${translation.comments}</a>
 	</h3>

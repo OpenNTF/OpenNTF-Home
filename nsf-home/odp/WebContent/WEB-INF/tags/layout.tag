@@ -21,6 +21,8 @@
 		
 		<script type="text/javascript" src="${pageContext.request.contextPath}/webjars/hotwired__turbo/7.1.0/dist/turbo.es2017-umd.js"></script>
 		
+		<script type="text/javascript" src="${pageContext.request.contextPath}/customElements.js"></script>
+		
 		<title>${translation.appTitle}</title>
 	</head>
 	<body>

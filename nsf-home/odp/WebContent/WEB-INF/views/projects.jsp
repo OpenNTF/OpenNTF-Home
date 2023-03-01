@@ -65,7 +65,7 @@
 							<a href="xsp/app/projects/${encoder.urlEncode(project.name)}"><c:out value="${project.name}"/></a>
 							<span class="overview"><c:out value="${project.overview}"/></span>
 						</td>
-						<td class="updated"><c:out value="${temporalBean.timeAgo(empty project.lastModified ? (empty project.created ? project.docCreated : project.created) : project.lastModified)}"/></td>
+						<td class="updated"><time-ago value="${fn:escapeXml(empty project.lastModified ? (empty project.created ? project.docCreated : project.created) : project.lastModified)}" /></td>
 						<td><t:personName value="${project.owner}"/></td>
 					</tr>
 				</c:forEach>

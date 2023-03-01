@@ -24,7 +24,7 @@
 								<a href="xsp/app/projects/${encoder.urlEncode(project.name)}">${fn:escapeXml(activity.form)}</a>
 							</c:otherwise>
 						</c:choose>
-						<span class="release-date">${fn:escapeXml(messages.format("activityByline", activity.createdBy, temporalBean.timeAgo(activity.date)))}</span>
+						<span class="release-date">${messages.format("activityByline", activity.createdBy, activity.date)}</span>
 					</li>
 				</c:forEach>
 			</ol>
