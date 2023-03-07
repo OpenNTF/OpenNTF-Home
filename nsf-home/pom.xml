@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.openntf</groupId>
+	<artifactId>nsf-home</artifactId>
+	<packaging>domino-nsf</packaging>
+	<version>2.0.0-SNAPSHOT</version>
+
+	<inceptionYear>2022</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openntf.maven</groupId>
+				<artifactId>nsfodp-maven-plugin</artifactId>
+				<version>3.10.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<updateSite>${project.baseDir}/../../../releng/org.openntf.xsp.jakartaee.updatesite/target/repository</updateSite>
+					<templateName>XPages Jakarta EE Example</templateName>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<aggregate>true</aggregate>
+					<header>license.txt</header>
+					<excludes>
+						<exclude>**/pom.xml</exclude>
+						<exclude>**/build.properties</exclude>
+						<exclude>**/database.properties</exclude>
+						<exclude>**/xspdesign.properties</exclude>
+						<exclude>**/xsp.properties</exclude>
+						<exclude>**/odp/WebContent/WEB-INF/faces-config.xml</exclude>
+						<exclude>**/odp/plugin.xml</exclude>
+						<exclude>**/odp/META-INF/**</exclude>
+						<exclude>**/webjars/**</exclude>
+					</excludes>
+					<properties>
+						<owner>Contributors to the OpenNTF Home App Project</owner>
+						<copyrightYear>2023</copyrightYear>
+					</properties>
+					<mapping>
+						<tag>DYNASCRIPT_STYLE</tag>
+					</mapping>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
