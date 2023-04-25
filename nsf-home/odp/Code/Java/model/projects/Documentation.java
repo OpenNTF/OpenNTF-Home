@@ -27,13 +27,14 @@ import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
+import jakarta.nosql.mapping.Sorts;
 import model.AbstractAttachmentEntity;
 
 @Entity("documentation")
 public class Documentation extends AbstractAttachmentEntity {
 	@RepositoryProvider("projectsRepository")
 	public static interface Repository extends DominoRepository<Documentation, String> {
-		Stream<Documentation> findByProjectName(String projectName);
+		Stream<Documentation> findByProjectName(String projectName, Sorts sorts);
 	}
 	
 	@Id

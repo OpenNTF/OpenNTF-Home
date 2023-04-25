@@ -172,7 +172,7 @@ public class Project {
 	
 	public List<Documentation> getDocumentation() {
 		Documentation.Repository repo = CDI.current().select(Documentation.Repository.class).get();
-		return repo.findByProjectName(getName())
+		return repo.findByProjectName(getName(), Sorts.sorts().desc("entryDate"))
 			.filter(s -> !s.getAttachments().isEmpty())
 			.collect(Collectors.toList());
 	}
