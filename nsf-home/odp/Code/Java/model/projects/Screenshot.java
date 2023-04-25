@@ -16,12 +16,15 @@
 package model.projects;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.openntf.xsp.nosql.communication.driver.DominoConstants;
 import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
 import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
 
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
@@ -33,6 +36,9 @@ public class Screenshot extends AbstractAttachmentEntity {
 	@RepositoryProvider("projectsRepository")
 	public static interface Repository extends DominoRepository<Screenshot, String> {
 		Stream<Screenshot> findByProjectName(String projectName);
+		
+		@ViewEntries("Screenshots")
+		Optional<Screenshot> findLatestByProjectName(ViewQuery query);
 	}
 	
 	@Id
