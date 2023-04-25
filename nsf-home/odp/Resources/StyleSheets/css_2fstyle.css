@@ -133,10 +133,20 @@ main img {
 .activity-feed li {
 	list-style-type: none;
 	display: block;
-	padding: 1em 0.5em;
-	margin: 0 1em;
-	border-bottom: 1px dashed lightgrey;
 	position: relative;
+}
+.activity-feed li, .activity-feed tr {
+	margin: 0 1em;
+}
+.activity-feed li, .activity-feed td {
+	border-bottom: 1px dashed lightgrey;
+	padding: 1em 0.5em;
+}
+.activity-feed li.active, .activity-feed tr.active {
+	font-weight: bold;
+}
+.activity-feed li.active, .activity-feed tr.active td:first-child {
+	border-left: 4px solid #E6F1B2;
 }
 .activity-feed .release-date {
 	position: absolute;

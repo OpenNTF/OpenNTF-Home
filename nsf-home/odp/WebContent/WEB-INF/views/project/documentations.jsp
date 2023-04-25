@@ -22,16 +22,8 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:projectLayout project="${project}" current="documentation">
 	<div class="lefthand-view-layout">
-		<section class="activity-feed">
-			<ol>
-			<c:forEach items="${project.documentation}" var="doc">
-				<li>
-					<a href="xsp/app/projects/${encoder.urlEncode(project.name)}/documentation/${doc.documentId}"><c:out value="${doc.description}"/></a>
-					<br /><c:out value="${doc.entryAuthor}"/>
-				</li>
-			</c:forEach>
-			</ol>
-		</section>
+		<t:activityFeed items="${project.documentation}" urlPart="documentation" activeEntry="${doc}" project="${project}"
+			titleProperty="description"/>
 		<section>
 			<c:if test="${not empty doc}">
 			<fieldset>

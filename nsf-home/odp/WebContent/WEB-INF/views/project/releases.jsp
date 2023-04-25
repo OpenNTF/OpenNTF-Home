@@ -32,11 +32,11 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${project.releasesByDate}" var="release">
-						<tr>
-							<td><a href="xsp/app/projects/${encoder.urlEncode(release.projectName)}/releases/${release.documentId}"><c:out value="${release.releaseDate}"/></a></td>
-							<td><c:out value="${release.version}"/></td>
-							<td>${release.downloadCount}</td>
+					<c:forEach items="${project.releasesByDate}" var="listRelease">
+						<tr class="${release ne null and release.documentId eq listRelease.documentId ? 'active' : ''}">
+							<td><a href="xsp/app/projects/${encoder.urlEncode(project.name)}/releases/${listRelease.documentId}"><c:out value="${fn:escapeXml(temporalBean.formatDate(listRelease.releaseDate))}"/></a></td>
+							<td><c:out value="${listRelease.version}"/></td>
+							<td>${listRelease.downloadCount}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

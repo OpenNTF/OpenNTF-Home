@@ -22,16 +22,8 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:projectLayout project="${project}" current="discussions">
 	<div class="lefthand-view-layout">
-		<section class="activity-feed">
-			<ol>
-			<c:forEach items="${project.discussionByDate}" var="discussion">
-				<li>
-					<a href="xsp/app/projects/${encoder.urlEncode(project.name)}/discussion/${discussion.documentId}"><c:out value="${discussion.subject}"/></a>
-					<br /><c:out value="${discussion.entryAuthor}"/>
-				</li>
-			</c:forEach>
-			</ol>
-		</section>
+		<t:activityFeed items="${project.discussionByDate}" urlPart="discussion" activeEntry="${discussion}" project="${project}"
+			titleProperty="subject"/>
 		<section>
 			<c:if test="${not empty discussion}">
 				<c:out value="${markdown.toHtml(discussion.body)}" escapeXml="false"/>
