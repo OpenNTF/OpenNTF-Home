@@ -1,1 +1,2 @@
 model.TemporalValueReader
+model.ForgivingOffsetDateTimeReader
