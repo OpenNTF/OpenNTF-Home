@@ -48,6 +48,8 @@ public class TemporalBean {
 			return formatter.format(time);
 		} else if(time instanceof OffsetDateTime) {
 			return formatter.format(((OffsetDateTime)time).toLocalDate());
+		} else if(time == null) {
+			return "";
 		} else {
 			Instant inst = Instant.from(time);
 			ZonedDateTime dt = ZonedDateTime.ofInstant(inst, ZoneId.systemDefault());
