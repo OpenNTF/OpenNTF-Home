@@ -13,26 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package webapp.resources;
+package controller;
 
+import bean.BlogEntries;
+import bean.ProjectReleases;
 import jakarta.inject.Inject;
+import jakarta.mvc.Controller;
+import jakarta.mvc.Models;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import bean.ApplicationConfig;
-
-@Path("/config")
-public class ApplicationConfigResource {
+@Path("/")
+@Controller
+public class HomeController {
+	@Inject
+	Models models;
 	
 	@Inject
-	ApplicationConfig config;
-
+	ProjectReleases projectReleases;
+	
+	@Inject
+	BlogEntries blogEntries;
+	
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public ApplicationConfig get() {
-		return config;
+	@Produces(MediaType.TEXT_HTML)
+	public String get() {
+		models.put("recentReleases", projectReleases.getRecentReleases(30)); //$NON-NLS-1$
+		models.put("blogEntries", blogEntries.getEntries(5)); //$NON-NLS-1$
+		
+		return "home.jsp"; //$NON-NLS-1$
+	}
+	
+	@Path("causeError")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String getErrorPath() {
+		throw new RuntimeException("oh no!");
 	}
 
 }

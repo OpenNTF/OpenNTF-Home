@@ -33,6 +33,7 @@ import api.atompub.model.Entry;
 import api.atompub.model.Feed;
 import api.atompub.model.Link;
 import bean.UserInfoBean;
+import controller.BlogController;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -52,7 +53,6 @@ import jakarta.ws.rs.core.UriInfo;
 import model.blog.BlogEntry;
 import model.blog.BlogStatus;
 import model.util.PostUtil;
-import webapp.controller.BlogController;
 
 @Path(AtomPubResource.BASE_PATH + "/{blogId}")
 @RolesAllowed(UserInfoBean.ROLE_BLOGADMIN)

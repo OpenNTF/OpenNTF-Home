@@ -4,9 +4,9 @@
     <text>34567Cg~[</text>
   </item>
   <item name="$TITLE">
-    <text>webapp/controller/ProjectsController.java</text>
+    <text>controller/BlogController.java</text>
   </item>
   <item name="$FileNames" sign="true">
-    <text>webapp/controller/ProjectsController.java</text>
+    <text>controller/BlogController.java</text>
   </item>
 </note>
