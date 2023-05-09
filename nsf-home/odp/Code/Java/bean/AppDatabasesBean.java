@@ -44,7 +44,7 @@ public class AppDatabasesBean {
 		return CDI.current().select(Session.class, NamedLiteral.of("dominoSessionAsSigner")).get();
 	}
 	
-	@Produces @Named("projects")
+	@Produces @Named("projectsDatabase")
 	public Database getProjectsDatabase() {
 		try {
 			return DominoUtils.openDatabaseByName(getSession(), config.getProjectsDbPath());
@@ -53,7 +53,7 @@ public class AppDatabasesBean {
 		}
 	}
 	
-	@Produces @Named("blog")
+	@Produces @Named("blogDatabase")
 	public Database getBlogDatabase() {
 		try {
 			return DominoUtils.openDatabaseByName(getSession(), config.getBlogDbPath());
@@ -62,10 +62,19 @@ public class AppDatabasesBean {
 		}
 	}
 	
-	@Produces @Named("home")
+	@Produces @Named("homeDatabase")
 	public Database getHomeDatabase() {
 		try {
 			return DominoUtils.openDatabaseByName(getSession(), config.getHomeDbPath());
+		} catch(NotesException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Produces @Named("webinarsDatabase")
+	public Database getWebinarsDatabase() {
+		try {
+			return DominoUtils.openDatabaseByName(getSession(), config.getWebinarsDbPath());
 		} catch(NotesException e) {
 			throw new RuntimeException(e);
 		}
@@ -96,6 +105,15 @@ public class AppDatabasesBean {
 	public DominoDocumentCollectionManager getHomeManager() {
 		return new DefaultDominoDocumentCollectionManager(
 			() -> getHomeDatabase(),
+			() -> getSessionAsSigner()
+		);
+	}
+
+	@Produces
+	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "webinarsRepository")
+	public DominoDocumentCollectionManager getWebinarsManager() {
+		return new DefaultDominoDocumentCollectionManager(
+			() -> getWebinarsDatabase(),
 			() -> getSessionAsSigner()
 		);
 	}

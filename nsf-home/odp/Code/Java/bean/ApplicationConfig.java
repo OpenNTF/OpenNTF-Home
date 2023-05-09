@@ -66,6 +66,10 @@ public class ApplicationConfig {
 		return getSingleValue("dbHome"); //$NON-NLS-1$
 	}
 	
+	public String getWebinarsDbPath() {
+		return getSingleValue("dbWebinars");
+	}
+	
 	private String getSingleValue(String key) {
 		return getConfigEntry(key)
 			.map(entry -> entry.getValue1().get(0))

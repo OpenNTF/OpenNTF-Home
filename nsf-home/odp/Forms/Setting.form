@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<note class="form" xmlns="http://www.lotus.com/dxl">
+  <item name="$HTMLCode" sign="true">
+    <rawitemdata type="1">
+X/8QAAIADwAHAAAAAAAAAA==
+</rawitemdata>
+  </item>
+  <item name="$TITLE">
+    <text>Setting</text>
+  </item>
+  <item name="$Comment" sign="true">
+    <text/>
+  </item>
+  <item name="$Info" sign="true">
+    <rawitemdata type="1">
+hhgBAIAAAAAAgAAAAQABAP///wAQAAAA
+</rawitemdata>
+  </item>
+  <item name="$Flags">
+    <text/>
+  </item>
+  <item name="Key" placeholder="true">
+    <rawitemdata type="0"/>
+  </item>
+  <item name="Value1" placeholder="true">
+    <rawitemdata type="0"/>
+  </item>
+  <item name="Value2" placeholder="true">
+    <rawitemdata type="0"/>
+  </item>
+  <item name="Value3" placeholder="true">
+    <rawitemdata type="0"/>
+  </item>
+  <item name="$Fields">
+    <textlist>
+      <text>Value3</text>
+      <text>Value2</text>
+      <text>Value1</text>
+      <text>Key</text>
+    </textlist>
+  </item>
+  <item name="$Body" sign="true">
+    <rawitemdata type="1">
+gQKC/1oAAQAAAAAAAAAAAKAFAACgBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAABAAAAAJSHAAAAAAAAAAAAAAAAAQAAAAQAAACDBAEAhf8IAAEAAAqBAoMEAQCF/w0A
+AQAACktleTogAN0GAACK//7/UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgA
+eAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiv8oAIoAAAUAMAIAAAAAAAAC
+AQAACgAAAAAAAAAAAwAAAAAAS2V5AGIOAQCEAAAAAAAAAAAA3gYAAIr/hf8IAAEAAAqBAoMEAQCF
+/wgAAQAACoECgwQBAIX/EAABAAAKVmFsdWUxOiDdBgAAiv/+/1AAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAB4AHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AIr/KgCKAAAFADACAAAAAAAAAgEAAAoAAAAAAAAAAAYAAAAAAFZhbHVlMWIOAQCEAAAAAAAAAAAA
+3gYAAIr/hf8IAAEAAAqBAoMEAQCF/xAAAQAAClZhbHVlMjog3QYAAIr//v9QAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAB4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAACK/yoAigAABQAwAgAAAAAAAAIBAAAKAAAAAAAAAAAGAAAAAABWYWx1ZTJiDgEAhAAA
+AAAAAAAAAN4GAACK/4X/CAABAAAKgQKDBAEAhf8QAAEAAApWYWx1ZTM6IN0GAACK//7/UAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAiv8qAIoAAAUAMAIAAAAAAAACAQAACgAAAAAAAAAABgAAAAAAVmFsdWUz
+Yg4BAIQAAAAAAAAAAADeBgAAiv+F/wgAAQAACg==
+</rawitemdata>
+  </item>
+</note>
