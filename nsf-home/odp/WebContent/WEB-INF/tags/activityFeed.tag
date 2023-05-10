@@ -38,7 +38,7 @@
 				<tr class="${pageScope.activeEntry ne null and pageScope.activeEntry.documentId eq listEntry.documentId ? 'active' : ''}">
 					<td><c:out value="${fn:escapeXml(temporalBean.formatDate(listEntry.entryDate))}"/></td>
 					<td>
-						<a href="xsp/app/projects/${encoder.urlEncode(project.name)}/${pageScope.urlPart}/${listEntry.documentId}">
+						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/${pageScope.urlPart}/${listEntry.documentId}">
 							<c:out value="${empty listEntry[pageScope.titleProperty] ? translation.noTitle : listEntry[pageScope.titleProperty]}"/>
 						</a>
 						<br /><c:out value="${listEntry.entryAuthor}"/>

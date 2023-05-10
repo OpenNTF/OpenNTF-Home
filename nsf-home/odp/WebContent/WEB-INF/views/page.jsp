@@ -35,7 +35,7 @@
 						
 					<div class="tabs">
 						<c:forEach items="${page.cleanChildPageIds}" var="pageId">
-							<turbo-frame id="page-content-${pageId}" src="xsp/app/pages/${encoder.urlEncode(pageId)}" class="tab" loading="lazy">
+							<turbo-frame id="page-content-${pageId}" src="${mvc.basePath}/pages/${encoder.urlEncode(pageId)}" class="tab" loading="lazy">
 							</turbo-frame>
 						</c:forEach>
 					</div>

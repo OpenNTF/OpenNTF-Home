@@ -34,7 +34,7 @@
 				<tbody>
 					<c:forEach items="${project.releasesByDate}" var="listRelease">
 						<tr class="${release ne null and release.documentId eq listRelease.documentId ? 'active' : ''}">
-							<td><a href="xsp/app/projects/${encoder.urlEncode(project.name)}/releases/${listRelease.documentId}"><c:out value="${fn:escapeXml(temporalBean.formatDate(listRelease.releaseDate))}"/></a></td>
+							<td><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${listRelease.documentId}"><c:out value="${fn:escapeXml(temporalBean.formatDate(listRelease.releaseDate))}"/></a></td>
 							<td><c:out value="${listRelease.version}"/></td>
 							<td>${listRelease.downloadCount}</td>
 						</tr>

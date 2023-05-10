@@ -32,13 +32,13 @@
 				<tr class="pager">
 					<td>
 						<c:if test="${prevPage gt 0}">
-							<a href="xsp/app/projects?page=${prevPage}"><c:out value="${translation.prevPage}"/></a>
+							<a href="${mvc.basePath}/projects?page=${prevPage}"><c:out value="${translation.prevPage}"/></a>
 						</c:if>
 					</td>
 					<td></td>
 					<td>
 						<c:if test="${nextPage gt 0}">
-							<a href="xsp/app/projects?page=${nextPage}"><c:out value="${translation.nextPage}"/></a>
+							<a href="${mvc.basePath}/projects?page=${nextPage}"><c:out value="${translation.nextPage}"/></a>
 						</c:if>
 					</td>
 				</tr>
@@ -46,7 +46,7 @@
 					<th>
 						<c:choose>
 						<c:when test="${sortColumn != 'name'}">
-							<a href="xsp/app/projects?sort=name"><c:out value="${translation.projectName}"/></a>
+							<a href="${mvc.basePath}/projects?sort=name"><c:out value="${translation.projectName}"/></a>
 						</c:when>
 						<c:otherwise>
 							<c:out value="${translation.projectName}"/>
@@ -56,7 +56,7 @@
 					<th>
 						<c:choose>
 						<c:when test="${sortColumn != 'updated'}">
-							<a href="xsp/app/projects?sort=updated"><c:out value="${translation.updated}"/></a>
+							<a href="${mvc.basePath}/projects?sort=updated"><c:out value="${translation.updated}"/></a>
 						</c:when>
 						<c:otherwise>
 							<c:out value="${translation.updated}"/>
@@ -66,7 +66,7 @@
 					<th>
 						<c:choose>
 						<c:when test="${sortColumn != 'owner'}">
-							<a href="xsp/app/projects?sort=owner"><c:out value="${translation.owner}"/></a>
+							<a href="${mvc.basePath}/projects?sort=owner"><c:out value="${translation.owner}"/></a>
 						</c:when>
 						<c:otherwise>
 							<c:out value="${translation.owner}"/>
@@ -79,7 +79,7 @@
 				<c:forEach items="${projectList}" var="project">
 					<tr>
 						<td class="project-name">
-							<a href="xsp/app/projects/${encoder.urlEncode(project.name)}"><c:out value="${project.name}"/></a>
+							<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}"><c:out value="${project.name}"/></a>
 							<span class="overview"><c:out value="${project.overview}"/></span>
 						</td>
 						<td class="updated"><time-ago value="${fn:escapeXml(empty project.lastModified ? (empty project.created ? project.docCreated : project.created) : project.lastModified)}" /></td>
@@ -91,13 +91,13 @@
 				<tr class="pager">
 					<td>
 						<c:if test="${prevPage gt 0}">
-							<a href="xsp/app/projects?page=${prevPage}"><c:out value="${translation.prevPage}"/></a>
+							<a href="${mvc.basePath}/projects?page=${prevPage}"><c:out value="${translation.prevPage}"/></a>
 						</c:if>
 					</td>
 					<td></td>
 					<td>
 						<c:if test="${nextPage gt 0}">
-							<a href="xsp/app/projects?page=${nextPage}"><c:out value="${translation.nextPage}"/></a>
+							<a href="${mvc.basePath}/projects?page=${nextPage}"><c:out value="${translation.nextPage}"/></a>
 						</c:if>
 					</td>
 				</tr>

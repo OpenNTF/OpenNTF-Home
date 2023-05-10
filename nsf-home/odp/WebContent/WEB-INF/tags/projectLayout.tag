@@ -38,14 +38,14 @@
 		</div>
 		
 		<nav>
-			<a href="xsp/app/projects/${encoder.urlEncode(pageScope.project.name)}" class="${pageScope.current == 'summary' ? 'current' : ''}"><c:out value="${translation.projectSummary}"/></a>
-			<a href="xsp/app/projects/${encoder.urlEncode(pageScope.project.name)}/releases" class="${pageScope.current == 'releases' ? 'current' : ''}"><c:out value="${translation.projectDownloads}"/></a>
-			<a href="xsp/app/projects/${encoder.urlEncode(pageScope.project.name)}/screenshots" class="${pageScope.current == 'screenshots' ? 'current' : ''}"><c:out value="${translation.projectScreenshots}"/></a>
-			<a href="xsp/app/projects/${encoder.urlEncode(pageScope.project.name)}/documentation" class="${pageScope.current == 'documentation' ? 'current' : ''}"><c:out value="${translation.projectDocumentation}"/></a>
-			<a href="xsp/app/projects/${encoder.urlEncode(pageScope.project.name)}/requests" class="${pageScope.current == 'requests' ? 'current' : ''}"><c:out value="${translation.projectRequests}"/></a>
-			<a href="xsp/app/projects/${encoder.urlEncode(pageScope.project.name)}/defects" class="${pageScope.current == 'defects' ? 'current' : ''}"><c:out value="${translation.projectDefects}"/></a>
-			<a href="xsp/app/projects/${encoder.urlEncode(pageScope.project.name)}/discussions" class="${pageScope.current == 'discussions' ? 'current' : ''}"><c:out value="${translation.projectDiscussions}"/></a>
-			<a href="xsp/app/projects/${encoder.urlEncode(pageScope.project.name)}/reviews" class="${pageScope.current == 'reviews' ? 'current' : ''}"><c:out value="${translation.projectReviews}"/></a>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.project.name)}" class="${pageScope.current == 'summary' ? 'current' : ''}"><c:out value="${translation.projectSummary}"/></a>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.project.name)}/releases" class="${pageScope.current == 'releases' ? 'current' : ''}"><c:out value="${translation.projectDownloads}"/></a>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.project.name)}/screenshots" class="${pageScope.current == 'screenshots' ? 'current' : ''}"><c:out value="${translation.projectScreenshots}"/></a>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.project.name)}/documentation" class="${pageScope.current == 'documentation' ? 'current' : ''}"><c:out value="${translation.projectDocumentation}"/></a>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.project.name)}/requests" class="${pageScope.current == 'requests' ? 'current' : ''}"><c:out value="${translation.projectRequests}"/></a>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.project.name)}/defects" class="${pageScope.current == 'defects' ? 'current' : ''}"><c:out value="${translation.projectDefects}"/></a>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.project.name)}/discussions" class="${pageScope.current == 'discussions' ? 'current' : ''}"><c:out value="${translation.projectDiscussions}"/></a>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.project.name)}/reviews" class="${pageScope.current == 'reviews' ? 'current' : ''}"><c:out value="${translation.projectReviews}"/></a>
 			<c:if test="${not empty pageScope.project.sourceControlUrl}">
 				<a href="${pageScope.project.sourceControlUrl}"><c:out value="${translation.projectSourceControl}"/></a>
 			</c:if>

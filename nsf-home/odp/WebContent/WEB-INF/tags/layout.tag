@@ -24,27 +24,27 @@
 	<head>
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<meta name="turbolinks-root" content="${pageContext.request.contextPath}/xsp/app" />
+		<meta name="turbolinks-root" content="${mvc.basePath}" />
 		
 		<base href="${pageContext.request.contextPath}/" />
 		
 		<link rel="shortcut icon" href="${pageContext.request.contextPath}/img/favicon.png" />
 		<link rel="apple-touch-icon" sizes="32x32" href="${pageContext.request.contextPath}/img/favicon.png" />
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabs.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="css/tabs.css" />
 		
-		<link rel="alternate" href="${urlBean.requestUri.resolve('xsp/app/feed.xml')}" type="application/rss+xml" title="${fn:escapeXml(translation.feedRssBlog)}">
-		<link rel="EditURI" type="application/rsd+xml" href="${urlBean.requestUri.resolve('xsp/app/rsd.xml')}" />
+		<link rel="alternate" href="${mvc.basePath}/feed.xml" type="application/rss+xml" title="${fn:escapeXml(translation.feedRssBlog)}">
+		<link rel="EditURI" type="application/rsd+xml" href="${mvc.basePath}/rsd.xml" />
 		
-		<script type="text/javascript" src="${pageContext.request.contextPath}/webjars/hotwired__turbo/7.1.0/dist/turbo.es2017-umd.js"></script>
+		<script type="text/javascript" src="webjars/hotwired__turbo/7.1.0/dist/turbo.es2017-umd.js"></script>
 		
-		<script type="text/javascript" src="${pageContext.request.contextPath}/customElements.js"></script>
+		<script type="text/javascript" src="customElements.js"></script>
 		
 		<title>${translation.appTitle}</title>
 	</head>
 	<body>
 		<header id="pageheader">
-			<a href="${pageContext.request.contextPath}/xsp/app/" class="logo">
+			<a href="${mvc.basePath}/" class="logo">
 				<img src="img/openntf_222222_bg.jpg" alt="${fn:escapeXml(translation.appTitle)}" />
 			</a>
 			<nav id="pagenav" role="navigation">
@@ -56,11 +56,11 @@
 			</nav>
 			
 			<div class="user-info">
-				<c:if test="${pageContext.request.remoteUser eq 'Anonymous'}">
-					<a href="${pageContext.request.contextPath}?Login&RedirectTo=${pageContext.request.contextPath}/xsp/app">Log In</a>
+				<c:if test="${userInfo.anonymous}">
+					<a href="${pageContext.request.contextPath}?Login&RedirectTo=${encoder.urlEncode(mvc.basePath)}">Log In</a>
 				</c:if>
-				<c:if test="${pageContext.request.remoteUser ne 'Anonymous'}">
-					${fn:escapeXml(encoder.abbreviateName(pageContext.request.remoteUser))}
+				<c:if test="${not userInfo.anonymous}">
+					${fn:escapeXml(encoder.abbreviateName(userInfo.userName))}
 				</c:if>
 			</div>
 		</header>

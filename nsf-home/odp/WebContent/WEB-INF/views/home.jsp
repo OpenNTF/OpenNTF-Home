@@ -34,7 +34,7 @@
 				<ol>
 					<c:forEach items="${recentReleases}" var="release">
 						<li>
-							<a href="xsp/app/projects/${encoder.urlEncode(release.projectName)}">${fn:escapeXml(release.projectName)}</a>
+							<a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}">${fn:escapeXml(release.projectName)}</a>
 							<span class="release-date"><time-ago value="${fn:escapeXml(release.releaseDate)}" /></span>
 						</li>
 					</c:forEach>

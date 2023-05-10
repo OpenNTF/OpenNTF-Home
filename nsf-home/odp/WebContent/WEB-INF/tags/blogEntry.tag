@@ -26,7 +26,7 @@
 		|
 		<time-ago value="${fn:escapeXml(pageScope.value.date)}" />
 		|
-		<a href="xsp/app/blog/${pageScope.value.unid}">${translation.comments}</a>
+		<a href="${mvc.basePath}/blog/${pageScope.value.unid}">${translation.comments}</a>
 	</h3>
 	<div>${pageScope.value.html}</div>
 </article>

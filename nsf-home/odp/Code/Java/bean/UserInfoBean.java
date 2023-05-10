@@ -15,6 +15,8 @@
  */
 package bean;
 
+import com.ibm.commons.util.StringUtil;
+
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -28,6 +30,11 @@ public class UserInfoBean {
 	private HttpServletRequest request;
 	
 	public String getUserName() {
-		return request.getUserPrincipal().getName();
+		return StringUtil.toString(request.getRemoteUser());
+	}
+	
+	public boolean isAnonymous() {
+		String name = getUserName();
+		return name.isEmpty() || "anonymous".equalsIgnoreCase(name);
 	}
 }
