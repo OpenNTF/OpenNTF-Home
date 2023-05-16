@@ -48,6 +48,26 @@ public class TranslationBean {
 			String message = translation.getString(key);
 			return MessageFormat.format(message, params);
 		}
+		
+		/**
+		 * Formats the keyed message from the translation bundle with the provided
+		 * parameters if they key exists. If it doesn't, this returns the key
+		 * itself.
+		 * 
+		 * @param key the key to look up in the translation bundle
+		 * @param params the parameters to use when formatting
+		 * @return a formatted message if the key has a translation, or the key
+		 *         itself otherwise
+		 */
+		public String softFormat(final String key, final Object... params) {
+			ResourceBundle translation = CDI.current().select(ResourceBundle.class, NamedLiteral.of("translation")).get(); //$NON-NLS-1$
+			if(translation.containsKey(key)) {
+				String message = translation.getString(key);
+				return MessageFormat.format(message, params);
+			} else {
+				return key;
+			}
+		}
 
 		public String getMonth(final int index) {
 			return DateFormatSymbols.getInstance(request.getLocale()).getMonths()[index];

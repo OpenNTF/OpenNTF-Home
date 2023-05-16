@@ -32,16 +32,16 @@
 					<li>
 						<c:choose>
 							<c:when test="${activity.form eq 'release'}">
-								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${activity.documentId}">${fn:escapeXml(activity.form)}</a>
+								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${activity.documentId}"><c:out value="${messages.softFormat(activity.form)}"/></a>
 							</c:when>
 							<c:when test="${activity.form eq 'discussion'}">
-								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/discussion/${activity.documentId}">${fn:escapeXml(activity.form)}</a>
+								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/discussion/${activity.documentId}"><c:out value="${messages.softFormat(activity.form)}"/></a>
 							</c:when>
 							<c:otherwise>
-								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}">${fn:escapeXml(activity.form)}</a>
+								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}"><c:out value="${messages.softFormat(activity.form)}"/></a>
 							</c:otherwise>
 						</c:choose>
-						<span class="release-date">${messages.format("activityByline", activity.createdBy, activity.date)}</span>
+						<span class="release-date"><c:out value="${messages.format('activityByline', activity.createdBy, activity.date)}" escapeXml="false"/></span>
 					</li>
 				</c:forEach>
 			</ol>
