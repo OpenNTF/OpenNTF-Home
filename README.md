@@ -22,6 +22,8 @@ Specifically, these databased should exist on your server and be referenced in S
 
 Additionally, the page uses various "links" documents for the navbar - probably the quickest route is to copy the documents from the existing "main.nsf" DB from the OpenNTF servers.
 
+The file "settings.db" can be imported (via File -> Import) into the System\Settings view as "Structured Text" (not "Tabular") with Line Feed as a delimiter. After importing, open and re-save the three "links" entries to ensure that their values are stored as lists.
+
 ## License
 
 This project is licensed under the Apache 2.0 License. See [NOTICE.md](NOTICE.md) for copyright information and details of third-party code.
