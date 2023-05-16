@@ -13,6 +13,15 @@ In particular, the technologies and techniques used are:
 
 Currently, deploying this essentially requires being OpenNTF, as the data is stored in several databases that are not included in this repository. That may change in the future.
 
+Specifically, these databased should exist on your server and be referenced in Settings documents inside the home NSF:
+
+- `dbProjects` should point to the Projects database (pmt.nsf)
+- `dbBlog` should point to the BlogSphere-templated blog database
+- `dbHome` should point to the "OLD OpenNTF Home" database (home.nsf), containing the Pages documents
+- `dbWebinars` should point to the webinar list database (wpl.nsf)
+
+Additionally, the page uses various "links" documents for the navbar - probably the quickest route is to copy the documents from the existing "main.nsf" DB from the OpenNTF servers.
+
 ## License
 
 This project is licensed under the Apache 2.0 License. See [NOTICE.md](NOTICE.md) for copyright information and details of third-party code.
