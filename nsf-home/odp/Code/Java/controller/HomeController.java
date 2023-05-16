@@ -45,12 +45,5 @@ public class HomeController {
 		
 		return "home.jsp"; //$NON-NLS-1$
 	}
-	
-	@Path("causeError")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String getErrorPath() {
-		throw new RuntimeException("oh no!");
-	}
 
 }
