@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// TODO figure out why JAX-B doesn't pick up on these
 @XmlSchema(
 	xmlns = {
 		@XmlNs(namespaceURI=Rss.NS_CONTENT, prefix="content"),
