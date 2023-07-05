@@ -30,6 +30,7 @@
     <import optional="true" plugin="org.openntf.xsp.jsonapi"/>
     <import optional="true" plugin="org.openntf.xsp.microprofile.rest.client"/>
     <import optional="true" plugin="org.openntf.xsp.el"/>
+    <import optional="true" plugin="com.ibm.xsp.extlib"/>
     <!--AUTOGEN-END-BUILDER: End of automatically generated section-->
   </requires>
 </plugin>

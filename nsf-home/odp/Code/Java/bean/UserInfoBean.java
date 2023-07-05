@@ -15,7 +15,9 @@
  */
 package bean;
 
+import com.ibm.commons.util.PathUtil;
 import com.ibm.commons.util.StringUtil;
+import com.ibm.xsp.extlib.beans.UserBean;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -27,14 +29,28 @@ public class UserInfoBean {
 	public static final String ROLE_BLOGADMIN = "[BlogAdmin]";
 	
 	@Inject
+	private UserBean userBean;
+	
+	@Inject
 	private HttpServletRequest request;
 	
 	public String getUserName() {
-		return StringUtil.toString(request.getRemoteUser());
+		return userBean.getId();
 	}
 	
 	public boolean isAnonymous() {
 		String name = getUserName();
-		return name.isEmpty() || "anonymous".equalsIgnoreCase(name);
+		return StringUtil.isEmpty(name) || "anonymous".equalsIgnoreCase(name);
+	}
+	
+	public String getThumbnailUrl() {
+		String url = userBean.getThumbnailUrl();
+		if(url != null && url.startsWith("/.ibmxspres")) {
+			return PathUtil.concat("/xsp", url, '/');
+		} else if(url != null && url.startsWith("/")) {
+			return PathUtil.concat(request.getContextPath(), url, '/');
+		} else {
+			return url;
+		}
 	}
 }
