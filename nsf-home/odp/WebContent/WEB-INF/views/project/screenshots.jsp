@@ -42,8 +42,8 @@
 					<c:forEach items="${screenshot.downloads}" var="shot">
 						<c:if test="${shot.contentType.startsWith('image/')}">
 							<li>
-								<a href="${shot.url}" onclick="return displayScreenshotLightbox(this)">
-									<img src="${shot.url}" alt="${shot.name}"/>
+								<a href="${fn:escapeXml(shot.url)}" onclick="return displayScreenshotLightbox(this)">
+									<img src="${fn:escapeXml(shot.url)}" alt="${fn:escapeXml(shot.name)}"/>
 								</a>
 							</li>
 						</c:if>
