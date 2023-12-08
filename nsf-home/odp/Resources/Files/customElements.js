@@ -54,3 +54,24 @@ class TimeAgo extends HTMLElement {
 }
 
 customElements.define("time-ago", TimeAgo);
+
+class FutureTime extends HTMLElement {
+	static dateTimeFormat = new Intl.DateTimeFormat(document.documentElement.lang, { dateStyle: 'medium', timeStyle: 'short' });
+	static dateFormat = new Intl.DateTimeFormat(document.documentElement.lang, { dateStyle: 'medium' });
+
+	constructor() {
+		super();
+	}
+
+	connectedCallback() {
+		let date = new Date(this.getAttribute("value"));
+
+		if (this.getAttribute("value").indexOf("T") > -1) {
+			this.title = this.innerText = FutureTime.dateTimeFormat.format(date);
+		} else {
+			this.title = this.innerText = FutureTime.dateFormat.format(date)
+		}
+	}
+}
+
+customElements.define("future-time", FutureTime);

@@ -28,17 +28,32 @@
 					<t:blogEntry value="${entry}"/>
 				</c:forEach>
 			</section>
-			<section id="recent-releases" class="activity-feed">
-				<h2>Recent Releases</h2>
+			<section id="recents">
+				<details id="recent-releases" class="activity-feed" open>
+					<summary><c:out value="${translation.recentReleases}"/></summary>
+					
+					<ol>
+						<c:forEach items="${recentReleases}" var="release">
+							<li>
+								<a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}"><c:out value="${release.projectName}"/></a>
+								<span class="release-date"><time-ago value="${fn:escapeXml(release.releaseDate)}" /></span>
+							</li>
+						</c:forEach>
+					</ol>
+				</details>
 				
-				<ol>
-					<c:forEach items="${recentReleases}" var="release">
-						<li>
-							<a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}">${fn:escapeXml(release.projectName)}</a>
-							<span class="release-date"><time-ago value="${fn:escapeXml(release.releaseDate)}" /></span>
-						</li>
-					</c:forEach>
-				</ol>
+				<details id="upcoming-events" class="activity-feed" open>
+					<summary><c:out value="${translation.upcomingEvents}"/></summary>
+					
+					<ol>
+						<c:forEach items="${upcomingEvents}" var="event">
+							<li>
+								<c:out value="${event.name}"/>
+								<span class="release-date"><future-time value="${fn:escapeXml(event.scheduledStartTime)}" /></span>
+							</li>
+						</c:forEach>
+					</ol>
+				</details>
 			</section>
 		</div>
 	</section>

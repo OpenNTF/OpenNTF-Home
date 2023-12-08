@@ -16,6 +16,7 @@
 package controller;
 
 import bean.BlogEntries;
+import bean.DiscordCacheBean;
 import bean.ProjectReleases;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
@@ -37,10 +38,14 @@ public class HomeController {
 	@Inject
 	BlogEntries blogEntries;
 	
+	@Inject
+	DiscordCacheBean discordBean;
+	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String get() {
-		models.put("recentReleases", projectReleases.getRecentReleases(30)); //$NON-NLS-1$
+		models.put("recentReleases", projectReleases.getRecentReleases(5)); //$NON-NLS-1$
+		models.put("upcomingEvents", discordBean.getUpcomingEvents()); //$NON-NLS-1$
 		models.put("blogEntries", blogEntries.getEntries(5)); //$NON-NLS-1$
 		
 		return "home.jsp"; //$NON-NLS-1$
