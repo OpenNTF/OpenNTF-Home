@@ -17,7 +17,7 @@ package model.blog;
 
 import jakarta.nosql.mapping.AttributeConverter;
 
-public class BooleanYNConveter implements AttributeConverter<Boolean, String> {
+public class BooleanYNConveter implements AttributeConverter<Boolean, Object> {
 
 	@Override
 	public String convertToDatabaseColumn(Boolean attribute) {
@@ -25,8 +25,8 @@ public class BooleanYNConveter implements AttributeConverter<Boolean, String> {
 	}
 
 	@Override
-	public Boolean convertToEntityAttribute(String dbData) {
-		return "y".equals(dbData);
+	public Boolean convertToEntityAttribute(Object dbData) {
+		return "y".equals(dbData) || Boolean.TRUE.equals(dbData);
 	}
 
 }
