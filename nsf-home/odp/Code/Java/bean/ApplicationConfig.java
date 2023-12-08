@@ -70,6 +70,14 @@ public class ApplicationConfig {
 		return getSingleValue("dbWebinars");
 	}
 	
+	public String getDiscordGuildId() {
+		return getSingleValue("discordGuildId");
+	}
+	
+	public String getDiscordBotToken() {
+		return getSingleValue("discordBotToken");
+	}
+	
 	private String getSingleValue(String key) {
 		return getConfigEntry(key)
 			.map(entry -> entry.getValue1().get(0))
