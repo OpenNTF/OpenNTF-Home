@@ -78,6 +78,10 @@ public class ApplicationConfig {
 		return getSingleValue("discordBotToken");
 	}
 	
+	public String getCtDbPath() {
+		return getSingleValue("dbCt");
+	}
+	
 	private String getSingleValue(String key) {
 		return getConfigEntry(key)
 			.map(entry -> entry.getValue1().get(0))

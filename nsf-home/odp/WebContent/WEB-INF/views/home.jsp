@@ -54,6 +54,19 @@
 						</c:forEach>
 					</ol>
 				</details>
+				
+				<details id="recent-ct-posts" class="activity-feed" open>
+					<summary><c:out value="${translation.recentCtPosts}"/></summary>
+					
+					<ol>
+						<c:forEach items="${recentCtPosts}" var="post">
+							<li>
+								<a href="${post.link}" target="_blank"><c:out value="${post.title}"/></a>
+								<span class="release-date"><time-ago value="${fn:escapeXml(post.creationDate)}" /></span>
+							</li>
+						</c:forEach>
+					</ol>
+				</details>
 			</section>
 		</div>
 	</section>

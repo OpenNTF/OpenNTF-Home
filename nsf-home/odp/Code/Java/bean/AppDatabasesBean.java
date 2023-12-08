@@ -80,6 +80,15 @@ public class AppDatabasesBean {
 		}
 	}
 	
+	@Produces @Named("ctDatabase")
+	public Database getCtDatabase() {
+		try {
+			return DominoUtils.openDatabaseByName(getSession(), config.getCtDbPath());
+		} catch(NotesException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	// NoSQL repositories
 
 	@Produces
@@ -115,6 +124,15 @@ public class AppDatabasesBean {
 		return new DefaultDominoDocumentCollectionManager(
 			() -> getWebinarsDatabase(),
 			() -> getSessionAsSigner()
+		);
+	}
+
+	@Produces
+	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "ctRepository")
+	public DominoDocumentCollectionManager getCtManager() {
+		return new DefaultDominoDocumentCollectionManager(
+			this::getCtDatabase,
+			this::getSessionAsSigner
 		);
 	}
 }

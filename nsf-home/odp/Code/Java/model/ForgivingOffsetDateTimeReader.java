@@ -1,7 +1,12 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -17,6 +22,7 @@ import jakarta.nosql.ValueReader;
  */
 @Priority(1)
 public class ForgivingOffsetDateTimeReader implements ValueReader {
+	private static final DateTimeFormatter CT_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     @Override
     public boolean test(Class<?> type) {
@@ -49,6 +55,17 @@ public class ForgivingOffsetDateTimeReader implements ValueReader {
         if (Number.class.isInstance(value)) {
             return new Date(((Number) value).longValue()).toInstant().atZone(ZoneId.systemDefault()).toOffsetDateTime();
         }
+    	
+    	// Observed in Collaboration Today
+    	if(value instanceof String) {
+	    	try {
+	    		TemporalAccessor temporal = CT_FORMAT.parse((String)value);
+	    		LocalDateTime dt = LocalDateTime.from(temporal);
+	    		return ZonedDateTime.of(dt, ZoneId.systemDefault()).toOffsetDateTime();
+	    	} catch(DateTimeParseException t) {
+	    		// Then it doesn't match - continue on
+	    	}
+    	}
 
         return OffsetDateTime.parse(value.toString());
     }

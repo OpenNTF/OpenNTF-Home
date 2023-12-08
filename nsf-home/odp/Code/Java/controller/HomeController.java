@@ -15,16 +15,23 @@
  */
 package controller;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+import api.external.discord.ScheduledEvent;
 import bean.BlogEntries;
 import bean.DiscordCacheBean;
 import bean.ProjectReleases;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
+import jakarta.nosql.mapping.Pagination;
+import jakarta.nosql.mapping.Sorts;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import model.ct.CtEntry;
 
 @Path("/")
 @Controller
@@ -41,11 +48,20 @@ public class HomeController {
 	@Inject
 	DiscordCacheBean discordBean;
 	
+	@Inject
+	CtEntry.Repository ctEntries;
+	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String get() {
 		models.put("recentReleases", projectReleases.getRecentReleases(5)); //$NON-NLS-1$
-		models.put("upcomingEvents", discordBean.getUpcomingEvents()); //$NON-NLS-1$
+		models.put("upcomingEvents", //$NON-NLS-1$
+			discordBean.getUpcomingEvents()
+				.stream()
+				.sorted(Comparator.comparing(ScheduledEvent::getScheduledStartTime))
+				.collect(Collectors.toList())
+		);
+		models.put("recentCtPosts", ctEntries.listEntries(Sorts.sorts().desc("creationDate"), Pagination.page(1).size(5)).collect(Collectors.toList()));
 		models.put("blogEntries", blogEntries.getEntries(5)); //$NON-NLS-1$
 		
 		return "home.jsp"; //$NON-NLS-1$
