@@ -43,6 +43,8 @@ public class Project {
 		
 		@ViewEntries("ProjectsList")
 		Stream<Project> findAll(Pagination pagination, Sorts sorts);
+		
+		Stream<Project> findByChefs(String chef, Sorts sorts);
 	}
 	
 	@Id

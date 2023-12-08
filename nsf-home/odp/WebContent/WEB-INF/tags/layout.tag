@@ -60,7 +60,20 @@
 					<a href="${pageContext.request.contextPath}?Login&RedirectTo=${encoder.urlEncode(mvc.basePath)}">Log In</a>
 				</c:if>
 				<c:if test="${not userInfo.anonymous}">
-					${fn:escapeXml(encoder.abbreviateName(userInfo.userName))}
+					<nav>
+						<ul>
+							<li>
+								<span role="toolbar"><c:out value="${encoder.abbreviateName(userInfo.userName)}"/></span>
+								<ul>
+									<li><a href="${mvc.basePath}/users/@me"><c:out value="${translation.profile}"/></a></li>
+									
+									<li><a href="${pageContext.request.contextPath}?Logout&RedirectTo=${encoder.urlEncode(mvc.basePath)}">
+										<c:out value="${translation.logoutLink}"/>
+									</a></li>
+								</ul>
+							</li>
+						</ul>
+					</nav>
 				</c:if>
 			</div>
 		</header>

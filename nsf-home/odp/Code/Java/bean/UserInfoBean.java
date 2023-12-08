@@ -15,8 +15,11 @@
  */
 package bean;
 
+import java.util.Arrays;
+
 import com.ibm.commons.util.PathUtil;
 import com.ibm.commons.util.StringUtil;
+import com.ibm.xsp.extlib.beans.DominoDBUserBeanDataProvider;
 import com.ibm.xsp.extlib.beans.UserBean;
 
 import jakarta.enterprise.context.RequestScoped;
@@ -27,6 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestScoped @Named("userInfo")
 public class UserInfoBean {
 	public static final String ROLE_BLOGADMIN = "[BlogAdmin]";
+	public static final String ROLE_CONTRIBUTOR = "[Contributor]";
 	
 	@Inject
 	private UserBean userBean;
@@ -36,6 +40,10 @@ public class UserInfoBean {
 	
 	public String getUserName() {
 		return userBean.getId();
+	}
+	
+	public String getDisplayName() {
+		return userBean.getDisplayName();
 	}
 	
 	public boolean isAnonymous() {
@@ -52,5 +60,10 @@ public class UserInfoBean {
 		} else {
 			return url;
 		}
+	}
+	
+	public boolean isApprovedContributor() {
+		String[] roles = (String[])userBean.getValue(DominoDBUserBeanDataProvider.FIELD_DBACL_ACCESS_ROLES);
+		return roles != null && Arrays.binarySearch(roles, ROLE_CONTRIBUTOR) > -1;
 	}
 }
