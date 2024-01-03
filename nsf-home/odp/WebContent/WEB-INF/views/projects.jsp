@@ -32,13 +32,13 @@
 				<tr class="pager">
 					<td>
 						<c:if test="${prevPage gt 0}">
-							<a href="${mvc.basePath}/projects?page=${prevPage}"><c:out value="${translation.prevPage}"/></a>
+							<a href="${mvc.basePath}/projects?sort=${sortColumn}&amp;page=${prevPage}"><c:out value="${translation.prevPage}"/></a>
 						</c:if>
 					</td>
 					<td></td>
 					<td>
 						<c:if test="${nextPage gt 0}">
-							<a href="${mvc.basePath}/projects?page=${nextPage}"><c:out value="${translation.nextPage}"/></a>
+							<a href="${mvc.basePath}/projects?sort=${sortColumn}&amp;page=${nextPage}"><c:out value="${translation.nextPage}"/></a>
 						</c:if>
 					</td>
 				</tr>
@@ -91,13 +91,13 @@
 				<tr class="pager">
 					<td>
 						<c:if test="${prevPage gt 0}">
-							<a href="${mvc.basePath}/projects?page=${prevPage}"><c:out value="${translation.prevPage}"/></a>
+							<a href="${mvc.basePath}/projects?sort=${sortColumn}&amp;page=${prevPage}"><c:out value="${translation.prevPage}"/></a>
 						</c:if>
 					</td>
 					<td></td>
 					<td>
 						<c:if test="${nextPage gt 0}">
-							<a href="${mvc.basePath}/projects?page=${nextPage}"><c:out value="${translation.nextPage}"/></a>
+							<a href="${mvc.basePath}/projects?sort=${sortColumn}&amp;page=${nextPage}"><c:out value="${translation.nextPage}"/></a>
 						</c:if>
 					</td>
 				</tr>
