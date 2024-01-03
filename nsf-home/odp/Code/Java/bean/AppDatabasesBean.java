@@ -16,8 +16,13 @@
 package bean;
 
 import org.openntf.xsp.nosql.communication.driver.lsxbe.impl.DefaultDominoDocumentCollectionManager;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.openntf.xsp.nosql.communication.driver.DominoDocumentCollectionManager;
 
+import com.ibm.xsp.extlib.util.ExtLibUtil;
 import com.ibm.xsp.model.domino.DominoUtils;
 
 import jakarta.enterprise.context.RequestScoped;
@@ -36,57 +41,29 @@ public class AppDatabasesBean {
 	@Inject
 	private ApplicationConfig config;
 	
-	private Session getSession() {
-		return CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
-	}
-	
-	private Session getSessionAsSigner() {
-		return CDI.current().select(Session.class, NamedLiteral.of("dominoSessionAsSigner")).get();
-	}
-	
 	@Produces @Named("projectsDatabase")
 	public Database getProjectsDatabase() {
-		try {
-			return DominoUtils.openDatabaseByName(getSession(), config.getProjectsDbPath());
-		} catch(NotesException e) {
-			throw new RuntimeException(e);
-		}
+		return openDatabase(config.getProjectsDbPath());
 	}
 	
 	@Produces @Named("blogDatabase")
 	public Database getBlogDatabase() {
-		try {
-			return DominoUtils.openDatabaseByName(getSession(), config.getBlogDbPath());
-		} catch(NotesException e) {
-			throw new RuntimeException(e);
-		}
+		return openDatabase(config.getBlogDbPath());
 	}
 	
 	@Produces @Named("homeDatabase")
 	public Database getHomeDatabase() {
-		try {
-			return DominoUtils.openDatabaseByName(getSession(), config.getHomeDbPath());
-		} catch(NotesException e) {
-			throw new RuntimeException(e);
-		}
+		return openDatabase(config.getHomeDbPath());
 	}
 	
 	@Produces @Named("webinarsDatabase")
 	public Database getWebinarsDatabase() {
-		try {
-			return DominoUtils.openDatabaseByName(getSession(), config.getWebinarsDbPath());
-		} catch(NotesException e) {
-			throw new RuntimeException(e);
-		}
+		return openDatabase(config.getWebinarsDbPath());
 	}
 	
 	@Produces @Named("ctDatabase")
 	public Database getCtDatabase() {
-		try {
-			return DominoUtils.openDatabaseByName(getSession(), config.getCtDbPath());
-		} catch(NotesException e) {
-			throw new RuntimeException(e);
-		}
+		return openDatabase(config.getCtDbPath());
 	}
 	
 	// NoSQL repositories
@@ -95,8 +72,8 @@ public class AppDatabasesBean {
 	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "projectsRepository")
 	public DominoDocumentCollectionManager getProjectsManager() {
 		return new DefaultDominoDocumentCollectionManager(
-			() -> getProjectsDatabase(),
-			() -> getSessionAsSigner()
+			this::getProjectsDatabase,
+			this::getSessionAsSigner
 		);
 	}
 	
@@ -104,8 +81,8 @@ public class AppDatabasesBean {
 	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "blogRepository")
 	public DominoDocumentCollectionManager getBlogManager() {
 		return new DefaultDominoDocumentCollectionManager(
-			() -> getBlogDatabase(),
-			() -> getSessionAsSigner()
+			this::getBlogDatabase,
+			this::getSessionAsSigner
 		);
 	}
 
@@ -113,8 +90,8 @@ public class AppDatabasesBean {
 	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "homeRepository")
 	public DominoDocumentCollectionManager getHomeManager() {
 		return new DefaultDominoDocumentCollectionManager(
-			() -> getHomeDatabase(),
-			() -> getSessionAsSigner()
+			this::getHomeDatabase,
+			this::getSessionAsSigner
 		);
 	}
 
@@ -122,8 +99,8 @@ public class AppDatabasesBean {
 	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "webinarsRepository")
 	public DominoDocumentCollectionManager getWebinarsManager() {
 		return new DefaultDominoDocumentCollectionManager(
-			() -> getWebinarsDatabase(),
-			() -> getSessionAsSigner()
+			this::getWebinarsDatabase,
+			this::getSessionAsSigner
 		);
 	}
 
@@ -134,5 +111,25 @@ public class AppDatabasesBean {
 			this::getCtDatabase,
 			this::getSessionAsSigner
 		);
+	}
+	
+	private Database openDatabase(String apiPath) {
+		@SuppressWarnings("unchecked")
+		Map<String, Database> dbs = (Map<String, Database>)ExtLibUtil.getRequestScope().computeIfAbsent(getClass().getName() + "_dbCache", key -> new HashMap<>());
+		return dbs.computeIfAbsent(apiPath, key -> {
+			try {
+				return DominoUtils.openDatabaseByName(getSession(), key);
+			} catch(NotesException e) {
+				throw new RuntimeException(e);
+			}
+		});
+	}
+	
+	private Session getSession() {
+		return CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
+	}
+	
+	private Session getSessionAsSigner() {
+		return CDI.current().select(Session.class, NamedLiteral.of("dominoSessionAsSigner")).get();
 	}
 }
