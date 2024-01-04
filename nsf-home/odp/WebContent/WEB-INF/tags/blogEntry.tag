@@ -24,7 +24,7 @@
 	<h3>
 		${fn:escapeXml(encoder.toCommonName(pageScope.value.author))}
 		|
-		<time-ago value="${fn:escapeXml(pageScope.value.date)}" />
+		<time-ago value="${fn:escapeXml(pageScope.value.date)}"></time-ago>
 		|
 		<a href="${mvc.basePath}/blog/${pageScope.value.unid}">${translation.comments}</a>
 	</h3>

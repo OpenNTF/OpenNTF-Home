@@ -36,7 +36,7 @@
 						<c:forEach items="${recentReleases}" var="release">
 							<li>
 								<a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}"><c:out value="${release.projectName}"/></a>
-								<span class="release-date"><time-ago value="${fn:escapeXml(release.releaseDate)}" /></span>
+								<span class="release-date"><time-ago value="${fn:escapeXml(release.releaseDate)}"></time-ago></span>
 							</li>
 						</c:forEach>
 					</ol>
@@ -49,7 +49,7 @@
 						<c:forEach items="${upcomingEvents}" var="event">
 							<li>
 								<c:out value="${event.name}"/>
-								<span class="release-date"><future-time value="${fn:escapeXml(event.scheduledStartTime)}" /></span>
+								<span class="release-date"><future-time value="${fn:escapeXml(event.scheduledStartTime)}"></future-time></span>
 							</li>
 						</c:forEach>
 					</ol>
@@ -62,7 +62,7 @@
 						<c:forEach items="${recentCtPosts}" var="post">
 							<li>
 								<a href="${post.link}" target="_blank"><c:out value="${post.title}"/></a>
-								<span class="release-date"><time-ago value="${fn:escapeXml(post.creationDate)}" /></span>
+								<span class="release-date"><time-ago value="${fn:escapeXml(post.creationDate)}"></time-ago></span>
 							</li>
 						</c:forEach>
 					</ol>

@@ -32,7 +32,7 @@
 			<c:forEach items="${pageScope.project.chefs}" var="chef">
 				<t:personName value="${chef}"/>
 			</c:forEach>
-			<span class="created"><time-ago value="${fn:escapeXml(pageScope.project.created)}" /></span>
+			<span class="created"><time-ago value="${fn:escapeXml(pageScope.project.created)}"></time-ago></span>
 			|
 			<span class="downloads"><c:out value="${messages.format('downloads', pageScope.project.downloads)}"/></span>
 		</div>

@@ -63,7 +63,7 @@
 					</div>
 					
 					<dt>Released On</dt>
-					<dd><time-ago value="${fn:escapeXml(release.releaseDate)}" /></dd>
+					<dd><time-ago value="${fn:escapeXml(release.releaseDate)}"></time-ago></dd>
 					
 					<dt>Released By</dt>
 					<dd>
