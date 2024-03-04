@@ -132,6 +132,19 @@ public class ProjectsController {
 		return "project/summary.jsp";
 	}
 	
+	@Path("{projectName}/edit")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Controller
+	public String editProject(@PathParam("projectName") String projectName) {
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		models.put("project", project);
+		models.put("editMode", true);
+		return "project/summary.jsp";
+	}
+	
 	@Path("{projectName}/releases")
 	@GET
 	@Produces(MediaType.TEXT_HTML)

@@ -38,6 +38,9 @@
 		
 		<script type="text/javascript" src="webjars/hotwired__turbo/7.1.0/dist/turbo.es2017-umd.js"></script>
 		
+		<script type="text/javascript" src="webjars/codemirror/5.62.2/lib/codemirror.js"></script>
+		<link rel="stylesheet" href="webjars/codemirror/5.62.2/lib/codemirror.css" />
+		
 		<script type="text/javascript" src="customElements.js"></script>
 		
 		<title>${translation.appTitle}</title>

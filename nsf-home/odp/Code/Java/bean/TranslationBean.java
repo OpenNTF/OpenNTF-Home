@@ -21,8 +21,6 @@ import java.util.ResourceBundle;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.Produces;
-import jakarta.enterprise.inject.literal.NamedLiteral;
-import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,9 +40,12 @@ public class TranslationBean {
 	public static class Messages {
 		@Inject
 		HttpServletRequest request;
+		
+		@Inject
+		@Named("translation")
+		private ResourceBundle translation;
 
 		public String format(final String key, final Object... params) {
-			ResourceBundle translation = CDI.current().select(ResourceBundle.class, NamedLiteral.of("translation")).get(); //$NON-NLS-1$
 			String message = translation.getString(key);
 			return MessageFormat.format(message, params);
 		}
@@ -60,7 +61,6 @@ public class TranslationBean {
 		 *         itself otherwise
 		 */
 		public String softFormat(final String key, final Object... params) {
-			ResourceBundle translation = CDI.current().select(ResourceBundle.class, NamedLiteral.of("translation")).get(); //$NON-NLS-1$
 			if(translation.containsKey(key)) {
 				String message = translation.getString(key);
 				return MessageFormat.format(message, params);

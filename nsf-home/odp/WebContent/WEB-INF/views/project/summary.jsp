@@ -24,7 +24,15 @@
 	<section class="project-layout">
 	
 		<section class="details">
-			${markdown.toHtml(project.details)}
+			<c:if test="${not editMode}">
+				${markdown.toHtml(project.details)}
+				
+				<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/edit"><c:out value="${translation.edit}"/></a></p>
+			</c:if>
+			<c:if test="${editMode}">
+				<h2><c:out value="${messages.format('editPrefix', translation.projectSummary)}"/></h2>
+				<textarea class="markdown-edit"><c:out value="${project.details}"/></textarea>
+			</c:if>
 		</section>
 		<section id="recent-activity" class="activity-feed">
 			<ol>
