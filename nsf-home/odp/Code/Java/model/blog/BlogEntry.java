@@ -32,6 +32,7 @@ import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
 import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.nosql.mapping.extension.ViewDocuments;
 import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
 
 import com.ibm.commons.util.StringUtil;
 
@@ -57,6 +58,9 @@ public class BlogEntry implements Comparable<BlogEntry> {
 		
 		@ViewEntries(value=VIEW_BYCATEGORY, maxLevel=0)
 		Stream<BlogEntry> listCategories();
+		
+		@ViewDocuments(value=VIEW_BYCATEGORY)
+		Stream<BlogEntry> findByCategory(ViewQuery query);
 	}
 	
 	private static final Comparator<BlogEntry> COMPARATOR = Comparator.comparing(BlogEntry::getOffsetDateTime).thenComparing(BlogEntry::getUnid);

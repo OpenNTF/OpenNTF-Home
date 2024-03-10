@@ -19,6 +19,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@attribute name="value" required="true" type="java.lang.Object" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <article class="blog-entry">
 	<h2>${fn:escapeXml(pageScope.value.title)}</h2>
 	<h3>
@@ -26,7 +27,15 @@
 		|
 		<time-ago value="${fn:escapeXml(pageScope.value.date)}"></time-ago>
 		|
-		<a href="${mvc.basePath}/blog/${pageScope.value.unid}">${translation.comments}</a>
+		<a href="${mvc.basePath}/blog/${pageScope.value.unid}"><c:out value="${translation.comments}"/></a>
+		
+		<c:if test="${not empty pageScope.value.categories}">
+			<br />
+			<c:out value="${translation.tagsPrefix}"/>
+			<c:forEach items="${pageScope.value.categories}" var="category">
+				<a href="${mvc.basePath}/blog/tags/${encoder.urlEncode(category)}"><c:out value="${category}"/></a>
+			</c:forEach>
+		</c:if>
 	</h3>
 	<div>${pageScope.value.html}</div>
 </article>
