@@ -173,7 +173,7 @@ public class BlogResource {
 
 		post.getCategories().stream()
 			.map(AtomCategory::new)
-			.map(entry.getCategories()::add);
+			.forEach(entry.getCategories()::add);
 
 		// Add links
 		Link read = new Link();
