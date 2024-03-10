@@ -57,7 +57,8 @@ public class BlogController {
 	@View("blog/byTag.jsp")
 	public void getByTag(@PathParam("tag") String tag) {
 		models.put("tag", tag); //$NON-NLS-1$
-		models.put("blogEntries", blogRepository.findByCategory(ViewQuery.query().category(tag)).collect(Collectors.toList()));
+		ViewQuery query = ViewQuery.query().category(tag.replace('+', ' '));
+		models.put("blogEntries", blogRepository.findByCategory(query).collect(Collectors.toList()));
 		
 	}
 	
