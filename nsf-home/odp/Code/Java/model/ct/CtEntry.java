@@ -16,12 +16,17 @@
 package model.ct;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
 import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
 
+import com.ibm.commons.util.StringUtil;
+
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
@@ -46,6 +51,8 @@ public class CtEntry {
 	private String title;
 	@Column("NLink")
 	private String link;
+	@Column("PID")
+	private String pid;
 	
 	public String getId() {
 		return id;
@@ -76,5 +83,23 @@ public class CtEntry {
 	}
 	public void setLink(String link) {
 		this.link = link;
+	}
+	public String getPid() {
+		return pid;
+	}
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+	
+	public String getPersonDisplayName() {
+		String pid = getPid();
+		if(StringUtil.isEmpty(pid)) {
+			return "";
+		}
+		
+		CtPerson.Repository repository = CDI.current().select(CtPerson.Repository.class).get();
+		return repository.findByPid(ViewQuery.query().key(pid, true))
+			.map(CtPerson::getDisplayName)
+			.orElse("");
 	}
 }

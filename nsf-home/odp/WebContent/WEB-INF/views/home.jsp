@@ -62,6 +62,7 @@
 						<c:forEach items="${recentCtPosts}" var="post">
 							<li>
 								<a href="${post.link}" target="_blank"><c:out value="${post.title}"/></a>
+								<br /><c:out value="${post.personDisplayName}"/>
 								<span class="release-date"><time-ago value="${fn:escapeXml(post.creationDate)}"></time-ago></span>
 							</li>
 						</c:forEach>
