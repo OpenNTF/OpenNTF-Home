@@ -44,7 +44,7 @@
 		
 		<script type="text/javascript" src="customElements.js"></script>
 		
-		<title>${translation.appTitle}</title>
+		<title><c:out value="${translation.appTitle}"/></title>
 	</head>
 	<body>
 		<header id="pageheader">
