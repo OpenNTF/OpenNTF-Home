@@ -16,7 +16,6 @@
 package model.ct;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
