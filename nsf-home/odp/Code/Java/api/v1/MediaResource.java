@@ -17,6 +17,7 @@ package api.v1;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Date;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
@@ -69,7 +70,9 @@ public class MediaResource {
         cc.setMaxAge(5 * 24 * 60 * 60);
 
         return builder
-                .cacheControl(cc)
-                .build();
+            .cacheControl(cc)
+            .lastModified(new Date(att.getLastModified()))
+            .header(HttpHeaders.ETAG, etag.getValue())
+            .build();
     }
 }

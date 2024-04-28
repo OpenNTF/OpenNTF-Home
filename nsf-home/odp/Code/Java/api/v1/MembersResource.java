@@ -1,6 +1,7 @@
 package api.v1;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,6 +62,8 @@ public class MembersResource {
 		
 		return Response.ok(att.getData(), att.getContentType())
             .cacheControl(cc)
+            .lastModified(new Date(att.getLastModified()))
+            .header(HttpHeaders.ETAG, etag.getValue())
             .build();
 		
 	}
