@@ -17,7 +17,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityTag;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
@@ -54,16 +53,15 @@ public class MembersResource {
         Response.ResponseBuilder builder = request.evaluatePreconditions(etag);
         if(builder == null) {
             builder = Response.ok(att.getData(), att.getContentType())
-                .header(HttpHeaders.ETAG, etag);
+                .tag(etag);
         }
         
         CacheControl cc = new CacheControl();
         cc.setMaxAge(5 * 24 * 60 * 60);
 		
-		return Response.ok(att.getData(), att.getContentType())
+		return builder
             .cacheControl(cc)
             .lastModified(new Date(att.getLastModified()))
-            .header(HttpHeaders.ETAG, etag.getValue())
             .build();
 		
 	}

@@ -31,7 +31,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityTag;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 
@@ -63,7 +62,7 @@ public class MediaResource {
         Response.ResponseBuilder builder = request.evaluatePreconditions(etag);
         if(builder == null) {
             builder = Response.ok(att.getData(), att.getContentType())
-                .header(HttpHeaders.ETAG, etag);
+                .tag(etag);
         }
 
         CacheControl cc = new CacheControl();
@@ -72,7 +71,6 @@ public class MediaResource {
         return builder
             .cacheControl(cc)
             .lastModified(new Date(att.getLastModified()))
-            .header(HttpHeaders.ETAG, etag.getValue())
             .build();
     }
 }
