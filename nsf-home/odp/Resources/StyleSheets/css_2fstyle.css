@@ -280,6 +280,26 @@ textarea.markdown-edit {
 	height: 30em;
 }
 
+.members-list li {
+	list-style-type: none;
+	display: grid;
+	grid-template-columns: 325px 1fr;
+	grid-template-areas: "logo description";
+	padding: 1em 0;
+}
+.members-list li + li {
+	border-top: 1px solid lightgrey;
+}
+.members-list img.member-logo {
+	max-width: 250px;
+	max-height: 150px;
+	object-fit: contain;
+	grid-area: logo;
+}
+.members-list p {
+	grid-area: description;
+}
+
 @media (min-width: 0px) {
 	body {
 		grid-template-rows: 44px auto 1fr 2em 50px;
