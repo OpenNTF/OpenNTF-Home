@@ -1,6 +1,5 @@
 package api.rss20;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -18,15 +17,12 @@ import bean.TemporalBean;
 import bean.UrlBean;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.nosql.mapping.Pagination;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.UriInfo;
-import lotus.domino.NotesException;
-import model.blog.BlogEntry;
 import model.projects.ProjectRelease;
 
 @Path("/projectReleases.xml")
@@ -92,15 +88,11 @@ public class ProjectFeedResource {
 		RssItem entry = new RssItem();
 
 		String author;
-		try {
-			List<String> chefs = release.getMasterChef();
-			if(chefs == null || chefs.isEmpty()) {
-				author = "";
-			} else {
-				author = encoderBean.toCommonName(chefs.stream().findFirst().orElse(""));
-			}
-		} catch (NotesException e) {
-			throw new RuntimeException(e);
+		List<String> chefs = release.getMasterChef();
+		if(chefs == null || chefs.isEmpty()) {
+			author = "";
+		} else {
+			author = encoderBean.toCommonName(chefs.stream().findFirst().orElse(""));
 		}
 		entry.setCreator(author);
 

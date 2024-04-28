@@ -35,7 +35,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.UriInfo;
-import lotus.domino.NotesException;
 import model.blog.BlogEntry;
 
 @Path("/blog.xml")
@@ -95,12 +94,7 @@ public class BlogFeedResource {
 	private RssItem toEntry(final BlogEntry post, final String baseUrl) {
 		RssItem entry = new RssItem();
 
-		String author;
-		try {
-			author = encoderBean.toCommonName(post.getAuthor());
-		} catch (NotesException e) {
-			throw new RuntimeException(e);
-		}
+		String author = encoderBean.toCommonName(post.getAuthor());
 		entry.setCreator(author);
 
 		entry.setTitle(post.getTitle());

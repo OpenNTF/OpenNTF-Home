@@ -87,12 +87,16 @@ public class EncoderBean {
 	 * @param name the name to convert, such as one in Domino canonical format
 	 * @return an abbreviated form of the name
 	 */
-	public String toCommonName(String name) throws NotesException {
-		Name dominoName = session.createName(name);
+	public String toCommonName(String name) {
 		try {
-			return dominoName.getCommon();
-		} finally {
-			dominoName.recycle();
+			Name dominoName = session.createName(name);
+			try {
+				return dominoName.getCommon();
+			} finally {
+				dominoName.recycle();
+			}
+		} catch (NotesException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
