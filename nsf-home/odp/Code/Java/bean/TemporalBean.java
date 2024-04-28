@@ -17,6 +17,7 @@ package bean;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -55,6 +56,13 @@ public class TemporalBean {
 			ZonedDateTime dt = ZonedDateTime.ofInstant(inst, ZoneId.systemDefault());
 			return formatter.format(dt);
 		}
+	}
+	
+	public Instant toInstant(Temporal time) {
+		if(time instanceof LocalDate) {
+			return ZonedDateTime.of((LocalDate)time, LocalTime.NOON, ZoneId.systemDefault()).toInstant();
+		}
+		return Instant.from(time);
 	}
 
 }

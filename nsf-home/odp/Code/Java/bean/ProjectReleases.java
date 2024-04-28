@@ -35,4 +35,9 @@ public class ProjectReleases {
 		Pagination pagination = Pagination.page(1).size(limit);
 		return projectReleaseRepository.findRecent(pagination).collect(Collectors.toList());
 	}
+	
+	public List<ProjectRelease> getRecentReleaseDocuments(int limit) {
+		Pagination pagination = Pagination.page(1).size(limit);
+		return projectReleaseRepository.findRecentDocuments(pagination).collect(Collectors.toList());
+	}
 }

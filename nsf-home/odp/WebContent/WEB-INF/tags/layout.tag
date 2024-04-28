@@ -34,6 +34,7 @@
 		<link rel="stylesheet" href="css/tabs.css" />
 		
 		<link rel="alternate" href="${mvc.basePath}/feed.xml" type="application/rss+xml" title="${fn:escapeXml(translation.feedRssBlog)}">
+		<link rel="alternate" href="${mvc.basePath}/projectReleases.xml" type="application/rss+xml" title="${fn:escapeXml(translation.feedRssProjectReleases)}">
 		<link rel="EditURI" type="application/rsd+xml" href="${mvc.basePath}/rsd.xml" />
 		
 		<script type="text/javascript" src="webjars/hotwired__turbo/7.1.0/dist/turbo.es2017-umd.js"></script>

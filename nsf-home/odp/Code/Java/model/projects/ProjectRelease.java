@@ -33,6 +33,8 @@ import org.openntf.xsp.nosql.mapping.extension.ViewDocuments;
 import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
 
 import bean.EncoderBean;
+import bean.TranslationBean.Messages;
+import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Convert;
@@ -54,6 +56,9 @@ public class ProjectRelease {
 	public interface Repository extends DominoRepository<ProjectRelease, String> {
 		@ViewEntries(VIEW_RELEASES)
 		Stream<ProjectRelease> findRecent(Pagination pagination);
+		
+		@ViewDocuments(VIEW_RELEASES)
+		Stream<ProjectRelease> findRecentDocuments(Pagination pagination);
 
 		Stream<ProjectRelease> findByProjectName(String projectName, Sorts sorts);
 		
@@ -223,5 +228,16 @@ public class ProjectRelease {
 		} else {
 			this.releaseStatus = ReleaseStatus.No;
 		}
+	}
+	
+	/**
+	 * Retrieves a human-readable name for the project and its version.
+	 * 
+	 * @return a human-readable display name
+	 */
+	public String getDisplayName() {
+		Messages translation = CDI.current().select(Messages.class, NamedLiteral.of("messages")).get();
+		return translation.format("projectReleaseDisplay", getProjectName(), getVersion());
+		
 	}
 }
