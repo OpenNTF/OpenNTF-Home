@@ -18,11 +18,11 @@ package model.home;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
 
 @Entity("Setting")
 public class ConfigEntry {

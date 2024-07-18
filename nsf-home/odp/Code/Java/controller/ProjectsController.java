@@ -24,8 +24,8 @@ import org.eclipse.krazo.engine.Viewable;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
-import jakarta.nosql.mapping.Pagination;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.data.page.PageRequest;
+import jakarta.data.Sort;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
@@ -81,14 +81,14 @@ public class ProjectsController {
 	@Controller
 	public String get(@QueryParam("page") Integer page, @QueryParam("sort") String sort) {
 		String sortColumn;
-		Sorts sorts = null;
+		Sort<Project> sorts = null;
 		switch(String.valueOf(sort)) {
 		case "name":
 			sortColumn = "name";
-			sorts = Sorts.sorts().asc("name");
+			sorts = Sort.asc("name");
 			break;
 		case "owner":
-			sorts = Sorts.sorts().asc("chefs");
+			sorts = Sort.asc("chefs");
 			sortColumn = "owner";
 			break;
 		default:
@@ -98,14 +98,14 @@ public class ProjectsController {
 		models.put("sortColumn", sortColumn);
 		
 		int pageSize = 30;
-		Pagination pagination;
+		PageRequest pagination;
 		int nextPage = 0;
 		int prevPage = 0;
 		if(page == null || page < 2) {
-			pagination = Pagination.page(1).size(pageSize);
+			pagination = PageRequest.ofPage(1).size(pageSize);
 			nextPage = 2;
 		} else {
-			pagination = Pagination.page(page).size(pageSize);
+			pagination = PageRequest.ofPage(page).size(pageSize);
 			nextPage = page+1;
 			prevPage = page-1;
 		}

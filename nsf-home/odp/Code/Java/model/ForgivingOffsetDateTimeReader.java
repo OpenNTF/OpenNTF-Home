@@ -25,8 +25,9 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.eclipse.jnosql.communication.ValueReader;
+
 import jakarta.annotation.Priority;
-import jakarta.nosql.ValueReader;
 
 /**
  * This {@link ValueReader} overrides the default {@link OffsetDateTime} reader

@@ -15,10 +15,10 @@
  */
 package model.projects;
 
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 
-import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.Entity;
 
 /**
  * This entity is used to represent view entries in a view that lists

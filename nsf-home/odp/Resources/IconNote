@@ -25,12 +25,6 @@ AAAAUEECICABAAD/////+A4DgA==
   <item name="$AllowPost8HTML">
     <text>1</text>
   </item>
-  <item name="$Daos">
-    <text>1</text>
-  </item>
-  <item name="$LargeSummary">
-    <text>0</text>
-  </item>
   <item name="$DefaultFrameset">
     <text>Outer Frame</text>
   </item>
@@ -40,10 +34,16 @@ AAAAUEECICABAAD/////+A4DgA==
   <item name="$TITLE">
     <text>OpenNTF Home (JEE)</text>
   </item>
-  <item name="$Flags">
-    <text>Jz47qNZFKE</text>
-  </item>
   <item name="$FlagsNoRefresh">
     <text>rv</text>
+  </item>
+  <item name="$Daos">
+    <text>1</text>
+  </item>
+  <item name="$LargeSummary">
+    <text>0</text>
+  </item>
+  <item name="$Flags">
+    <text>Jz47qNZFKE</text>
   </item>
 </note>

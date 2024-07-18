@@ -37,7 +37,7 @@ import controller.BlogController;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.nosql.mapping.Pagination;
+import jakarta.data.page.PageRequest;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -85,7 +85,7 @@ public class BlogResource {
 		// Figure out the starting point
 		int start = Math.max(PostUtil.parseStartParam(startParam), 0);
 		int page = start / PAGE_LENGTH + 1;
-		List<BlogEntry> result = posts.findRecent(Pagination.page(page).size(PAGE_LENGTH)).collect(Collectors.toList());
+		List<BlogEntry> result = posts.findRecent(PageRequest.ofPage(page).size(PAGE_LENGTH)).collect(Collectors.toList());
 
 		if (start + PAGE_LENGTH < PostUtil.getPostCount()) {
 			// Then add nav links

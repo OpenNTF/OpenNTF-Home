@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.nosql.mapping.Pagination;
+import jakarta.data.page.PageRequest;
 import model.projects.ProjectRelease;
 
 @RequestScoped
@@ -32,12 +32,12 @@ public class ProjectReleases {
 	private ProjectRelease.Repository projectReleaseRepository;
 
 	public List<ProjectRelease> getRecentReleases(int limit) {
-		Pagination pagination = Pagination.page(1).size(limit);
+		PageRequest pagination = PageRequest.ofPage(1).size(limit);
 		return projectReleaseRepository.findRecent(pagination).collect(Collectors.toList());
 	}
 	
 	public List<ProjectRelease> getRecentReleaseDocuments(int limit) {
-		Pagination pagination = Pagination.page(1).size(limit);
+		PageRequest pagination = PageRequest.ofPage(1).size(limit);
 		return projectReleaseRepository.findRecentDocuments(pagination).collect(Collectors.toList());
 	}
 }

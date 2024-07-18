@@ -24,7 +24,7 @@ import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
 import jakarta.mvc.View;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.data.Sort;
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -53,7 +53,7 @@ public class UsersController {
 		models.put("displayName", userInfo.getDisplayName());
 		models.put("thumbnailUrl", userInfo.getThumbnailUrl());
 		models.put("approvedContributor", userInfo.isApprovedContributor());
-		models.put("projects", projectsRepository.findByChefs(userInfo.getDisplayName(), Sorts.sorts().asc("name")).collect(Collectors.toList()));
+		models.put("projects", projectsRepository.findByChefs(userInfo.getDisplayName(), Sort.asc("name")).collect(Collectors.toList()));
 	}
 	
 	@Path("{userName}")

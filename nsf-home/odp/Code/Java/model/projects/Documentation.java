@@ -20,21 +20,21 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
-import org.openntf.xsp.nosql.communication.driver.DominoConstants;
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
+import jakarta.data.Sort;
 import model.AbstractAttachmentEntity;
 
 @Entity("documentation")
 public class Documentation extends AbstractAttachmentEntity {
 	@RepositoryProvider("projectsRepository")
 	public static interface Repository extends DominoRepository<Documentation, String> {
-		Stream<Documentation> findByProjectName(String projectName, Sorts sorts);
+		Stream<Documentation> findByProjectName(String projectName, Sort<Documentation> sorts);
 	}
 	
 	@Id

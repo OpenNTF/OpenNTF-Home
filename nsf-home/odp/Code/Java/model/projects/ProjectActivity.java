@@ -18,14 +18,14 @@ package model.projects;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
-import org.openntf.xsp.nosql.communication.driver.DominoConstants;
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
-import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
-import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
+import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
 
 // NB: this entity represents many types of forms in the database
 //     and should not be created or saved

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
-import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;

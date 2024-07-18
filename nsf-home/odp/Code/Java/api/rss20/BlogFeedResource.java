@@ -28,7 +28,7 @@ import bean.EncoderBean;
 import bean.UrlBean;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.nosql.mapping.Pagination;
+import jakarta.data.page.PageRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -84,7 +84,7 @@ public class BlogFeedResource {
 		image.setTitle(translation.getString("appTitle")); //$NON-NLS-1$
 		image.setLink(baseUrl);
 
-		posts.findRecent(Pagination.page(1).size(10))
+		posts.findRecent(PageRequest.ofPage(1).size(10))
 			.map(post -> toEntry(post, baseUrl))
 			.forEach(channel.getItems()::add);
 

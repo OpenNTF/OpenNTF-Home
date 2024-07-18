@@ -15,7 +15,7 @@
  */
 package model.blog;
 
-import jakarta.nosql.mapping.AttributeConverter;
+import jakarta.nosql.AttributeConverter;
 
 public class BooleanYNConveter implements AttributeConverter<Boolean, Object> {
 

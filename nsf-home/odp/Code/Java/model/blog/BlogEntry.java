@@ -27,21 +27,21 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.openntf.xsp.nosql.communication.driver.DominoConstants;
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
-import org.openntf.xsp.nosql.mapping.extension.ViewDocuments;
-import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
-import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
+import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewDocuments;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import com.ibm.commons.util.StringUtil;
 
 import bean.MarkdownBean;
 import jakarta.enterprise.inject.spi.CDI;
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
-import jakarta.nosql.mapping.Pagination;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
+import jakarta.data.page.PageRequest;
 
 @Entity("content_BlogEntry")
 public class BlogEntry implements Comparable<BlogEntry> {
@@ -51,7 +51,7 @@ public class BlogEntry implements Comparable<BlogEntry> {
 		public static final String VIEW_BYCATEGORY = "vw_Content_BlogsCategory";
 		
 		@ViewDocuments(value=VIEW_BLOGS, maxLevel=0)
-		Stream<BlogEntry> findRecent(Pagination pagination);
+		Stream<BlogEntry> findRecent(PageRequest pagination);
 		
 		@ViewEntries(value=VIEW_BLOGS, maxLevel=0)
 		Stream<BlogEntry> findAll();

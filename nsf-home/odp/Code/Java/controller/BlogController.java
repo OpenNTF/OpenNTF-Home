@@ -17,7 +17,7 @@ package controller;
 
 import java.util.stream.Collectors;
 
-import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import bean.BlogEntries;
 import jakarta.inject.Inject;

@@ -18,26 +18,26 @@ package model.ct;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
-import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
-import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import com.ibm.commons.util.StringUtil;
 
 import jakarta.enterprise.inject.spi.CDI;
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
-import jakarta.nosql.mapping.Pagination;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
+import jakarta.data.page.PageRequest;
+import jakarta.data.Sort;
 
 @Entity
 public class CtEntry {
 	@RepositoryProvider("ctRepository")
 	public interface Repository extends DominoRepository<CtEntry, String> {
 		@ViewEntries("NewsAll")
-		Stream<CtEntry> listEntries(Sorts sorts, Pagination pagination);
+		Stream<CtEntry> listEntries(Sort<CtEntry> sorts, PageRequest pagination);
 	}
 	
 	@Id

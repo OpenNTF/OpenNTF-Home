@@ -21,19 +21,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.openntf.xsp.nosql.communication.driver.DominoConstants;
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.ItemStorage;
-import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
-import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
-import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
+import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ItemStorage;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import jakarta.enterprise.inject.spi.CDI;
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
-import jakarta.nosql.mapping.Pagination;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
+import jakarta.data.page.PageRequest;
+import jakarta.data.Sort;
 
 @Entity("Project")
 public class Project {
@@ -42,9 +42,9 @@ public class Project {
 		Optional<Project> findByProjectName(String projectName);
 		
 		@ViewEntries("ProjectsList")
-		Stream<Project> findAll(Pagination pagination, Sorts sorts);
+		Stream<Project> findAll(PageRequest pagination, Sort<Project> sorts);
 		
-		Stream<Project> findByChefs(String chef, Sorts sorts);
+		Stream<Project> findByChefs(String chef, Sort<Project> sorts);
 	}
 	
 	@Id
@@ -147,7 +147,7 @@ public class Project {
 	
 	public List<ProjectRelease> getReleasesByDate() {
 		ProjectRelease.Repository repo = CDI.current().select(ProjectRelease.Repository.class).get();
-		Stream<ProjectRelease> releases = repo.findByProjectName(getName(), Sorts.sorts().desc("releaseDate"));
+		Stream<ProjectRelease> releases = repo.findByProjectName(getName(), Sort.desc("releaseDate"));
 		return releases.collect(Collectors.toList());
 	}
 	
@@ -161,7 +161,7 @@ public class Project {
 	
 	public List<Discussion> getDiscussionByDate() {
 		Discussion.Repository repo = CDI.current().select(Discussion.Repository.class).get();
-		Stream<Discussion> releases = repo.findByProjectName(getName(), Sorts.sorts().desc("entryDate"));
+		Stream<Discussion> releases = repo.findByProjectName(getName(), Sort.desc("entryDate"));
 		return releases.collect(Collectors.toList());
 	}
 	
@@ -174,26 +174,26 @@ public class Project {
 	
 	public List<Documentation> getDocumentation() {
 		Documentation.Repository repo = CDI.current().select(Documentation.Repository.class).get();
-		return repo.findByProjectName(getName(), Sorts.sorts().desc("entryDate"))
+		return repo.findByProjectName(getName(), Sort.desc("entryDate"))
 			.filter(s -> !s.getAttachments().isEmpty())
 			.collect(Collectors.toList());
 	}
 	
 	public List<FeatureRequest> getFeatureRequests() {
 		FeatureRequest.Repository repo = CDI.current().select(FeatureRequest.Repository.class).get();
-		return repo.findByProjectName(getName(), Sorts.sorts().desc("entryDate"))
+		return repo.findByProjectName(getName(), Sort.desc("entryDate"))
 			.collect(Collectors.toList());
 	}
 	
 	public List<Defect> getDefects() {
 		Defect.Repository repo = CDI.current().select(Defect.Repository.class).get();
-		return repo.findByProjectName(getName(), Sorts.sorts().desc("entryDate"))
+		return repo.findByProjectName(getName(), Sort.desc("entryDate"))
 			.collect(Collectors.toList());
 	}
 	
 	public List<Review> getReviews() {
 		Review.Repository repo = CDI.current().select(Review.Repository.class).get();
-		return repo.findByProjectName(getName(), Sorts.sorts().desc("entryDate"))
+		return repo.findByProjectName(getName(), Sort.desc("entryDate"))
 			.collect(Collectors.toList());
 	}
 }

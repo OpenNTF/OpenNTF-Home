@@ -25,8 +25,8 @@ import bean.ProjectReleases;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
-import jakarta.nosql.mapping.Pagination;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.data.page.PageRequest;
+import jakarta.data.Sort;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -61,7 +61,7 @@ public class HomeController {
 				.sorted(Comparator.comparing(ScheduledEvent::getScheduledStartTime))
 				.collect(Collectors.toList())
 		);
-		models.put("recentCtPosts", ctEntries.listEntries(Sorts.sorts().desc("creationDate"), Pagination.page(1).size(5)).collect(Collectors.toList()));
+		models.put("recentCtPosts", ctEntries.listEntries(Sort.desc("creationDate"), PageRequest.ofPage(1).size(5)).collect(Collectors.toList()));
 		models.put("blogEntries", blogEntries.getEntries(5)); //$NON-NLS-1$
 		
 		return "home.jsp"; //$NON-NLS-1$

@@ -18,10 +18,10 @@ package api.v1;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.openntf.xsp.nosql.mapping.extension.ViewQuery;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import jakarta.inject.Inject;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.data.Sort;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -58,7 +58,7 @@ public class ProjectSummaryResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ProjectSummary> get() {
-		return projectsRepository.findAll(null, Sorts.sorts().desc("lastModified"))
+		return projectsRepository.findAll(null, Sort.desc("lastModified"))
 			.map(p -> {
 				ProjectSummary summary = new ProjectSummary();
 				summary.setName(p.getName());

@@ -29,7 +29,7 @@ import com.ibm.commons.util.StringUtil;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.nosql.mapping.Pagination;
+import jakarta.data.page.PageRequest;
 import jakarta.ws.rs.NotFoundException;
 import model.blog.BlogEntry;
 
@@ -58,7 +58,7 @@ public class BlogEntries {
 	}
 
 	public List<BlogEntry> getEntries(int limit) {
-		return blogEntryRepository.findRecent(Pagination.page(1).size(limit))
+		return blogEntryRepository.findRecent(PageRequest.ofPage(1).size(limit))
 			.collect(Collectors.toList());
 	}
 }

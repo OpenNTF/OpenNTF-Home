@@ -24,24 +24,24 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
-import org.openntf.xsp.nosql.communication.driver.DominoConstants;
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.ItemFlags;
-import org.openntf.xsp.nosql.mapping.extension.ItemStorage;
-import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
-import org.openntf.xsp.nosql.mapping.extension.ViewDocuments;
-import org.openntf.xsp.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ItemFlags;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ItemStorage;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewDocuments;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 
 import bean.EncoderBean;
 import bean.TranslationBean.Messages;
 import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Convert;
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
-import jakarta.nosql.mapping.Pagination;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.nosql.Column;
+import jakarta.nosql.Convert;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
+import jakarta.data.page.PageRequest;
+import jakarta.data.Sort;
 import jakarta.servlet.ServletContext;
 import model.blog.BooleanYNConveter;
 
@@ -55,12 +55,12 @@ public class ProjectRelease {
 	@RepositoryProvider("projectsRepository")
 	public interface Repository extends DominoRepository<ProjectRelease, String> {
 		@ViewEntries(VIEW_RELEASES)
-		Stream<ProjectRelease> findRecent(Pagination pagination);
+		Stream<ProjectRelease> findRecent(PageRequest pagination);
 		
 		@ViewDocuments(VIEW_RELEASES)
-		Stream<ProjectRelease> findRecentDocuments(Pagination pagination);
+		Stream<ProjectRelease> findRecentDocuments(PageRequest pagination);
 
-		Stream<ProjectRelease> findByProjectName(String projectName, Sorts sorts);
+		Stream<ProjectRelease> findByProjectName(String projectName, Sort<ProjectRelease> sorts);
 		
 		@ViewDocuments(VIEW_PENDING_RELEASES)
 		Stream<ProjectRelease> findPendingReleases();

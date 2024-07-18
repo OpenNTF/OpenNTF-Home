@@ -15,12 +15,12 @@
  */
 package bean;
 
-import org.openntf.xsp.nosql.communication.driver.lsxbe.impl.DefaultDominoDocumentCollectionManager;
+import org.openntf.xsp.jakarta.nosql.communication.driver.lsxbe.impl.DefaultDominoDocumentCollectionManager;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openntf.xsp.nosql.communication.driver.DominoDocumentCollectionManager;
+import org.openntf.xsp.jakarta.nosql.communication.driver.DominoDocumentManager;
 
 import com.ibm.xsp.extlib.util.ExtLibUtil;
 import com.ibm.xsp.model.domino.DominoUtils;
@@ -31,7 +31,7 @@ import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.nosql.mapping.DatabaseType;
+import org.eclipse.jnosql.mapping.DatabaseType;
 import lotus.domino.Database;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
@@ -69,8 +69,8 @@ public class AppDatabasesBean {
 	// NoSQL repositories
 
 	@Produces
-	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "projectsRepository")
-	public DominoDocumentCollectionManager getProjectsManager() {
+	@org.eclipse.jnosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "projectsRepository")
+	public DominoDocumentManager getProjectsManager() {
 		return new DefaultDominoDocumentCollectionManager(
 			this::getProjectsDatabase,
 			this::getSessionAsSigner
@@ -78,8 +78,8 @@ public class AppDatabasesBean {
 	}
 	
 	@Produces
-	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "blogRepository")
-	public DominoDocumentCollectionManager getBlogManager() {
+	@org.eclipse.jnosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "blogRepository")
+	public DominoDocumentManager getBlogManager() {
 		return new DefaultDominoDocumentCollectionManager(
 			this::getBlogDatabase,
 			this::getSessionAsSigner
@@ -87,8 +87,8 @@ public class AppDatabasesBean {
 	}
 
 	@Produces
-	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "homeRepository")
-	public DominoDocumentCollectionManager getHomeManager() {
+	@org.eclipse.jnosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "homeRepository")
+	public DominoDocumentManager getHomeManager() {
 		return new DefaultDominoDocumentCollectionManager(
 			this::getHomeDatabase,
 			this::getSessionAsSigner
@@ -96,8 +96,8 @@ public class AppDatabasesBean {
 	}
 
 	@Produces
-	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "webinarsRepository")
-	public DominoDocumentCollectionManager getWebinarsManager() {
+	@org.eclipse.jnosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "webinarsRepository")
+	public DominoDocumentManager getWebinarsManager() {
 		return new DefaultDominoDocumentCollectionManager(
 			this::getWebinarsDatabase,
 			this::getSessionAsSigner
@@ -105,8 +105,8 @@ public class AppDatabasesBean {
 	}
 
 	@Produces
-	@jakarta.nosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "ctRepository")
-	public DominoDocumentCollectionManager getCtManager() {
+	@org.eclipse.jnosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "ctRepository")
+	public DominoDocumentManager getCtManager() {
 		return new DefaultDominoDocumentCollectionManager(
 			this::getCtDatabase,
 			this::getSessionAsSigner

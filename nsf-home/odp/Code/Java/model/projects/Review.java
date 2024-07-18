@@ -18,20 +18,20 @@ package model.projects;
 import java.time.temporal.Temporal;
 import java.util.stream.Stream;
 
-import org.openntf.xsp.nosql.communication.driver.DominoConstants;
-import org.openntf.xsp.nosql.mapping.extension.DominoRepository;
-import org.openntf.xsp.nosql.mapping.extension.ItemStorage;
-import org.openntf.xsp.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ItemStorage;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Sorts;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
+import jakarta.data.Sort;
 
 @Entity("Testimonial")
 public class Review {
 	@RepositoryProvider("projectsRepository")
 	public interface Repository extends DominoRepository<Review, String> {
-		Stream<Review> findByProjectName(String projectName, Sorts sorts);
+		Stream<Review> findByProjectName(String projectName, Sort<Review> sorts);
 	}
 	
 	@Column(DominoConstants.FIELD_ID)
