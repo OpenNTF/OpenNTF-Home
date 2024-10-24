@@ -157,7 +157,7 @@ main img {
 }
 .activity-feed .release-date {
 	position: absolute;
-	bottom: 0.1em;
+	bottom: 0.2em;
 	right: 0.1em;
 	color: grey;
 	font-size: 0.9em;
@@ -298,6 +298,17 @@ textarea.markdown-edit {
 }
 .members-list p {
 	grid-area: description;
+}
+
+fieldset {
+	border: 1px solid lightgrey;
+	border-radius: 0.5em;
+}
+legend {
+	font-size: 1.6rem;
+	font-weight: bold;
+	padding-left: 1rem;
+	padding-right: 1rem;
 }
 
 @media (min-width: 0px) {

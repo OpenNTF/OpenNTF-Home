@@ -19,4 +19,6 @@
 <%@attribute name="value" required="true" type="java.lang.Object" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:out value="${pageScope.value.name}"/>
+<div>
+	<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.value.name)}"><c:out value="${pageScope.value.name}"/></a>
+</div>
