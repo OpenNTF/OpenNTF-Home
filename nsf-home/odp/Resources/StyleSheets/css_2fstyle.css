@@ -113,6 +113,9 @@ main > .main-content {
 main img {
 	max-width: 100%;
 }
+main pre {
+	white-space: pre-wrap;
+}
 
 
 .activity-feed {
@@ -139,6 +142,9 @@ main img {
 	display: block;
 	position: relative;
 }
+.activity-feed table {
+	width: 100%;
+}
 .activity-feed li, .activity-feed tr {
 	margin: 0 1em;
 }
@@ -146,7 +152,7 @@ main img {
 	border-bottom: 1px dashed lightgrey;
 	padding: 1em 0.5em;
 }
-.activity-feed li:last-child, .activity-feed td:last-child {
+.activity-feed li:last-child, .activity-feed tr:last-child td {
 	border-bottom: 0;
 }
 .activity-feed li.active, .activity-feed tr.active {
