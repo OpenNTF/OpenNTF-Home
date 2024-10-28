@@ -15,11 +15,17 @@
  */
 package bean;
 
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import api.external.discord.GuildApi;
@@ -35,6 +41,8 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class DiscordCacheBean {
 	private static final long TIMEOUT = TimeUnit.MINUTES.toMillis(5);
+	
+	private static final Logger log = Logger.getLogger(DiscordCacheBean.class.getPackageName());
 	
 	@Inject
 	@RestClient
@@ -54,15 +62,28 @@ public class DiscordCacheBean {
 		this.lock = new Object();
 	}
 	
+	@Timeout(unit = ChronoUnit.SECONDS, value = 10)
+	@Fallback(fallbackMethod = "emptyUpcomingEvents")
 	@SuppressWarnings("unchecked")
 	public List<ScheduledEvent> getUpcomingEvents() {
 		synchronized(this.lock) {
-			Long updated = lastUpdate.get("upcomingEvents");
-			if(updated == null || updated < System.currentTimeMillis() - TIMEOUT) {
-				cache.put("upcomingEvents", guildApi.getEvents(appConfig.getDiscordGuildId()));
-				lastUpdate.put("upcomingEvents", System.currentTimeMillis());
+			try {
+				Long updated = lastUpdate.get("upcomingEvents");
+				if(updated == null || updated < System.currentTimeMillis() - TIMEOUT) {
+					cache.put("upcomingEvents", guildApi.getEvents(appConfig.getDiscordGuildId()));
+					lastUpdate.put("upcomingEvents", System.currentTimeMillis());
+				}
+				return (List<ScheduledEvent>)cache.get("upcomingEvents");
+			} catch(Exception e) {
+				if(log.isLoggable(Level.SEVERE)) {
+					log.log(Level.SEVERE, "Encountered exception fetching Discord events", e);
+				}
+				throw e;
 			}
-			return (List<ScheduledEvent>)cache.get("upcomingEvents");
 		}
+	}
+	
+	public List<ScheduledEvent> emptyUpcomingEvents() {
+		return Collections.emptyList();
 	}
 }
