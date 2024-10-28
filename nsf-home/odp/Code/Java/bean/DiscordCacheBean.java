@@ -24,7 +24,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -63,27 +65,29 @@ public class DiscordCacheBean {
 	}
 	
 	@Timeout(unit = ChronoUnit.SECONDS, value = 10)
-	@Fallback(fallbackMethod = "emptyUpcomingEvents")
+	@Fallback(FetchFailureHandler.class)
 	@SuppressWarnings("unchecked")
 	public List<ScheduledEvent> getUpcomingEvents() {
 		synchronized(this.lock) {
-			try {
-				Long updated = lastUpdate.get("upcomingEvents");
-				if(updated == null || updated < System.currentTimeMillis() - TIMEOUT) {
-					cache.put("upcomingEvents", guildApi.getEvents(appConfig.getDiscordGuildId()));
-					lastUpdate.put("upcomingEvents", System.currentTimeMillis());
-				}
-				return (List<ScheduledEvent>)cache.get("upcomingEvents");
-			} catch(Exception e) {
-				if(log.isLoggable(Level.SEVERE)) {
-					log.log(Level.SEVERE, "Encountered exception fetching Discord events", e);
-				}
-				throw e;
+			Long updated = lastUpdate.get("upcomingEvents");
+			if(updated == null || updated < System.currentTimeMillis() - TIMEOUT) {
+				cache.put("upcomingEvents", guildApi.getEvents(appConfig.getDiscordGuildId()));
+				lastUpdate.put("upcomingEvents", System.currentTimeMillis());
 			}
+			return (List<ScheduledEvent>)cache.get("upcomingEvents");
 		}
 	}
 	
-	public List<ScheduledEvent> emptyUpcomingEvents() {
-		return Collections.emptyList();
+	public static class FetchFailureHandler implements FallbackHandler<List<ScheduledEvent>> {
+		@Override
+		public List<ScheduledEvent> handle(ExecutionContext context) {
+			Throwable t = context.getFailure();
+			if(t != null) {
+				if(log.isLoggable(Level.SEVERE)) {
+					log.log(Level.SEVERE, "Encountered exception fetching Discord events", t);
+				}
+			}
+			return Collections.emptyList();
+		}
 	}
 }
