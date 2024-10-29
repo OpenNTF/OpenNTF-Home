@@ -22,6 +22,12 @@
     <text>favicon.png</text>
   </item>
   <item name="$TITLE" sign="true">
-    <text>img/favicon.png</text>
+    <textlist>
+      <text>img/favicon.png</text>
+      <text>favicon.ico</text>
+    </textlist>
+  </item>
+  <item name="$DesignerBuild">
+    <text>Build V1450_08282024</text>
   </item>
 </note>
