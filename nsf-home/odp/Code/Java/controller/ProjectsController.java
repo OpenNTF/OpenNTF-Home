@@ -15,17 +15,18 @@
  */
 package controller;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.krazo.engine.Viewable;
 
+import jakarta.data.Sort;
+import jakarta.data.page.PageRequest;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
-import jakarta.data.page.PageRequest;
-import jakarta.data.Sort;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
@@ -48,6 +49,7 @@ import model.projects.FeatureRequest;
 import model.projects.Project;
 import model.projects.ProjectRelease;
 import model.projects.Review;
+import model.projects.Screenshot;
 
 @Path("/projects")
 public class ProjectsController {
@@ -75,6 +77,12 @@ public class ProjectsController {
 	
 	@Inject
 	Review.Repository reviewRepository;
+	
+	@Inject
+	Screenshot.Repository screenshotRepository;
+
+    @Context
+    Request request;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -207,6 +215,14 @@ public class ProjectsController {
 		return "project/screenshots.jsp";
 	}
 	
+	@Path("{projectName}/screenshots/{screenshotId}/{fileName}")
+	@GET
+	public Response getProjectScreenshot(@PathParam("projectName") String projectName, @PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
+		Screenshot shot = screenshotRepository.findById(screenshotId).orElseThrow(NotFoundException::new);
+
+    	return ControllerUtil.fetchAttachment(shot, fileName, request);
+	}
+	
 	@Path("{projectName}/documentation")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -244,6 +260,14 @@ public class ProjectsController {
 		resp.addHeader(HttpHeaders.ETAG, etag.getValue());
 		
 		return Response.ok(new Viewable("project/documentations.jsp")).build();
+	}
+	
+	@Path("{projectName}/documentation/{documentId}/{fileName}")
+	@GET
+	public Response getProjectDocumentationFile(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @PathParam("fileName") String fileName) throws IOException {
+		Documentation doc = documentationRepository.findById(documentId).orElseThrow(NotFoundException::new);
+    	
+    	return ControllerUtil.fetchAttachment(doc, fileName, request);
 	}
 	
 	@Path("{projectName}/requests")
