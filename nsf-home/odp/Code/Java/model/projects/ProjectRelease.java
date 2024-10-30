@@ -32,6 +32,8 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewDocuments;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 
+import com.ibm.commons.util.StringUtil;
+
 import bean.EncoderBean;
 import bean.TranslationBean.Messages;
 import jakarta.enterprise.inject.literal.NamedLiteral;
@@ -237,7 +239,14 @@ public class ProjectRelease {
 	 */
 	public String getDisplayName() {
 		Messages translation = CDI.current().select(Messages.class, NamedLiteral.of("messages")).get();
-		return translation.format("projectReleaseDisplay", getProjectName(), getVersion());
+		String projectName = StringUtil.toString(getProjectName());
+		String version = StringUtil.toString(getVersion());
+		
+		if(version.startsWith(projectName)) {
+			version = version.substring(projectName.length()).strip();
+		}
+		
+		return translation.format("projectReleaseDisplay", projectName, version);
 		
 	}
 }
