@@ -21,18 +21,33 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:layout>
 	<section class="main-content">
-		<p><img src="${thumbnailUrl}"/></p>
+		<c:if test="${not empty thumbnailUrl}">
+			<p><img src="${thumbnailUrl}"/></p>
+		</c:if>
 		<h1><c:out value="${displayName}"/></h1>
 		
+		<c:if test="${displayPersonalInfo}">
+			<dl>
+				<dt><c:out value="${translation.approvedContributor}"/></dt>
+				<dd><c:out value="${approvedContributor}"/></dd>
+			</dl>
+		</c:if>
+		
 		<dl>
-			<dt><c:out value="${translation.approvedContributor}"/></dt>
-			<dd><c:out value="${approvedContributor}"/></dd>
-			
 			<dt><c:out value="${translation.projects}"/></dt>
 			<dd>
 				<ul>
 					<c:forEach items="${projects}" var="project">
 						<li><t:projectBlock value="${project}"/></li>
+					</c:forEach>
+				</ul>
+			</dd>
+			
+			<dt><c:out value="${translation.snippets}"/></dt>
+			<dd>
+				<ul>
+					<c:forEach items="${snippets}" var="snippet">
+						<li><a href="${messages.formatStatic(appConfig.snippetUrlFormat, snippet.snippetId)}"><c:out value="${snippet.name}"/></a></li>
 					</c:forEach>
 				</ul>
 			</dd>

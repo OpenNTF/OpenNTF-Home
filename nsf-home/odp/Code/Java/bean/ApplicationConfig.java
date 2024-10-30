@@ -24,9 +24,11 @@ import java.util.stream.Collectors;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import model.home.ConfigEntry;
 
 @ApplicationScoped
+@Named("appConfig")
 public class ApplicationConfig {
 	private Map<String, ConfigEntry> configEntries;
 	

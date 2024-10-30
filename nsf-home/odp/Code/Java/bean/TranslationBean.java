@@ -50,6 +50,10 @@ public class TranslationBean {
 			return MessageFormat.format(message, params);
 		}
 		
+		public String formatStatic(String message, Object... params) {
+			return MessageFormat.format(message, params);
+		}
+		
 		/**
 		 * Formats the keyed message from the translation bundle with the provided
 		 * parameters if they key exists. If it doesn't, this returns the key

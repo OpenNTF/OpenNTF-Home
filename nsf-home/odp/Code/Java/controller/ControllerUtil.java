@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
+import com.ibm.commons.util.PathUtil;
 import com.ibm.commons.util.StringUtil;
 
 import jakarta.ws.rs.NotFoundException;
@@ -54,5 +55,23 @@ public enum ControllerUtil {
             .cacheControl(cc)
             .lastModified(new Date(att.getLastModified()))
             .build();
+	}
+	
+	/**
+	 * Cleans the provided user thumbnail URL (such as one from UserBean)
+	 * for use in an img element.
+	 * 
+	 * @param url the URL to clean
+	 * @param contextPath the app context path
+	 * @return a cleaned URL suitable for use in image sources
+	 */
+	public static String cleanThumbnailUrl(String url, String contextPath) {
+		if(url != null && url.startsWith("/.ibmxspres")) {
+			return PathUtil.concat("/xsp", url, '/');
+		} else if(url != null && url.startsWith("/")) {
+			return PathUtil.concat(contextPath, url, '/');
+		} else {
+			return url;
+		}
 	}
 }

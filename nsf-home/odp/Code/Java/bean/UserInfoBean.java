@@ -17,11 +17,11 @@ package bean;
 
 import java.util.Arrays;
 
-import com.ibm.commons.util.PathUtil;
 import com.ibm.commons.util.StringUtil;
 import com.ibm.xsp.extlib.beans.DominoDBUserBeanDataProvider;
 import com.ibm.xsp.extlib.beans.UserBean;
 
+import controller.ControllerUtil;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -53,13 +53,7 @@ public class UserInfoBean {
 	
 	public String getThumbnailUrl() {
 		String url = userBean.getThumbnailUrl();
-		if(url != null && url.startsWith("/.ibmxspres")) {
-			return PathUtil.concat("/xsp", url, '/');
-		} else if(url != null && url.startsWith("/")) {
-			return PathUtil.concat(request.getContextPath(), url, '/');
-		} else {
-			return url;
-		}
+		return ControllerUtil.cleanThumbnailUrl(url, request.getContextPath());
 	}
 	
 	public boolean isApprovedContributor() {
