@@ -80,7 +80,7 @@
 					<dd>
 						<ul>
 						<c:forEach items="${release.downloads}" var="download">
-							<li><a href="${download.url}"><c:out value="${download.name}"/></a></li>
+							<li><a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}/releases/${release.documentId}/${encoder.urlEncode(download.name)}"><c:out value="${download.name}"/></a></li>
 						</c:forEach>
 						</ul>
 					</dd>

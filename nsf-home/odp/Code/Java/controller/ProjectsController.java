@@ -201,6 +201,14 @@ public class ProjectsController {
 			.build();
 	}
 	
+	@Path("{projectName}/releases/{releaseId}/{fileName}")
+	@GET
+	public Response getProjectReleaseFile(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId, @PathParam("fileName") String fileName) throws IOException {
+		ProjectRelease shot = projectReleaseRepository.findById(releaseId).orElseThrow(NotFoundException::new);
+
+    	return ControllerUtil.fetchAttachment(shot, fileName, request);
+	}
+	
 	@Path("{projectName}/screenshots")
 	@GET
 	@Produces(MediaType.TEXT_HTML)

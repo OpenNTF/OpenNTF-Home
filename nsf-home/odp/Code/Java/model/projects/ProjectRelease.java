@@ -35,6 +35,7 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 import com.ibm.commons.util.StringUtil;
 
 import bean.EncoderBean;
+import bean.UrlBean;
 import bean.TranslationBean.Messages;
 import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
@@ -45,10 +46,12 @@ import jakarta.nosql.Id;
 import jakarta.data.page.PageRequest;
 import jakarta.data.Sort;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import model.AbstractAttachmentEntity;
 import model.blog.BooleanYNConveter;
 
 @Entity("Release")
-public class ProjectRelease {
+public class ProjectRelease extends AbstractAttachmentEntity {
 	public static final String VIEW_RELEASES = "ReleasesByDate"; //$NON-NLS-1$
 	public static final String VIEW_PENDING_RELEASES = "IP Management\\Pending Releases"; //$NON-NLS-1$
 	/** The admin role to be added to modified authors fields */
@@ -103,6 +106,8 @@ public class ProjectRelease {
 	private List<String> masterChef;
 	@Column(DominoConstants.FIELD_ETAG)
 	private String etag;
+	@Column(DominoConstants.FIELD_REPLICAID)
+	private String replicaId;
 	
 	public ProjectRelease() {
 	
@@ -207,17 +212,20 @@ public class ProjectRelease {
 		this.etag = etag;
 	}
 	
+	@Override
+	public String getReplicaId() {
+		return replicaId;
+	}
+	public void setReplicaId(String replicaId) {
+		this.replicaId = replicaId;
+	}
+	
 	public List<Download> getDownloads() {
-		EncoderBean encoder = CDI.current().select(EncoderBean.class).get();
-		String contextPath = CDI.current().select(ServletContext.class).get().getContextPath();
-		String unid = getDocumentId();
 		return getAttachments()
 			.stream()
 			.map(att -> {
 				Download download = new Download();
 				download.setName(att.getName());
-				String url = contextPath + "/0/" + unid + "/$FILE/" + encoder.urlEncode(att.getName());
-				download.setUrl(url);
 				return download;
 			})
 			.collect(Collectors.toList());
