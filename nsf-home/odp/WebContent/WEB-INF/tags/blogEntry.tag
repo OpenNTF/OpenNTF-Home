@@ -27,7 +27,7 @@
 		|
 		<time-ago value="${fn:escapeXml(pageScope.value.date)}"></time-ago>
 		|
-		<a href="${mvc.basePath}/blog/${pageScope.value.unid}"><c:out value="${translation.comments}"/></a>
+		<a href="${mvc.basePath}/blog/${pageScope.value.unid}"><c:out value="${translation.permalink}"/></a>
 		
 		<c:if test="${not empty pageScope.value.categories}">
 			<br />
