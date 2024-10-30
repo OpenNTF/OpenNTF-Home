@@ -61,7 +61,12 @@ public class MediaResource {
         EntityTag etag = new EntityTag(att.getETag());
         Response.ResponseBuilder builder = request.evaluatePreconditions(etag);
         if(builder == null) {
-            builder = Response.ok(att.getData(), att.getContentType())
+        	String contentType = media.getContentType();
+        	if(StringUtil.isEmpty(contentType)) {
+        		contentType = att.getContentType();
+        	}
+        	
+            builder = Response.ok(att.getData(), contentType)
                 .tag(etag);
         }
 

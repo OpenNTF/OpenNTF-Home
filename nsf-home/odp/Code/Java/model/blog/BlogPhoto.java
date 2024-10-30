@@ -61,6 +61,10 @@ public class BlogPhoto extends AbstractAttachmentEntity {
 	private Instant created;
 	@Column("PhotoTitle")
 	private String title;
+	// Since Domino doesn't store the content type, add it as a field here
+	//   in case the attachment doesn't have a file extension to guess from
+	@Column("ContentType")
+	private String contentType;
 	
 	@Override
 	public String getDocumentId() {
@@ -133,5 +137,12 @@ public class BlogPhoto extends AbstractAttachmentEntity {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getContentType() {
+		return contentType;
+	}
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 }

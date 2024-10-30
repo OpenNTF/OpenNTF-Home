@@ -24,6 +24,8 @@ import java.util.ResourceBundle;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
+import com.ibm.commons.util.StringUtil;
+
 import api.atompub.model.Author;
 import api.atompub.model.Content;
 import api.atompub.model.Entry;
@@ -107,6 +109,7 @@ public class MediaResource {
         media.setAuthor(userInfo.getUserName());
         media.setPhotoDate(LocalDate.now());
         media.setAlbum(ALBUM);
+        media.setContentType(contentType);
         media = mediaRepository.save(media);
 
         // Force update of metadata fields
@@ -153,12 +156,19 @@ public class MediaResource {
 
         EntityAttachment att = media.getAttachments().get(0);
         Content content = new Content();
-        content.setType(att.getContentType());
+        String contentType = media.getContentType();
+        if(StringUtil.isEmpty(contentType)) {
+        	contentType = att.getContentType();
+        }
+        content.setType(contentType);
         entry.setContent(content);
 
         String nameEnc = encoder.urlEncode(media.getTitle());
-		// TODO remove explicit "xsp/app"
-        String path = urlBean.concat("xsp/app", MediaResource.PATH, media.getDocumentId(), nameEnc);
+        String servletBase = request.getServletPath();
+        if(!servletBase.isEmpty() && servletBase.charAt(0) == '/') {
+        	servletBase = servletBase.substring(1);
+        }
+        String path = urlBean.concat(servletBase, api.v1.MediaResource.PATH, media.getDocumentId(), nameEnc);
         content.setSrc(path);
         entry.setContent(content);
 
