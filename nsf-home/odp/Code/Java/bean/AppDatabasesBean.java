@@ -66,6 +66,11 @@ public class AppDatabasesBean {
 		return openDatabase(config.getCtDbPath());
 	}
 	
+	@Produces @Named("snippetsDatabase")
+	public Database getSnippetsDatabase() {
+		return openDatabase(config.getSnippetsDbPath());
+	}
+	
 	// NoSQL repositories
 
 	@Produces
@@ -109,6 +114,15 @@ public class AppDatabasesBean {
 	public DominoDocumentManager getCtManager() {
 		return new DefaultDominoDocumentCollectionManager(
 			this::getCtDatabase,
+			this::getSessionAsSigner
+		);
+	}
+
+	@Produces
+	@org.eclipse.jnosql.mapping.Database(value = DatabaseType.DOCUMENT, provider = "snippetsRepository")
+	public DominoDocumentManager getSnippetsManager() {
+		return new DefaultDominoDocumentCollectionManager(
+			this::getSnippetsDatabase,
 			this::getSessionAsSigner
 		);
 	}

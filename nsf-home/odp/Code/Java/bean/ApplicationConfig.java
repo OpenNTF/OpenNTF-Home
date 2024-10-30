@@ -82,6 +82,14 @@ public class ApplicationConfig {
 		return getSingleValue("dbCt");
 	}
 	
+	public String getSnippetsDbPath() {
+		return getSingleValue("dbXSnippets");
+	}
+	
+	public String getSnippetUrlFormat() {
+		return getSingleValue("urlFormat_snippet");
+	}
+	
 	private String getSingleValue(String key) {
 		return getConfigEntry(key)
 			.map(entry -> entry.getValue1().get(0))
