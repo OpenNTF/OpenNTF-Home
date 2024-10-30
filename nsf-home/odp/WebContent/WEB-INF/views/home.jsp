@@ -42,6 +42,20 @@
 					</ol>
 				</details>
 				
+				<details id="recent-snippets" class="activity-feed" open>
+					<summary><c:out value="${translation.recentSnippets}"/></summary>
+					
+					<ol>
+						<c:forEach items="${recentSnippets}" var="snippet">
+							<li>
+								<a href="${snippet.link}" target="_blank"><c:out value="${snippet.name}"/></a>
+								<br /><c:out value="${snippet.author}"/>
+								<span class="release-date"><time-ago value="${fn:escapeXml(snippet.creationDate)}"></time-ago></span>
+							</li>
+						</c:forEach>
+					</ol>
+				</details>
+				
 				<details id="upcoming-events" class="activity-feed" open>
 					<summary><c:out value="${translation.upcomingEvents}"/></summary>
 					

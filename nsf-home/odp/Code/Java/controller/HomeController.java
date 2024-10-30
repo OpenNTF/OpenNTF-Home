@@ -32,6 +32,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import model.ct.CtEntry;
+import model.snippets.Snippet;
 
 @Path("/")
 @Controller
@@ -51,6 +52,9 @@ public class HomeController {
 	@Inject
 	CtEntry.Repository ctEntries;
 	
+	@Inject
+	Snippet.Repository snippetsRepository;
+	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String get() {
@@ -62,6 +66,7 @@ public class HomeController {
 				.collect(Collectors.toList())
 		);
 		models.put("recentCtPosts", ctEntries.listEntries(Sort.desc("creationDate"), PageRequest.ofPage(1).size(5)).collect(Collectors.toList()));
+		models.put("recentSnippets", snippetsRepository.findRecent(PageRequest.ofPage(1).size(3)).collect(Collectors.toList()));
 		models.put("blogEntries", blogEntries.getEntries(5)); //$NON-NLS-1$
 		
 		return "home.jsp"; //$NON-NLS-1$
