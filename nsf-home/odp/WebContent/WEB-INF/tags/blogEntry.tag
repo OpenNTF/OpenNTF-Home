@@ -21,9 +21,9 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <article class="blog-entry">
-	<h2>${fn:escapeXml(pageScope.value.title)}</h2>
+	<h2><c:out value="${pageScope.value.title}"/></h2>
 	<h3>
-		${fn:escapeXml(encoder.toCommonName(pageScope.value.author))}
+		<c:out value="${encoder.toCommonName(pageScope.value.author)}"/>
 		|
 		<time-ago value="${fn:escapeXml(pageScope.value.date)}"></time-ago>
 		|
@@ -37,5 +37,5 @@
 			</c:forEach>
 		</c:if>
 	</h3>
-	<div>${pageScope.value.html}</div>
+	<div><c:out value="${pageScope.value.html}" escapeXml="false"/></div>
 </article>
