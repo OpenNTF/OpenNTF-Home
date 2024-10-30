@@ -17,20 +17,16 @@ package controller;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
 
-import com.ibm.commons.util.StringUtil;
-
+import jakarta.data.Sort;
+import jakarta.data.page.PageRequest;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
-import jakarta.data.page.PageRequest;
-import jakarta.data.Sort;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
@@ -38,7 +34,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityTag;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -224,28 +219,8 @@ public class ProjectsController {
 	@GET
 	public Response getProjectScreenshot(@PathParam("projectName") String projectName, @PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
 		Screenshot shot = screenshotRepository.findById(screenshotId).orElseThrow(NotFoundException::new);
-    	
-    	String expectedName = fileName.replace('+', ' ').toLowerCase();
-        EntityAttachment att = shot.getAttachments()
-        	.stream()
-        	.filter(a -> StringUtil.toString(a.getName()).toLowerCase().endsWith(expectedName))
-        	.findFirst()
-        	.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find screenshot {0} in document {1}", fileName, screenshotId)));
 
-        EntityTag etag = new EntityTag(att.getETag());
-        Response.ResponseBuilder builder = request.evaluatePreconditions(etag);
-        if(builder == null) {
-            builder = Response.ok(att.getData(), att.getContentType())
-                .tag(etag);
-        }
-
-        CacheControl cc = new CacheControl();
-        cc.setMaxAge(5 * 24 * 60 * 60);
-
-        return builder
-            .cacheControl(cc)
-            .lastModified(new Date(att.getLastModified()))
-            .build();
+    	return ControllerUtil.fetchAttachment(shot, fileName, request);
 	}
 	
 	@Path("{projectName}/documentation")
@@ -292,27 +267,7 @@ public class ProjectsController {
 	public Response getProjectDocumentationFile(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @PathParam("fileName") String fileName) throws IOException {
 		Documentation doc = documentationRepository.findById(documentId).orElseThrow(NotFoundException::new);
     	
-    	String expectedName = fileName.replace('+', ' ').toLowerCase();
-        EntityAttachment att = doc.getAttachments()
-        	.stream()
-        	.filter(a -> StringUtil.toString(a.getName()).toLowerCase().endsWith(expectedName))
-        	.findFirst()
-        	.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find documentation file {0} in document {1}", fileName, documentId)));
-
-        EntityTag etag = new EntityTag(att.getETag());
-        Response.ResponseBuilder builder = request.evaluatePreconditions(etag);
-        if(builder == null) {
-            builder = Response.ok(att.getData(), att.getContentType())
-                .tag(etag);
-        }
-
-        CacheControl cc = new CacheControl();
-        cc.setMaxAge(5 * 24 * 60 * 60);
-
-        return builder
-            .cacheControl(cc)
-            .lastModified(new Date(att.getLastModified()))
-            .build();
+    	return ControllerUtil.fetchAttachment(doc, fileName, request);
 	}
 	
 	@Path("{projectName}/requests")
