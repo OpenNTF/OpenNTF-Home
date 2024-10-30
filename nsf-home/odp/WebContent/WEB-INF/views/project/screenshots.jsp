@@ -43,7 +43,7 @@
 						<c:if test="${shot.contentType.startsWith('image/')}">
 							<li>
 								<a href="${mvc.basePath}/projects/${fn:escapeXml(project.name)}/screenshots/${screenshot.documentId}/${fn:escapeXml(shot.name)}" onclick="return displayScreenshotLightbox(this)">
-									<img src="${mvc.basePath}/projects/${fn:escapeXml(project.name)}/screenshots/${screenshot.documentId}/${fn:escapeXml(shot.name)}" alt="${fn:escapeXml(shot.name)}"/>
+									<img src="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/screenshots/${screenshot.documentId}/${encoder.urlEncode(shot.name)}" alt="${fn:escapeXml(shot.name)}"/>
 								</a>
 							</li>
 						</c:if>

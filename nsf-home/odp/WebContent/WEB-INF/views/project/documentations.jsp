@@ -33,7 +33,7 @@
 				
 				<ul>
 				<c:forEach items="${doc.downloads}" var="download">
-					<li><a href="${download.url}"><c:out value="${download.name}"/></a></li>
+					<li><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/documentation/${doc.documentId}/${encoder.urlEncode(download.name)}"><c:out value="${download.name}"/></a></li>
 				</c:forEach>
 				</ul>
 			</fieldset>

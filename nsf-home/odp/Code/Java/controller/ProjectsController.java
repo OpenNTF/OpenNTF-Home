@@ -287,6 +287,34 @@ public class ProjectsController {
 		return Response.ok(new Viewable("project/documentations.jsp")).build();
 	}
 	
+	@Path("{projectName}/documentation/{documentId}/{fileName}")
+	@GET
+	public Response getProjectDocumentationFile(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @PathParam("fileName") String fileName) throws IOException {
+		Documentation doc = documentationRepository.findById(documentId).orElseThrow(NotFoundException::new);
+    	
+    	String expectedName = fileName.replace('+', ' ').toLowerCase();
+        EntityAttachment att = doc.getAttachments()
+        	.stream()
+        	.filter(a -> StringUtil.toString(a.getName()).toLowerCase().endsWith(expectedName))
+        	.findFirst()
+        	.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find documentation file {0} in document {1}", fileName, documentId)));
+
+        EntityTag etag = new EntityTag(att.getETag());
+        Response.ResponseBuilder builder = request.evaluatePreconditions(etag);
+        if(builder == null) {
+            builder = Response.ok(att.getData(), att.getContentType())
+                .tag(etag);
+        }
+
+        CacheControl cc = new CacheControl();
+        cc.setMaxAge(5 * 24 * 60 * 60);
+
+        return builder
+            .cacheControl(cc)
+            .lastModified(new Date(att.getLastModified()))
+            .build();
+	}
+	
 	@Path("{projectName}/requests")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
