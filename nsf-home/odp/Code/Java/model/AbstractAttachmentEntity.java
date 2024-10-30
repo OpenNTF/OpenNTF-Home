@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
-import bean.EncoderBean;
-import jakarta.enterprise.inject.spi.CDI;
 import model.projects.Download;
 
 /**
@@ -37,16 +35,11 @@ public abstract class AbstractAttachmentEntity {
 	public abstract String getReplicaId();
 	
 	public List<Download> getDownloads() {
-		EncoderBean encoder = CDI.current().select(EncoderBean.class).get();
-		String contextPath = "/__" + getReplicaId() + ".nsf";
-		String unid = getDocumentId();
 		return getAttachments()
 			.stream()
 			.map(att -> {
 				Download download = new Download();
 				download.setName(att.getName());
-				String url = contextPath + "/0/" + unid + "/$FILE/" + encoder.urlEncode(att.getName());
-				download.setUrl(url);
 				download.setContentType(att.getContentType());
 				return download;
 			})

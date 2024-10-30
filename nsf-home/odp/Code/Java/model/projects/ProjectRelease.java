@@ -34,19 +34,15 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 
 import com.ibm.commons.util.StringUtil;
 
-import bean.EncoderBean;
-import bean.UrlBean;
 import bean.TranslationBean.Messages;
+import jakarta.data.Sort;
+import jakarta.data.page.PageRequest;
 import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.nosql.Column;
 import jakarta.nosql.Convert;
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
-import jakarta.data.page.PageRequest;
-import jakarta.data.Sort;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.HttpServletRequest;
 import model.AbstractAttachmentEntity;
 import model.blog.BooleanYNConveter;
 

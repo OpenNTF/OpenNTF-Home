@@ -17,7 +17,6 @@ package model.projects;
 
 public class Download {
 	private String name;
-	private String url;
 	private String contentType;
 	
 	public String getName() {
@@ -25,13 +24,6 @@ public class Download {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public String getUrl() {
-		return url;
-	}
-	public void setUrl(String url) {
-		this.url = url;
 	}
 	
 	public String getContentType() {
