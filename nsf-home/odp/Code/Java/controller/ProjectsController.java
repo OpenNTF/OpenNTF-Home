@@ -27,7 +27,6 @@ import jakarta.data.page.PageRequest;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
@@ -180,7 +179,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectRelease(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId, @Context Request request, @Context HttpServletResponse resp) {
+	public Response getProjectRelease(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId, @Context Request request) {
 		ProjectRelease release = projectReleaseRepository.findById(releaseId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Release for ID {0}", releaseId)));
 		
@@ -197,9 +196,9 @@ public class ProjectsController {
 		
 		models.put("release", release);
 		
-		resp.addHeader(HttpHeaders.ETAG, etag.getValue());
-		
-		return Response.ok(new Viewable("project/releases.jsp")).build();
+		return Response.ok(new Viewable("project/releases.jsp"))
+			.header(HttpHeaders.ETAG,  etag.getValue())
+			.build();
 	}
 	
 	@Path("{projectName}/screenshots")
@@ -240,7 +239,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectDocumentationEntry(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request, @Context HttpServletResponse resp) {
+	public Response getProjectDocumentationEntry(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request) {
 		Documentation doc = documentationRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Documentation for ID {0}", documentId)));
 		
@@ -257,9 +256,9 @@ public class ProjectsController {
 		
 		models.put("doc", doc);
 		
-		resp.addHeader(HttpHeaders.ETAG, etag.getValue());
-		
-		return Response.ok(new Viewable("project/documentations.jsp")).build();
+		return Response.ok(new Viewable("project/documentations.jsp"))
+			.header(HttpHeaders.ETAG,  etag.getValue())
+			.build();
 	}
 	
 	@Path("{projectName}/documentation/{documentId}/{fileName}")
@@ -287,7 +286,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectRequestEntry(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request, @Context HttpServletResponse resp) {
+	public Response getProjectRequestEntry(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request) {
 		FeatureRequest featureRequest = requestRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Request for ID {0}", documentId)));
 		
@@ -304,9 +303,9 @@ public class ProjectsController {
 		
 		models.put("featureRequest", featureRequest);
 		
-		resp.addHeader(HttpHeaders.ETAG, etag.getValue());
-		
-		return Response.ok(new Viewable("project/requests.jsp")).build();
+		return Response.ok(new Viewable("project/requests.jsp"))
+			.header(HttpHeaders.ETAG,  etag.getValue())
+			.build();
 	}
 	
 	@Path("{projectName}/defects")
@@ -326,7 +325,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectDefect(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request, @Context HttpServletResponse resp) {
+	public Response getProjectDefect(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request) {
 		Defect defect = defectRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Defect for ID {0}", documentId)));
 		
@@ -343,9 +342,9 @@ public class ProjectsController {
 		
 		models.put("defect", defect);
 		
-		resp.addHeader(HttpHeaders.ETAG, etag.getValue());
-		
-		return Response.ok(new Viewable("project/defects.jsp")).build();
+		return Response.ok(new Viewable("project/defects.jsp"))
+			.header(HttpHeaders.ETAG,  etag.getValue())
+			.build();
 	}
 	
 	@Path("{projectName}/discussions")
@@ -365,7 +364,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectDiscussion(@PathParam("projectName") String projectName, @PathParam("discussionId") String discussionId, @Context Request request, @Context HttpServletResponse resp) {
+	public Response getProjectDiscussion(@PathParam("projectName") String projectName, @PathParam("discussionId") String discussionId, @Context Request request) {
 		Discussion discussion = discussionRepository.findById(discussionId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Discussion for ID {0}", discussionId)));
 		
@@ -382,9 +381,9 @@ public class ProjectsController {
 		
 		models.put("discussion", discussion);
 		
-		resp.addHeader(HttpHeaders.ETAG, etag.getValue());
-		
-		return Response.ok(new Viewable("project/discussions.jsp")).build();
+		return Response.ok(new Viewable("project/discussions.jsp"))
+			.header(HttpHeaders.ETAG,  etag.getValue())
+			.build();
 	}
 	
 	@Path("{projectName}/reviews")
@@ -404,7 +403,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectReview(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request, @Context HttpServletResponse resp) {
+	public Response getProjectReview(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request) {
 		Review review = reviewRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Review for ID {0}", documentId)));
 		
@@ -421,9 +420,9 @@ public class ProjectsController {
 		
 		models.put("review", review);
 		
-		resp.addHeader(HttpHeaders.ETAG, etag.getValue());
-		
-		return Response.ok(new Viewable("project/reviews.jsp")).build();
+		return Response.ok(new Viewable("project/reviews.jsp"))
+			.header(HttpHeaders.ETAG,  etag.getValue())
+			.build();
 	}
 	
 	@Path("{projectName}/sourceControl")
