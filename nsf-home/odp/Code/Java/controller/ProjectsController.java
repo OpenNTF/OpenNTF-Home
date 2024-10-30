@@ -15,11 +15,16 @@
  */
 package controller;
 
+import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
+
+import com.ibm.commons.util.StringUtil;
 
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
@@ -33,6 +38,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityTag;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -48,6 +54,7 @@ import model.projects.FeatureRequest;
 import model.projects.Project;
 import model.projects.ProjectRelease;
 import model.projects.Review;
+import model.projects.Screenshot;
 
 @Path("/projects")
 public class ProjectsController {
@@ -75,6 +82,12 @@ public class ProjectsController {
 	
 	@Inject
 	Review.Repository reviewRepository;
+	
+	@Inject
+	Screenshot.Repository screenshotRepository;
+
+    @Context
+    Request request;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -205,6 +218,34 @@ public class ProjectsController {
 		models.put("project", project);
 		
 		return "project/screenshots.jsp";
+	}
+	
+	@Path("{projectName}/screenshots/{screenshotId}/{fileName}")
+	@GET
+	public Response getProjectScreenshot(@PathParam("projectName") String projectName, @PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
+		Screenshot shot = screenshotRepository.findById(screenshotId).orElseThrow(NotFoundException::new);
+    	
+    	String expectedName = fileName.replace('+', ' ').toLowerCase();
+        EntityAttachment att = shot.getAttachments()
+        	.stream()
+        	.filter(a -> StringUtil.toString(a.getName()).toLowerCase().endsWith(expectedName))
+        	.findFirst()
+        	.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find screenshot {0} in document {1}", fileName, screenshotId)));
+
+        EntityTag etag = new EntityTag(att.getETag());
+        Response.ResponseBuilder builder = request.evaluatePreconditions(etag);
+        if(builder == null) {
+            builder = Response.ok(att.getData(), att.getContentType())
+                .tag(etag);
+        }
+
+        CacheControl cc = new CacheControl();
+        cc.setMaxAge(5 * 24 * 60 * 60);
+
+        return builder
+            .cacheControl(cc)
+            .lastModified(new Date(att.getLastModified()))
+            .build();
 	}
 	
 	@Path("{projectName}/documentation")
