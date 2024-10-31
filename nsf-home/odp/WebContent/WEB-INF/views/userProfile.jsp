@@ -21,21 +21,44 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:layout>
 	<section class="main-content">
-		<p><img src="${thumbnailUrl}"/></p>
-		<h1><c:out value="${displayName}"/></h1>
+		<div class="user-card">
+			<div class="user-photo">
+				<c:if test="${not empty thumbnailUrl}">
+					<img src="${thumbnailUrl}"/>
+				</c:if>
+			</div>
+			<div class="user-details">
+				<h1><c:out value="${displayName}"/></h1>
+				<c:if test="${not empty webPage}">
+					<a href="${fn:escapeXml(webPage)}"><c:out value="${webPage}"/></a>
+				</c:if>
+			</div>
+		</div>
 		
-		<dl>
-			<dt><c:out value="${translation.approvedContributor}"/></dt>
-			<dd><c:out value="${approvedContributor}"/></dd>
+		<c:if test="${displayPersonalInfo}">
+			<dl>
+				<dt><c:out value="${translation.approvedContributor}"/></dt>
+				<dd><c:out value="${approvedContributor}"/></dd>
+			</dl>
+		</c:if>
+		
+		<fieldset>
+			<legend><c:out value="${translation.projects}"/></legend>
 			
-			<dt><c:out value="${translation.projects}"/></dt>
-			<dd>
-				<ul>
-					<c:forEach items="${projects}" var="project">
-						<li><t:projectBlock value="${project}"/></li>
-					</c:forEach>
-				</ul>
-			</dd>
-		</dl>
+			<ul class="user-projects-list">
+				<c:forEach items="${projects}" var="project">
+					<li><t:projectBlock value="${project}"/></li>
+				</c:forEach>
+			</ul>
+		</fieldset>
+		<fieldset>
+			<legend><c:out value="${translation.snippets}"/></legend>
+			
+			<ul class="user-projects-list">
+				<c:forEach items="${snippets}" var="snippet">
+					<li><a href="${messages.formatStatic(appConfig.snippetUrlFormat, snippet.snippetId)}"><c:out value="${snippet.name}"/></a></li>
+				</c:forEach>
+			</ul>
+		</fieldset>
 	</section>
 </t:layout>

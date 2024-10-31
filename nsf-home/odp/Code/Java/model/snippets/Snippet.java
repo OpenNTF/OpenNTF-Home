@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import bean.ApplicationConfig;
 import jakarta.data.page.PageRequest;
@@ -23,6 +24,9 @@ public class Snippet {
 	public interface Repository extends DominoRepository<Snippet, String> {
 		@ViewEntries("SnippetsByDate")
 		public Stream<Snippet> findRecent(PageRequest pagination);
+		
+		@ViewEntries("SnippetsByAuthor")
+		public Stream<Snippet> findByAuthor(ViewQuery viewQuery);
 	}
 	
 	@Id

@@ -310,11 +310,30 @@ fieldset {
 	border: 1px solid lightgrey;
 	border-radius: 0.5em;
 }
+fieldset + fieldset {
+	margin-top: 2em;
+}
 legend {
 	font-size: 1.6rem;
 	font-weight: bold;
 	padding-left: 1rem;
 	padding-right: 1rem;
+}
+
+/* User profile */
+.user-card {
+	display: grid;
+}
+.user-card .user-photo {
+	grid-area: photo;
+}
+.user-card .user-details {
+	grid-area: details;
+}
+.user-card img {
+	width: 100%;
+	max-width: 100%;
+	object-fit: contain;
 }
 
 @media (min-width: 0px) {
@@ -413,5 +432,17 @@ legend {
 	
 	dl.release-info {
 		columns: 2;
+	}
+	
+	.user-card {
+		grid-template-areas: "photo details";
+		grid-template-columns: 200px 1fr;
+	}
+	.user-card .user-photo {
+		padding: 1em;
+	}
+	
+	.user-projects-list {
+		columns: 2
 	}
 }
