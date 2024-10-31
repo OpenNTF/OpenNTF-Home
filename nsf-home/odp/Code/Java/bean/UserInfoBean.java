@@ -20,6 +20,7 @@ import java.util.Arrays;
 import com.ibm.commons.util.StringUtil;
 import com.ibm.xsp.extlib.beans.DominoDBUserBeanDataProvider;
 import com.ibm.xsp.extlib.beans.UserBean;
+import com.ibm.xsp.extlib.social.Person;
 
 import controller.ControllerUtil;
 import jakarta.enterprise.context.RequestScoped;
@@ -44,6 +45,10 @@ public class UserInfoBean {
 	
 	public String getDisplayName() {
 		return userBean.getDisplayName();
+	}
+	
+	public Person getPerson() {
+		return userBean.getPerson();
 	}
 	
 	public boolean isAnonymous() {

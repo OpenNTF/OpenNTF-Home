@@ -21,10 +21,19 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:layout>
 	<section class="main-content">
-		<c:if test="${not empty thumbnailUrl}">
-			<p><img src="${thumbnailUrl}"/></p>
-		</c:if>
-		<h1><c:out value="${displayName}"/></h1>
+		<div class="user-card">
+			<div class="user-photo">
+				<c:if test="${not empty thumbnailUrl}">
+					<img src="${thumbnailUrl}"/>
+				</c:if>
+			</div>
+			<div class="user-details">
+				<h1><c:out value="${displayName}"/></h1>
+				<c:if test="${not empty webPage}">
+					<a href="${fn:escapeXml(webPage)}"><c:out value="${webPage}"/></a>
+				</c:if>
+			</div>
+		</div>
 		
 		<c:if test="${displayPersonalInfo}">
 			<dl>

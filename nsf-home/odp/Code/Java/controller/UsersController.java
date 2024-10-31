@@ -39,6 +39,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Context;
 import model.projects.Project;
 import model.snippets.Snippet;
+import social.UserWebSiteProvider;
 
 @Path("users")
 @Controller
@@ -73,6 +74,7 @@ public class UsersController {
 		models.put("displayName", userInfo.getDisplayName());
 		models.put("thumbnailUrl", userInfo.getThumbnailUrl());
 		models.put("approvedContributor", userInfo.isApprovedContributor());
+		models.put("webPage", userInfo.getPerson().getField(UserWebSiteProvider.FIELD_WEBSITE));
 		
 		models.put("projects", projectsRepository.findByChefs(userInfo.getDisplayName(), Sort.asc("name")).collect(Collectors.toList()));
 		models.put("snippets", snippetsRepository.findByAuthor(ViewQuery.query().category(userInfo.getDisplayName())).toList());
@@ -97,6 +99,7 @@ public class UsersController {
 			thumbnailUrl = (String)person.getField(Person.FIELD_THUMBNAIL_URL);
 			models.put("thumbnailUrl", ControllerUtil.cleanThumbnailUrl(thumbnailUrl, request.getContextPath()));
 			models.put("displayName", person.getDisplayName());
+			models.put("webPage", person.getField(UserWebSiteProvider.FIELD_WEBSITE));
 		} else {
 			models.put("displayName", user);
 		}
