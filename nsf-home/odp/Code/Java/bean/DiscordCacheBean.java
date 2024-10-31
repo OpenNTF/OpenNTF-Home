@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.FallbackHandler;
@@ -66,6 +67,7 @@ public class DiscordCacheBean {
 	
 	@Timeout(unit = ChronoUnit.SECONDS, value = 10)
 	@Fallback(FetchFailureHandler.class)
+	@CircuitBreaker(requestVolumeThreshold = 2, delay = 10, delayUnit = ChronoUnit.MINUTES)
 	@SuppressWarnings("unchecked")
 	public List<ScheduledEvent> getUpcomingEvents() {
 		synchronized(this.lock) {
