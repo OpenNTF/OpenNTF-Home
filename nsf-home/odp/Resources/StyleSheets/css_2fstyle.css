@@ -310,6 +310,9 @@ fieldset {
 	border: 1px solid lightgrey;
 	border-radius: 0.5em;
 }
+fieldset + fieldset {
+	margin-top: 2em;
+}
 legend {
 	font-size: 1.6rem;
 	font-weight: bold;
@@ -437,5 +440,9 @@ legend {
 	}
 	.user-card .user-photo {
 		padding: 1em;
+	}
+	
+	.user-projects-list {
+		columns: 2
 	}
 }

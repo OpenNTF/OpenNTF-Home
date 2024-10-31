@@ -42,24 +42,23 @@
 			</dl>
 		</c:if>
 		
-		<dl>
-			<dt><c:out value="${translation.projects}"/></dt>
-			<dd>
-				<ul>
-					<c:forEach items="${projects}" var="project">
-						<li><t:projectBlock value="${project}"/></li>
-					</c:forEach>
-				</ul>
-			</dd>
+		<fieldset>
+			<legend><c:out value="${translation.projects}"/></legend>
 			
-			<dt><c:out value="${translation.snippets}"/></dt>
-			<dd>
-				<ul>
-					<c:forEach items="${snippets}" var="snippet">
-						<li><a href="${messages.formatStatic(appConfig.snippetUrlFormat, snippet.snippetId)}"><c:out value="${snippet.name}"/></a></li>
-					</c:forEach>
-				</ul>
-			</dd>
-		</dl>
+			<ul class="user-projects-list">
+				<c:forEach items="${projects}" var="project">
+					<li><t:projectBlock value="${project}"/></li>
+				</c:forEach>
+			</ul>
+		</fieldset>
+		<fieldset>
+			<legend><c:out value="${translation.snippets}"/></legend>
+			
+			<ul class="user-projects-list">
+				<c:forEach items="${snippets}" var="snippet">
+					<li><a href="${messages.formatStatic(appConfig.snippetUrlFormat, snippet.snippetId)}"><c:out value="${snippet.name}"/></a></li>
+				</c:forEach>
+			</ul>
+		</fieldset>
 	</section>
 </t:layout>
