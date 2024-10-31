@@ -81,6 +81,12 @@ main > .main-header h3 {
 	margin-top: 0;
 	font-weight: normal;
 }
+main > .main-header .info {
+	white-space: pre-wrap;
+}
+main > .main-header h2 + .info {
+	margin-top: 1em;
+}
 main > .main-header a {
 	color: white;
 }

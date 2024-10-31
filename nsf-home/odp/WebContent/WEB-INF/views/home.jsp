@@ -21,6 +21,10 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:layout>
+<section class="main-header">
+		<h2><c:out value="${translation.homeHeaderTitle}"/></h2>
+		<div class="info"><c:out value="${translation.homeHeaderSubtitle}"/></div>
+	</section>
 	<section class="main-content">
 		<div class="home-layout">
 			<section id="blog">
