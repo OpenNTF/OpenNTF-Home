@@ -1,0 +1,82 @@
+package util;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import com.ibm.commons.util.StringUtil;
+
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.xml.bind.DatatypeConverter;
+import lotus.domino.Directory;
+import lotus.domino.DirectoryNavigator;
+import lotus.domino.Name;
+import lotus.domino.NotesException;
+import lotus.domino.Session;
+
+public enum AppUtil {
+	;
+	
+	public static String getUserWebSite(String id) {
+		if(StringUtil.isNotEmpty(id) && !"anonymous".equalsIgnoreCase(id)) {
+			// Try to find their email address
+			try {
+				Session session = CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
+				Directory dir = session.getDirectory();
+				DirectoryNavigator nav = dir.lookupNames("($Users)", id, "WebSite");
+				if(nav.findFirstMatch()) {
+					List<?> vals = nav.getFirstItemValue();
+					if(vals != null && !vals.isEmpty()) {
+						return StringUtil.toString(vals.get(0));
+					}
+				}
+			} catch(NotesException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return null;
+	}
+	
+	public static String getGravatarUrl(String id) {
+		if(StringUtil.isNotEmpty(id) && !"anonymous".equalsIgnoreCase(id)) {
+			// Try to find their email address
+			try {
+				Session session = CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
+				Directory dir = session.getDirectory();
+				DirectoryNavigator nav = dir.lookupNames("($Users)", id, "InternetAddress");
+				if(nav.findFirstMatch()) {
+					List<?> vals = nav.getFirstItemValue();
+					if(vals != null && !vals.isEmpty()) {
+						String email = StringUtil.toString(vals.get(0));
+						if(StringUtil.isNotEmpty(email)) {
+							// If found, send them to Gravatar
+							MessageDigest md = MessageDigest.getInstance("MD5");
+						    md.update(email.getBytes());
+						    byte[] digest = md.digest();
+						    String md5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
+							return "http://www.gravatar.com/avatar/" + md5 + "?d=wavatar&s=256";
+						}
+					}
+				}
+			} catch(NotesException | NoSuchAlgorithmException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return "";
+	}
+	
+	public static String toCn(String userName) {
+		Session session = CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
+		try {
+			Name name = session.createName(userName);
+			try {
+				return name.getCommon();
+			} finally {
+				name.recycle();
+			}
+		} catch(NotesException e) {
+			throw new RuntimeException(e);
+		}
+	}
+}

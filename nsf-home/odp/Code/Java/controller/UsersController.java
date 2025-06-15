@@ -20,18 +20,15 @@ import java.util.stream.Collectors;
 
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
-import com.ibm.xsp.extlib.beans.PeopleBean;
-import com.ibm.xsp.extlib.social.Person;
-
 import bean.UserInfoBean;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.data.Sort;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.data.Sort;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
@@ -39,7 +36,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Context;
 import model.projects.Project;
 import model.snippets.Snippet;
-import social.UserWebSiteProvider;
+import util.AppUtil;
 
 @Path("users")
 @Controller
@@ -51,9 +48,6 @@ public class UsersController {
 	
 	@Inject
 	private UserInfoBean userInfo;
-	
-	@Inject
-	private PeopleBean peopleBean;
 	
 	@Inject
 	private Project.Repository projectsRepository;
@@ -74,7 +68,7 @@ public class UsersController {
 		models.put("displayName", userInfo.getDisplayName());
 		models.put("thumbnailUrl", userInfo.getThumbnailUrl());
 		models.put("approvedContributor", userInfo.isApprovedContributor());
-		models.put("webPage", userInfo.getPerson().getField(UserWebSiteProvider.FIELD_WEBSITE));
+		models.put("webPage", AppUtil.getUserWebSite(userInfo.getUserName()));
 		
 		models.put("projects", projectsRepository.findByChefs(userInfo.getDisplayName(), Sort.asc("name")).collect(Collectors.toList()));
 		models.put("snippets", snippetsRepository.findByAuthor(ViewQuery.query().category(userInfo.getDisplayName())).toList());
@@ -93,13 +87,11 @@ public class UsersController {
 		
 		models.put("displayPersonalInfo", false);
 		
-		Person person = peopleBean.getPerson(user);
-		String thumbnailUrl = null;
-		if(person != null) {
-			thumbnailUrl = (String)person.getField(Person.FIELD_THUMBNAIL_URL);
+		if(!"Anonymous".equalsIgnoreCase(user)) {
+			String thumbnailUrl = AppUtil.getGravatarUrl(user);
 			models.put("thumbnailUrl", ControllerUtil.cleanThumbnailUrl(thumbnailUrl, request.getContextPath()));
-			models.put("displayName", person.getDisplayName());
-			models.put("webPage", person.getField(UserWebSiteProvider.FIELD_WEBSITE));
+			models.put("displayName", AppUtil.toCn(user));
+			models.put("webPage", AppUtil.getUserWebSite(user));
 		} else {
 			models.put("displayName", user);
 		}
@@ -107,5 +99,6 @@ public class UsersController {
 		models.put("projects", projects);
 		models.put("snippets", snippets);
 	}
+	
 	
 }

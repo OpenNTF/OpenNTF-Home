@@ -67,7 +67,8 @@ public enum ControllerUtil {
 	 */
 	public static String cleanThumbnailUrl(String url, String contextPath) {
 		if(url != null && url.startsWith("/.ibmxspres")) {
-			return PathUtil.concat("/xsp", url, '/');
+//			return PathUtil.concat("/xsp", url, '/');
+			return url;
 		} else if(url != null && url.startsWith("/")) {
 			return PathUtil.concat(contextPath, url, '/');
 		} else {

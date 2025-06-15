@@ -22,9 +22,9 @@ import java.util.Map;
 
 import org.openntf.xsp.jakarta.nosql.communication.driver.DominoDocumentManager;
 
-import com.ibm.xsp.extlib.util.ExtLibUtil;
 import com.ibm.xsp.model.domino.DominoUtils;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.enterprise.inject.literal.NamedLiteral;
@@ -40,6 +40,13 @@ import lotus.domino.Session;
 public class AppDatabasesBean {
 	@Inject
 	private ApplicationConfig config;
+	
+	private Map<String, Database> openDatabases;
+	
+	@PostConstruct
+	public void init() {
+		this.openDatabases = new HashMap<>();
+	}
 	
 	@Produces @Named("projectsDatabase")
 	public Database getProjectsDatabase() {
@@ -128,9 +135,7 @@ public class AppDatabasesBean {
 	}
 	
 	private Database openDatabase(String apiPath) {
-		@SuppressWarnings("unchecked")
-		Map<String, Database> dbs = (Map<String, Database>)ExtLibUtil.getRequestScope().computeIfAbsent(getClass().getName() + "_dbCache", key -> new HashMap<>());
-		return dbs.computeIfAbsent(apiPath, key -> {
+		return openDatabases.computeIfAbsent(apiPath, key -> {
 			try {
 				return DominoUtils.openDatabaseByName(getSession(), key);
 			} catch(NotesException e) {

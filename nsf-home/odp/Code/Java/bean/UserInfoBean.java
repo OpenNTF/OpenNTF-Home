@@ -15,18 +15,16 @@
  */
 package bean;
 
-import java.util.Arrays;
+import java.security.Principal;
 
-import com.ibm.commons.util.StringUtil;
-import com.ibm.xsp.extlib.beans.DominoDBUserBeanDataProvider;
-import com.ibm.xsp.extlib.beans.UserBean;
-import com.ibm.xsp.extlib.social.Person;
-
-import controller.ControllerUtil;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.core.SecurityContext;
+import lotus.domino.Name;
+import lotus.domino.NotesException;
+import lotus.domino.Session;
+import util.AppUtil;
 
 @RequestScoped @Named("userInfo")
 public class UserInfoBean {
@@ -34,35 +32,45 @@ public class UserInfoBean {
 	public static final String ROLE_CONTRIBUTOR = "[Contributor]";
 	
 	@Inject
-	private UserBean userBean;
+	private SecurityContext securityContext;
 	
-	@Inject
-	private HttpServletRequest request;
+	@Inject @Named("dominoSession")
+	private Session session;
 	
 	public String getUserName() {
-		return userBean.getId();
+		Principal principal = securityContext.getUserPrincipal();
+		return principal == null ? "Anonymous" : principal.getName();
 	}
 	
 	public String getDisplayName() {
-		return userBean.getDisplayName();
-	}
-	
-	public Person getPerson() {
-		return userBean.getPerson();
+		Principal principal = securityContext.getUserPrincipal();
+		try {
+			if(principal != null) {
+				Name name = session.createName(principal.getName());
+				try {
+					return name.getCommon();
+				} finally {
+					name.recycle();
+				}
+			} else {
+				return "Anonymous";
+			}
+		} catch(NotesException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public boolean isAnonymous() {
-		String name = getUserName();
-		return StringUtil.isEmpty(name) || "anonymous".equalsIgnoreCase(name);
+		Principal principal = securityContext.getUserPrincipal();
+		return principal == null || "Anonymous".equalsIgnoreCase(principal.getName());
 	}
 	
 	public String getThumbnailUrl() {
-		String url = userBean.getThumbnailUrl();
-		return ControllerUtil.cleanThumbnailUrl(url, request.getContextPath());
+		String id = getUserName();
+		return AppUtil.getGravatarUrl(id);
 	}
 	
 	public boolean isApprovedContributor() {
-		String[] roles = (String[])userBean.getValue(DominoDBUserBeanDataProvider.FIELD_DBACL_ACCESS_ROLES);
-		return roles != null && Arrays.binarySearch(roles, ROLE_CONTRIBUTOR) > -1;
+		return securityContext.isUserInRole(ROLE_CONTRIBUTOR);
 	}
 }
