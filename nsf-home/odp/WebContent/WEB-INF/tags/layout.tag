@@ -33,7 +33,7 @@
 		<link rel="stylesheet" href="css/style.css" />
 		<link rel="stylesheet" href="css/tabs.css" />
 		
-		<link rel="alternate" href="${mvc.basePath}/feed.xml" type="application/rss+xml" title="${fn:escapeXml(translation.feedRssBlog)}">
+		<link rel="alternate" href="${mvc.basePath}/blog.xml" type="application/rss+xml" title="${fn:escapeXml(translation.feedRssBlog)}">
 		<link rel="alternate" href="${mvc.basePath}/projectReleases.xml" type="application/rss+xml" title="${fn:escapeXml(translation.feedRssProjectReleases)}">
 		<link rel="EditURI" type="application/rsd+xml" href="${mvc.basePath}/rsd.xml" />
 		
