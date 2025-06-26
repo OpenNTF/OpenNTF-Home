@@ -49,7 +49,7 @@ public class ProjectFeedResource {
 	private boolean rssRequestUrls;
 
 	@GET
-	@Produces("application/rss+xml")
+	@Produces("application/rss+xml; charset=utf-8")
 	public Rss get() {
 		String baseUrl;
 		if(rssRequestUrls) {
