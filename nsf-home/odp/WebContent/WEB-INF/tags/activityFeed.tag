@@ -17,14 +17,13 @@
 --%>
 <%@tag description="Activity feed for various project entities" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@attribute name="items" required="true" type="java.lang.Object" %>
 <%@attribute name="activeEntry" required="true" type="java.lang.Object" %>
 <%@attribute name="urlPart" required="true" type="java.lang.String" %>
 <%@attribute name="project" required="true" type="java.lang.Object" %>
 <%@attribute name="titleProperty" required="true" type="java.lang.String" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <section class="activity-feed">
 	<table>
 		<thead>

@@ -17,8 +17,7 @@
 --%>
 <%@tag description="Summaried project information in a block" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@attribute name="value" required="true" type="java.lang.Object" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <div>
 	<a href="${mvc.basePath}/projects/${encoder.urlEncode(pageScope.value.name)}"><c:out value="${pageScope.value.name}"/></a>
 </div>

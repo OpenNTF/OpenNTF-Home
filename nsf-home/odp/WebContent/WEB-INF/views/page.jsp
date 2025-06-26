@@ -17,8 +17,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" session="false" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <t:layout>
 	<section class="main-content">
 		<turbo-frame id="page-content-${page.linkId}">
@@ -30,7 +29,7 @@
 				<div class="tab-container">
 					<c:forEach items="${page.cleanChildPageIds}" var="pageId" varStatus="pageLoop">
 						<input type="radio" id="tab${pageLoop.index}" name="tab-group" ${pageLoop.index == 0 ? 'checked="checked"' : ''} />
-						<label for="tab${pageLoop.index}">${fn:escapeXml(encoder.cleanPageId(pageId))}</label>
+						<label for="tab${pageLoop.index}"><c:out value="${encoder.cleanPageId(pageId)}"/></label>
 					</c:forEach>
 						
 					<div class="tabs">
