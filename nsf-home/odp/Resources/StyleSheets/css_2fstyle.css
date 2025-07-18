@@ -64,10 +64,6 @@ main {
     background-color: white;
 	display: grid;
 }
-main > iframe {
-	border: 0;
-	flex-grow: 1;
-}
 main > .main-header {
 	grid-area: main-header;
 	background-color: #019bdb;
@@ -241,8 +237,6 @@ footer p {
 	display: grid;
 }
 
-article.blog-entry {
-}
 article.blog-entry + article.blog-entry {
 	margin-top: 1em;
 	padding-top: 1em;
@@ -337,6 +331,17 @@ legend {
 	width: 100%;
 	max-width: 100%;
 	object-fit: contain;
+}
+
+/* Document edit forms */
+.edit-form {
+	dd + dt {
+		margin-top: 1em;
+	}
+	
+	input[type=text] {
+		width: 90%;
+	}
 }
 
 @media (min-width: 0px) {

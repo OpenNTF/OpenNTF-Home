@@ -24,7 +24,7 @@
 	<head>
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<meta name="turbolinks-root" content="${mvc.basePath}" />
+		<meta name="turbo-root" content="${mvc.basePath}" />
 		
 		<base href="${pageContext.request.contextPath}/" />
 		
@@ -58,7 +58,7 @@
 			
 			<div class="user-info">
 				<c:if test="${userInfo.anonymous}">
-					<a href="${pageContext.request.contextPath}?Login&RedirectTo=${encoder.urlEncode(mvc.basePath)}">Log In</a>
+					<a href="/names.nsf?Login&RedirectTo=${encoder.urlEncode(mvc.basePath)}">Log In</a>
 				</c:if>
 				<c:if test="${not userInfo.anonymous}">
 					<nav>

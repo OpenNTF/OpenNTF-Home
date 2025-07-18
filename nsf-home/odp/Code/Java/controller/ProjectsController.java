@@ -16,19 +16,28 @@
 package controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.krazo.engine.Viewable;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.data.Sort;
 import jakarta.data.page.PageRequest;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
+import jakarta.mvc.View;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -131,25 +140,57 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProject(@PathParam("projectName") String projectName) {
+	@View("project/summary.jsp")
+	public void getProject(@PathParam("projectName") String projectName) {
 		String key = projectName.replace('+', ' ');
 		Project project = projectRepository.findByProjectName(key)
 			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
 		models.put("project", project);
-		return "project/summary.jsp";
+		
+		// TODO figure out permissions
+		models.put("editable", true);
 	}
 	
 	@Path("{projectName}/edit")
 	@GET
-	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String editProject(@PathParam("projectName") String projectName) {
+	@View("project/summary-edit.jsp")
+	// Users who can edit may not have a specific role in this app, but this is a first check
+	@RolesAllowed("login")
+	public void editProject(@PathParam("projectName") String projectName) {
 		String key = projectName.replace('+', ' ');
 		Project project = projectRepository.findByProjectName(key)
 			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
 		models.put("project", project);
-		models.put("editMode", true);
-		return "project/summary.jsp";
+	}
+	
+	@Path("{projectName}/edit")
+	@POST
+	@Controller
+	@RolesAllowed("login")
+	public String updateProject(
+		@PathParam("projectName") String projectName,
+		@FormParam("projectName") @NotEmpty String newProjectName,
+		@FormParam("projectOverview") String newProjectOverview,
+		@FormParam("projectChefs") String newProjectChefs,
+		@FormParam("projectDetails") String newProjectDetails
+	) {
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		
+		project.setName(newProjectName);
+		project.setOverview(newProjectOverview);
+		List<String> newChefs = Arrays.stream(newProjectChefs.split(","))
+			.map(String::trim)
+			.filter(s -> !s.isEmpty())
+			.toList();
+		project.setChefs(newChefs);
+		project.setDetails(newProjectDetails);
+		
+		project = projectRepository.save(project, true);
+		
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8);
 	}
 	
 	@Path("{projectName}/releases")

@@ -18,6 +18,8 @@ package bean;
 import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -98,5 +100,9 @@ public class EncoderBean {
 		} catch (NotesException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public String joinNames(Collection<String> names) {
+		return names.stream().collect(Collectors.joining(", "));
 	}
 }
