@@ -17,6 +17,7 @@
 --%>
 <%@tag description="Individual header nav link" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@attribute name="value" required="true" type="java.lang.String" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <c:if test="${not empty pageScope.value}">
 	<a href="${mvc.basePath}/users/${encoder.urlEncode(pageScope.value)}"><c:out value="${pageScope.value}"/></a>
 </c:if>

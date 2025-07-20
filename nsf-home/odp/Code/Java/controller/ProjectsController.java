@@ -19,12 +19,17 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
 
+import bean.UserInfoBean;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.data.Sort;
 import jakarta.data.page.PageRequest;
@@ -33,21 +38,26 @@ import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.EntityTag;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
+import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import model.projects.Defect;
 import model.projects.Discussion;
@@ -90,6 +100,9 @@ public class ProjectsController {
 
     @Context
     Request request;
+    
+    @Inject
+    UserInfoBean userInfo;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -146,8 +159,7 @@ public class ProjectsController {
 			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
 		models.put("project", project);
 		
-		// TODO figure out permissions
-		models.put("editable", true);
+		models.put("editable", isProjectEditable(project));
 	}
 	
 	@Path("{projectName}/edit")
@@ -202,6 +214,8 @@ public class ProjectsController {
 			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
 		models.put("project", project);
 		
+		models.put("projectEditable", isProjectEditable(project));
+		
 		return "project/releases.jsp";
 	}
 
@@ -219,14 +233,18 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectRelease(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId, @Context Request request) {
+	public Response getProjectRelease(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId) {
 		ProjectRelease release = projectReleaseRepository.findById(releaseId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Release for ID {0}", releaseId)));
 		
-		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(release.getEtag());
-		ResponseBuilder response = request.evaluatePreconditions(etag);
-		if(response != null) {
-			return response.build();
+		boolean anon = userInfo.isAnonymous();
+		EntityTag etag = null;
+		if(anon) {
+			etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(release.getEtag());
+			ResponseBuilder response = request.evaluatePreconditions(etag);
+			if(response != null) {
+				return response.build();
+			}
 		}
 		
 		String key = projectName.replace('+', ' ');
@@ -236,9 +254,119 @@ public class ProjectsController {
 		
 		models.put("release", release);
 		
-		return Response.ok(new Viewable("project/releases.jsp"))
-			.header(HttpHeaders.ETAG,  etag.getValue())
-			.build();
+		models.put("projectEditable", isProjectEditable(project));
+
+		if(anon) {
+			return Response.ok(new Viewable("project/releases.jsp"))
+				.header(HttpHeaders.ETAG,  etag.getValue())
+				.build();
+		} else {
+			return Response.ok(new Viewable("project/releases.jsp"))
+				.build();
+		}
+	}
+	
+	@Path("{projectName}/releases/@new")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Controller
+	@View("project/release-edit.jsp")
+	// Users who can edit may not have a specific role in this app, but this is a first check
+	@RolesAllowed("login")
+	public void composeProjectRelease(@PathParam("projectName") String projectName) {
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		boolean projectEditable = isProjectEditable(project);
+		
+		if(!projectEditable) {
+			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
+		}
+		
+		models.put("project", project);
+		
+		var release = new ProjectRelease();
+		release.setAttachments(new ArrayList<>());
+		models.put("release", release);
+	}
+	
+	@Path("{projectName}/releases/@new")
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Controller
+	// Users who can edit may not have a specific role in this app, but this is a first check
+	@RolesAllowed("login")
+	public String createProjectRelease(
+		@PathParam("projectName") String projectName,
+		List<EntityPart> entityParts
+//		@NotEmpty @FormParam("releaseVersion") String releaseVersion,
+//		@NotEmpty @FormParam("releaseLicense") String releaseLicense,
+//		@FormParam("releaseReleased") boolean releaseReleased,
+//		@FormParam("releaseFiles") EntityPart uploads,
+//		@FormParam("releaseDescription") String releaseDescription
+	) {
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		boolean projectEditable = isProjectEditable(project);
+		
+		if(!projectEditable) {
+			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
+		}
+		
+		String releaseVersion = entityParts.stream()
+			.filter(part -> "releaseVersion".equals(part.getName()))
+			.findFirst()
+			.map(this::toString)
+			.orElse(null);
+		String releaseLicense = entityParts.stream()
+			.filter(part -> "releaseLicense".equals(part.getName()))
+			.findFirst()
+			.map(this::toString)
+			.orElse(null);
+		boolean releaseReleased = entityParts.stream()
+			.filter(part -> "releaseReleased".equals(part.getName()))
+			.findFirst()
+			.map(this::toString)
+			.map(val -> "true".equals(val))
+			.orElse(null);
+		String releaseDescription = entityParts.stream()
+			.filter(part -> "releaseDescription".equals(part.getName()))
+			.findFirst()
+			.map(this::toString)
+			.orElse(null);
+		
+		var release = new ProjectRelease();
+		release.setVersion(releaseVersion);
+		release.setLicenseType(releaseLicense);
+		release.setReleased(releaseReleased);
+		release.setDescription(releaseDescription);
+		
+		release.setReleaseDate(LocalDate.now());
+		release.setProjectName(project.getName());
+		release.setMasterChef(List.of(userInfo.getDisplayName()));
+		
+		List<EntityAttachment> attachments = entityParts.stream()
+			.filter(part -> "releaseFiles".equals(part.getName()))
+			.map(part -> {
+				String fileName = part.getFileName()
+					.orElseGet(() -> UUID.randomUUID().toString());
+				String type = part.getMediaType().toString();
+				byte[] data;
+				try {
+					data = part.getContent(byte[].class);
+				} catch (IllegalArgumentException | IllegalStateException | WebApplicationException | IOException e) {
+					throw new RuntimeException(e);
+				}
+				
+				return EntityAttachment.of(fileName, System.currentTimeMillis(), type, data);
+			})
+			.toList();
+		release.setAttachments(attachments);
+		
+		release = projectReleaseRepository.save(release, true);
+		
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
 	}
 	
 	@Path("{projectName}/releases/{releaseId}/{fileName}")
@@ -287,7 +415,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectDocumentationEntry(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request) {
+	public Response getProjectDocumentationEntry(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId) {
 		Documentation doc = documentationRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Documentation for ID {0}", documentId)));
 		
@@ -334,7 +462,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectRequestEntry(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request) {
+	public Response getProjectRequestEntry(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId) {
 		FeatureRequest featureRequest = requestRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Request for ID {0}", documentId)));
 		
@@ -373,7 +501,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectDefect(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request) {
+	public Response getProjectDefect(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId) {
 		Defect defect = defectRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Defect for ID {0}", documentId)));
 		
@@ -412,7 +540,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectDiscussion(@PathParam("projectName") String projectName, @PathParam("discussionId") String discussionId, @Context Request request) {
+	public Response getProjectDiscussion(@PathParam("projectName") String projectName, @PathParam("discussionId") String discussionId) {
 		Discussion discussion = discussionRepository.findById(discussionId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Discussion for ID {0}", discussionId)));
 		
@@ -451,7 +579,7 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectReview(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId, @Context Request request) {
+	public Response getProjectReview(@PathParam("projectName") String projectName, @PathParam("documentId") String documentId) {
 		Review review = reviewRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Review for ID {0}", documentId)));
 		
@@ -484,5 +612,18 @@ public class ProjectsController {
 		models.put("project", project);
 		
 		return "project/sourceControl.jsp";
+	}
+	
+	private boolean isProjectEditable(Project project) {
+		// TODO figure out permissions
+		return true;
+	}
+	
+	private String toString(EntityPart part) {
+		try {
+			return part.getContent(String.class);
+		} catch (IllegalArgumentException | IllegalStateException | WebApplicationException | IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

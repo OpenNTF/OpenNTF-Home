@@ -25,7 +25,7 @@
 			<c:out value="${markdown.toHtml(project.details)}" escapeXml="false"/>
 			
 			<c:if test="${editable}">
-				<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/edit"><c:out value="${translation.edit}"/></a></p>
+				<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/edit" class="edit-button"><c:out value="${translation.edit}"/></a></p>
 			</c:if>
 		</section>
 		<section id="recent-activity" class="activity-feed">

@@ -40,6 +40,10 @@
 					</c:forEach>
 				</tbody>
 			</table>
+			
+			<c:if test="${projectEditable}">
+				<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/@new" class="edit-button"><c:out value="${translation.createRelease}"/></a></p>
+			</c:if>
 		</section>
 		<section>
 			<c:if test="${not empty release}">
@@ -47,35 +51,35 @@
 				<legend><c:out value="${release.version}"/></legend>
 				
 				<dl class="release-info">
-					<dt>Release Name</dt>
+					<dt><c:out value="${translation.releaseName}"/></dt>
 					<dd><c:out value="${release.version}"/></dd>
 					
-					<dt>License</dt>
+					<dt><c:out value="${translation.releaseLicense}"/></dt>
 					<dd><c:out value="${release.licenseType}"/></dd>
 					
-					<dt>Status</dt>
-					<dd><c:out value="${release.released ? 'Released' : 'Not Released'}"/></dd>
+					<dt><c:out value="${translation.status}"/></dt>
+					<dd><c:out value="${release.released ? translation.statusReleased : translation.statusNotReleased}"/></dd>
 					
 					<div>
-						<dt>Cleared</dt>
+						<dt><c:out value="${translation.cleared}"/></dt>
 						<dd><c:out value="${release.releaseStatus}"/></dd>
 					</div>
 					
-					<dt>Released On</dt>
+					<dt><c:out value="${translation.releasedOn}"/></dt>
 					<dd><time-ago value="${fn:escapeXml(release.releaseDate)}"></time-ago></dd>
 					
-					<dt>Released By</dt>
+					<dt><c:out value="${translation.releaseBy}"/></dt>
 					<dd>
 						<c:forEach items="${release.masterChef}" var="name">
 							<t:personName value="${name}"/>
 						</c:forEach>
 					</dd>
 					
-					<dt>Downloads</dt>
+					<dt><c:out value="${translation.downloadCountLabel}"/></dt>
 					<dd><c:out value="${release.downloadCount}"/></dd>
 				</dl>
 				<dl>
-					<dt>Download(s)</dt>
+					<dt><c:out value="${translation.downloadsLabel}"/></dt>
 					<dd>
 						<ul>
 						<c:forEach items="${release.downloads}" var="download">
@@ -85,7 +89,7 @@
 					</dd>
 				</dl>
 				
-				<h3>Description</h3>
+				<h3><c:out value="${translation.description}"/></h3>
 				<p><c:out value="${markdown.toHtml(release.description)}" escapeXml="false"/></p>
 			</fieldset>
 			</c:if>
