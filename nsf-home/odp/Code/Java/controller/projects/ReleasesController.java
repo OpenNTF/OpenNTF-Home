@@ -48,9 +48,6 @@ public class ReleasesController {
 	private Models models;
 	
 	@Inject
-	private Project.Repository projectRepository;
-	
-	@Inject
 	private ProjectRelease.Repository projectReleaseRepository;
 
     @Context
@@ -59,13 +56,13 @@ public class ReleasesController {
     @Inject
     private UserInfoBean userInfo;
     
+    @Inject @UriParameter
+    private Project project;
+    
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProjectReleases(@PathParam("projectName") String projectName) {
-		String key = projectName.replace('+', ' ');
-		Project project = projectRepository.findByProjectName(key)
-			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+	public String getProjectReleases() {
 		models.put("project", project);
 		
 		models.put("projectEditable", ControllerUtil.isProjectEditable(project));
@@ -75,10 +72,7 @@ public class ReleasesController {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProjectRelease> getProjectReleasesJson(@PathParam("projectName") String projectName) {
-		String key = projectName.replace('+', ' ');
-		Project project = projectRepository.findByProjectName(key)
-			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+	public List<ProjectRelease> getProjectReleasesJson() {
 		return project.getReleasesByDate();
 	}
 	
@@ -86,7 +80,7 @@ public class ReleasesController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectRelease(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId) {
+	public Response getProjectRelease(@PathParam("releaseId") String releaseId) {
 		ProjectRelease release = projectReleaseRepository.findById(releaseId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Release for ID {0}", releaseId)));
 		
@@ -100,9 +94,6 @@ public class ReleasesController {
 			}
 		}
 		
-		String key = projectName.replace('+', ' ');
-		Project project = projectRepository.findByProjectName(key)
-			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
 		models.put("project", project);
 		
 		models.put("release", release);
@@ -126,10 +117,7 @@ public class ReleasesController {
 	@View("project/release-edit.jsp")
 	// Users who can edit may not have a specific role in this app, but this is a first check
 	@RolesAllowed("login")
-	public void composeProjectRelease(@PathParam("projectName") String projectName) {
-		String key = projectName.replace('+', ' ');
-		Project project = projectRepository.findByProjectName(key)
-			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+	public void composeProjectRelease() {
 		boolean projectEditable = ControllerUtil.isProjectEditable(project);
 		
 		if(!projectEditable) {
@@ -150,7 +138,6 @@ public class ReleasesController {
 	// Users who can edit may not have a specific role in this app, but this is a first check
 	@RolesAllowed("login")
 	public String createProjectRelease(
-		@PathParam("projectName") String projectName,
 		List<EntityPart> entityParts
 //		@NotEmpty @FormParam("releaseVersion") String releaseVersion,
 //		@NotEmpty @FormParam("releaseLicense") String releaseLicense,
@@ -158,9 +145,6 @@ public class ReleasesController {
 //		@FormParam("releaseFiles") EntityPart uploads,
 //		@FormParam("releaseDescription") String releaseDescription
 	) {
-		String key = projectName.replace('+', ' ');
-		Project project = projectRepository.findByProjectName(key)
-			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
 		boolean projectEditable = ControllerUtil.isProjectEditable(project);
 		
 		if(!projectEditable) {
@@ -224,7 +208,7 @@ public class ReleasesController {
 	
 	@Path("{releaseId}/{fileName}")
 	@GET
-	public Response getProjectReleaseFile(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId, @PathParam("fileName") String fileName) throws IOException {
+	public Response getProjectReleaseFile(@PathParam("releaseId") String releaseId, @PathParam("fileName") String fileName) throws IOException {
 		ProjectRelease shot = projectReleaseRepository.findById(releaseId).orElseThrow(NotFoundException::new);
 
     	return ControllerUtil.fetchAttachment(shot, fileName, request);
