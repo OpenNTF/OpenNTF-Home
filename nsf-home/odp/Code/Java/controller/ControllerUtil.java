@@ -25,11 +25,14 @@ import com.ibm.commons.util.PathUtil;
 import com.ibm.commons.util.StringUtil;
 
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.CacheControl;
+import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.EntityTag;
 import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 import model.AbstractAttachmentEntity;
+import model.projects.Project;
 
 /**
  * Utility methods useful for controller classes
@@ -88,6 +91,19 @@ public enum ControllerUtil {
 			return PathUtil.concat(contextPath, url, '/');
 		} else {
 			return url;
+		}
+	}
+	
+	public static boolean isProjectEditable(Project project) {
+		// TODO figure out permissions
+		return true;
+	}
+	
+	public static String toString(EntityPart part) {
+		try {
+			return part.getContent(String.class);
+		} catch (IllegalArgumentException | IllegalStateException | WebApplicationException | IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

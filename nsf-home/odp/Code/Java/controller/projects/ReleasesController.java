@@ -1,0 +1,232 @@
+package controller.projects;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
+import org.eclipse.krazo.engine.Viewable;
+
+import bean.UserInfoBean;
+import controller.ControllerUtil;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
+import jakarta.mvc.Controller;
+import jakarta.mvc.Models;
+import jakarta.mvc.View;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.EntityPart;
+import jakarta.ws.rs.core.EntityTag;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Request;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.ResponseBuilder;
+import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.ext.RuntimeDelegate;
+import model.projects.Project;
+import model.projects.ProjectRelease;
+
+@Path("projects/{projectName}/releases")
+public class ReleasesController {
+	
+	@Inject
+	private Models models;
+	
+	@Inject
+	private Project.Repository projectRepository;
+	
+	@Inject
+	private ProjectRelease.Repository projectReleaseRepository;
+
+    @Context
+    private Request request;
+    
+    @Inject
+    private UserInfoBean userInfo;
+    
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Controller
+	public String getProjectReleases(@PathParam("projectName") String projectName) {
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		models.put("project", project);
+		
+		models.put("projectEditable", ControllerUtil.isProjectEditable(project));
+		
+		return "project/releases.jsp";
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProjectRelease> getProjectReleasesJson(@PathParam("projectName") String projectName) {
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		return project.getReleasesByDate();
+	}
+	
+	@Path("{releaseId}")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Controller
+	public Response getProjectRelease(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId) {
+		ProjectRelease release = projectReleaseRepository.findById(releaseId)
+			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Release for ID {0}", releaseId)));
+		
+		boolean anon = userInfo.isAnonymous();
+		EntityTag etag = null;
+		if(anon) {
+			etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(release.getEtag());
+			ResponseBuilder response = request.evaluatePreconditions(etag);
+			if(response != null) {
+				return response.build();
+			}
+		}
+		
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		models.put("project", project);
+		
+		models.put("release", release);
+		
+		models.put("projectEditable", ControllerUtil.isProjectEditable(project));
+
+		if(anon) {
+			return Response.ok(new Viewable("project/releases.jsp"))
+				.header(HttpHeaders.ETAG,  etag.getValue())
+				.build();
+		} else {
+			return Response.ok(new Viewable("project/releases.jsp"))
+				.build();
+		}
+	}
+	
+	@Path("@new")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Controller
+	@View("project/release-edit.jsp")
+	// Users who can edit may not have a specific role in this app, but this is a first check
+	@RolesAllowed("login")
+	public void composeProjectRelease(@PathParam("projectName") String projectName) {
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		boolean projectEditable = ControllerUtil.isProjectEditable(project);
+		
+		if(!projectEditable) {
+			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
+		}
+		
+		models.put("project", project);
+		
+		var release = new ProjectRelease();
+		release.setAttachments(new ArrayList<>());
+		models.put("release", release);
+	}
+	
+	@Path("@new")
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Controller
+	// Users who can edit may not have a specific role in this app, but this is a first check
+	@RolesAllowed("login")
+	public String createProjectRelease(
+		@PathParam("projectName") String projectName,
+		List<EntityPart> entityParts
+//		@NotEmpty @FormParam("releaseVersion") String releaseVersion,
+//		@NotEmpty @FormParam("releaseLicense") String releaseLicense,
+//		@FormParam("releaseReleased") boolean releaseReleased,
+//		@FormParam("releaseFiles") EntityPart uploads,
+//		@FormParam("releaseDescription") String releaseDescription
+	) {
+		String key = projectName.replace('+', ' ');
+		Project project = projectRepository.findByProjectName(key)
+			.orElseThrow(() -> new NotFoundException("Unable to find project for name: " + key));
+		boolean projectEditable = ControllerUtil.isProjectEditable(project);
+		
+		if(!projectEditable) {
+			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
+		}
+		
+		String releaseVersion = entityParts.stream()
+			.filter(part -> "releaseVersion".equals(part.getName()))
+			.findFirst()
+			.map(ControllerUtil::toString)
+			.orElse(null);
+		String releaseLicense = entityParts.stream()
+			.filter(part -> "releaseLicense".equals(part.getName()))
+			.findFirst()
+			.map(ControllerUtil::toString)
+			.orElse(null);
+		boolean releaseReleased = entityParts.stream()
+			.filter(part -> "releaseReleased".equals(part.getName()))
+			.findFirst()
+			.map(ControllerUtil::toString)
+			.map(val -> "true".equals(val))
+			.orElse(null);
+		String releaseDescription = entityParts.stream()
+			.filter(part -> "releaseDescription".equals(part.getName()))
+			.findFirst()
+			.map(ControllerUtil::toString)
+			.orElse(null);
+		
+		var release = new ProjectRelease();
+		release.setVersion(releaseVersion);
+		release.setLicenseType(releaseLicense);
+		release.setReleased(releaseReleased);
+		release.setDescription(releaseDescription);
+		
+		release.setReleaseDate(LocalDate.now());
+		release.setProjectName(project.getName());
+		release.setMasterChef(List.of(userInfo.getDisplayName()));
+		
+		List<EntityAttachment> attachments = entityParts.stream()
+			.filter(part -> "releaseFiles".equals(part.getName()))
+			.map(part -> {
+				String fileName = part.getFileName()
+					.orElseGet(() -> UUID.randomUUID().toString());
+				String type = part.getMediaType().toString();
+				byte[] data;
+				try {
+					data = part.getContent(byte[].class);
+				} catch (IllegalArgumentException | IllegalStateException | WebApplicationException | IOException e) {
+					throw new RuntimeException(e);
+				}
+				
+				return EntityAttachment.of(fileName, System.currentTimeMillis(), type, data);
+			})
+			.toList();
+		release.setAttachments(attachments);
+		
+		release = projectReleaseRepository.save(release, true);
+		
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
+	}
+	
+	@Path("{releaseId}/{fileName}")
+	@GET
+	public Response getProjectReleaseFile(@PathParam("projectName") String projectName, @PathParam("releaseId") String releaseId, @PathParam("fileName") String fileName) throws IOException {
+		ProjectRelease shot = projectReleaseRepository.findById(releaseId).orElseThrow(NotFoundException::new);
+
+    	return ControllerUtil.fetchAttachment(shot, fileName, request);
+	}
+}
