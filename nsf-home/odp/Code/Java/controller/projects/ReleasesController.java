@@ -3,7 +3,6 @@ package controller.projects;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,6 @@ import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotAuthorizedException;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -41,7 +39,7 @@ import jakarta.ws.rs.ext.RuntimeDelegate;
 import model.projects.Project;
 import model.projects.ProjectRelease;
 
-@Path("projects/{projectName}/releases")
+@Path("projects/{project}/releases")
 public class ReleasesController {
 	
 	@Inject
@@ -56,8 +54,11 @@ public class ReleasesController {
     @Inject
     private UserInfoBean userInfo;
 
-    @PathParam("projectName")
+    @PathParam("project")
     private Project project;
+    
+    @PathParam("release")
+    private ProjectRelease release;
     
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -76,14 +77,11 @@ public class ReleasesController {
 		return project.getReleasesByDate();
 	}
 	
-	@Path("{releaseId}")
+	@Path("{release}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getProjectRelease(@PathParam("releaseId") String releaseId) {
-		ProjectRelease release = projectReleaseRepository.findById(releaseId)
-			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Release for ID {0}", releaseId)));
-		
+	public Response showRelease() {
 		boolean anon = userInfo.isAnonymous();
 		EntityTag etag = null;
 		if(anon) {
@@ -206,11 +204,9 @@ public class ReleasesController {
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
 	}
 	
-	@Path("{releaseId}/{fileName}")
+	@Path("{release}/{fileName}")
 	@GET
-	public Response getProjectReleaseFile(@PathParam("releaseId") String releaseId, @PathParam("fileName") String fileName) throws IOException {
-		ProjectRelease shot = projectReleaseRepository.findById(releaseId).orElseThrow(NotFoundException::new);
-
-    	return ControllerUtil.fetchAttachment(shot, fileName, request);
+	public Response getProjectReleaseFile(@PathParam("fileName") String fileName) throws IOException {
+		return ControllerUtil.fetchAttachment(release, fileName, request);
 	}
 }
