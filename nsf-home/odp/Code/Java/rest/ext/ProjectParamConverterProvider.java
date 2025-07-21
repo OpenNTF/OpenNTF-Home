@@ -3,7 +3,6 @@ package rest.ext;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
@@ -11,7 +10,6 @@ import jakarta.ws.rs.ext.Provider;
 import model.projects.Project;
 
 @Provider
-@Dependent
 public class ProjectParamConverterProvider implements ParamConverterProvider {
 	
 	@Inject

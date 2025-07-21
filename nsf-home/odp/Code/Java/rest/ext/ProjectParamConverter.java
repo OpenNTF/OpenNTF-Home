@@ -1,12 +1,12 @@
 package rest.ext;
 
-import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.ext.ParamConverter;
 import model.projects.Project;
 
-@Dependent
+@ApplicationScoped
 public class ProjectParamConverter implements ParamConverter<Project> {
 	
 	@Inject
