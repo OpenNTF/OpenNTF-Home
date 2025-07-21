@@ -4,9 +4,9 @@
     <text>34567Cg~[</text>
   </item>
   <item name="$TITLE">
-    <text>controller/projects/UriParameter.java</text>
+    <text>rest/ext/ProjectParamConverter.java</text>
   </item>
   <item name="$FileNames" sign="true">
-    <text>controller/projects/UriParameter.java</text>
+    <text>rest/ext/ProjectParamConverter.java</text>
   </item>
 </note>

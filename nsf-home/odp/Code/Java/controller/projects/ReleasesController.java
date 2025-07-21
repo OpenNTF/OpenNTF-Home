@@ -55,8 +55,8 @@ public class ReleasesController {
     
     @Inject
     private UserInfoBean userInfo;
-    
-    @Inject @UriParameter("projectName")
+
+    @PathParam("projectName")
     private Project project;
     
 	@GET
