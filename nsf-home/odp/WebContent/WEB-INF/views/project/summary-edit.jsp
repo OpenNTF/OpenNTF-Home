@@ -22,8 +22,11 @@
 <t:projectLayout project="${project}" current="summary">
 	<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/edit" class="edit-form" data-turbo="false">
 		<dl>
-			<dt><label for="projectName"><c:out value="${translation.projectName}"/></label></dt>
-			<dd><input type="text" id="projectName" name="projectName" value="${fn:escapeXml(project.name)}"/></dd>
+			<%-- Disallow editing the name of existing projects, for data-integrity reasons --%>
+			<c:if test="${empty project.id}">
+				<dt><label for="projectName"><c:out value="${translation.projectName}"/></label></dt>
+				<dd><input type="text" id="projectName" name="projectName" value="${fn:escapeXml(project.name)}"/></dd>
+			</c:if>
 			
 			<dt><label for="projectOverview"><c:out value="${translation.projectOverview}"/></label></dt>
 			<dd><input type="text" id="projectOverview" name="projectOverview" value="${fn:escapeXml(project.overview)}"/></dd>
