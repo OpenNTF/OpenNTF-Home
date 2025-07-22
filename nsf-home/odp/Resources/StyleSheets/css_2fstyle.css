@@ -344,6 +344,15 @@ legend {
 	}
 }
 
+.edit-button {
+	display: inline-block;
+	padding: 0.5em 1em;
+	color: white !important;
+	text-decoration: none;
+	background-color: #ffa500;
+	border-radius: 4px;
+}
+
 @media (min-width: 0px) {
 	body {
 		grid-template-rows: 44px auto 1fr 2em 50px;
