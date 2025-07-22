@@ -47,7 +47,7 @@ import model.AbstractAttachmentEntity;
 import model.blog.BooleanYNConveter;
 
 @Entity("Release")
-public class ProjectRelease extends AbstractAttachmentEntity {
+public class ProjectRelease extends AbstractAttachmentEntity implements ProjectRelative {
 	public static final String VIEW_RELEASES = "ReleasesByDate"; //$NON-NLS-1$
 	public static final String VIEW_PENDING_RELEASES = "IP Management\\Pending Releases"; //$NON-NLS-1$
 	/** The admin role to be added to modified authors fields */
@@ -116,6 +116,7 @@ public class ProjectRelease extends AbstractAttachmentEntity {
 		this.documentId = documentId;
 	}
 
+	@Override
 	public String getProjectName() {
 		return projectName;
 	}

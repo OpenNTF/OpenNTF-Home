@@ -31,7 +31,7 @@ import jakarta.data.Sort;
 import model.AbstractAttachmentEntity;
 
 @Entity("documentation")
-public class Documentation extends AbstractAttachmentEntity {
+public class Documentation extends AbstractAttachmentEntity implements ProjectRelative {
 	@RepositoryProvider("projectsRepository")
 	public static interface Repository extends DominoRepository<Documentation, String> {
 		Stream<Documentation> findByProjectName(String projectName, Sort<Documentation> sorts);
@@ -99,6 +99,7 @@ public class Documentation extends AbstractAttachmentEntity {
 		this.entryAuthor = entryAuthor;
 	}
 
+	@Override
 	public String getProjectName() {
 		return projectName;
 	}

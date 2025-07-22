@@ -38,8 +38,10 @@ import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import model.projects.Project;
 import model.projects.ProjectRelease;
+import rest.ext.ValidProjectRelationship;
 
 @Path("projects/{project}/releases")
+@ValidProjectRelationship
 public class ReleasesController {
 	
 	@Inject

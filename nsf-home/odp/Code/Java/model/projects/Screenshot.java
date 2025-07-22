@@ -32,7 +32,7 @@ import jakarta.nosql.Id;
 import model.AbstractAttachmentEntity;
 
 @Entity("screenshot")
-public class Screenshot extends AbstractAttachmentEntity {
+public class Screenshot extends AbstractAttachmentEntity implements ProjectRelative {
 	@RepositoryProvider("projectsRepository")
 	public static interface Repository extends DominoRepository<Screenshot, String> {
 		Stream<Screenshot> findByProjectName(String projectName);
@@ -74,6 +74,7 @@ public class Screenshot extends AbstractAttachmentEntity {
 		this.replicaId = replicaId;
 	}
 	
+	@Override
 	public String getProjectName() {
 		return projectName;
 	}

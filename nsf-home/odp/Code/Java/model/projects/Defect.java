@@ -28,7 +28,7 @@ import jakarta.nosql.Entity;
 import jakarta.data.Sort;
 
 @Entity("bug")
-public class Defect {
+public class Defect implements ProjectRelative {
 	@RepositoryProvider("projectsRepository")
 	public interface Repository extends DominoRepository<Defect, String> {
 		Stream<Defect> findByProjectName(String projectName, Sort<Defect> sorts);
@@ -85,6 +85,7 @@ public class Defect {
 		this.entryAuthor = entryAuthor;
 	}
 	
+	@Override
 	public String getProjectName() {
 		return projectName;
 	}

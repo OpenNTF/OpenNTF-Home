@@ -30,7 +30,7 @@ import jakarta.nosql.Entity;
 // NB: this entity represents many types of forms in the database
 //     and should not be created or saved
 @Entity("ProjectActivity")
-public class ProjectActivity {
+public class ProjectActivity implements ProjectRelative {
 	@RepositoryProvider("projectsRepository")
 	public interface Repository extends DominoRepository<ProjectActivity, String> {
 		public static final String VIEW_ALLBYDATE = "AllbyDate";
@@ -59,6 +59,7 @@ public class ProjectActivity {
 		this.documentId = documentId;
 	}
 
+	@Override
 	public String getProjectName() {
 		return projectName;
 	}
