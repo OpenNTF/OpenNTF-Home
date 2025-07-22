@@ -62,20 +62,23 @@ public class ReleasesController {
     @PathParam("release")
     private ProjectRelease release;
     
+    @Inject
+    private ControllerUtil controllerUtil;
+    
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProjectReleases() {
+	public String showReleases() {
 		models.put("project", project);
 		
-		models.put("projectEditable", ControllerUtil.isProjectEditable(project));
+		models.put("projectEditable", controllerUtil.isProjectEditable(project));
 		
 		return "project/releases.jsp";
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProjectRelease> getProjectReleasesJson() {
+	public List<ProjectRelease> getReleasesJson() {
 		return project.getReleasesByDate();
 	}
 	
@@ -98,7 +101,7 @@ public class ReleasesController {
 		
 		models.put("release", release);
 		
-		models.put("projectEditable", ControllerUtil.isProjectEditable(project));
+		models.put("projectEditable", controllerUtil.isProjectEditable(project));
 
 		if(anon) {
 			return Response.ok(new Viewable("project/releases.jsp"))
@@ -118,7 +121,7 @@ public class ReleasesController {
 	// Users who can edit may not have a specific role in this app, but this is a first check
 	@RolesAllowed("login")
 	public void composeProjectRelease() {
-		boolean projectEditable = ControllerUtil.isProjectEditable(project);
+		boolean projectEditable = controllerUtil.isProjectEditable(project);
 		
 		if(!projectEditable) {
 			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
@@ -145,7 +148,7 @@ public class ReleasesController {
 //		@FormParam("releaseFiles") EntityPart uploads,
 //		@FormParam("releaseDescription") String releaseDescription
 	) {
-		boolean projectEditable = ControllerUtil.isProjectEditable(project);
+		boolean projectEditable = controllerUtil.isProjectEditable(project);
 		
 		if(!projectEditable) {
 			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
@@ -154,23 +157,23 @@ public class ReleasesController {
 		String releaseVersion = entityParts.stream()
 			.filter(part -> "releaseVersion".equals(part.getName()))
 			.findFirst()
-			.map(ControllerUtil::toString)
+			.map(controllerUtil::toString)
 			.orElse(null);
 		String releaseLicense = entityParts.stream()
 			.filter(part -> "releaseLicense".equals(part.getName()))
 			.findFirst()
-			.map(ControllerUtil::toString)
+			.map(controllerUtil::toString)
 			.orElse(null);
 		boolean releaseReleased = entityParts.stream()
 			.filter(part -> "releaseReleased".equals(part.getName()))
 			.findFirst()
-			.map(ControllerUtil::toString)
+			.map(controllerUtil::toString)
 			.map(val -> "true".equals(val))
 			.orElse(null);
 		String releaseDescription = entityParts.stream()
 			.filter(part -> "releaseDescription".equals(part.getName()))
 			.findFirst()
-			.map(ControllerUtil::toString)
+			.map(controllerUtil::toString)
 			.orElse(null);
 		
 		var release = new ProjectRelease();
@@ -209,6 +212,6 @@ public class ReleasesController {
 	@Path("{release}/{fileName}")
 	@GET
 	public Response getProjectReleaseFile(@PathParam("fileName") String fileName) throws IOException {
-		return ControllerUtil.fetchAttachment(release, fileName, request);
+		return controllerUtil.fetchAttachment(release, fileName, request);
 	}
 }

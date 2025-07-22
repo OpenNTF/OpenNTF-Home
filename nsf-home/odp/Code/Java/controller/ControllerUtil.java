@@ -21,9 +21,13 @@ import java.util.Date;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
+import bean.UserInfoBean;
+
 import com.ibm.commons.util.PathUtil;
 import com.ibm.commons.util.StringUtil;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.CacheControl;
@@ -37,8 +41,11 @@ import model.projects.Project;
 /**
  * Utility methods useful for controller classes
  */
-public enum ControllerUtil {
-	;
+@ApplicationScoped
+public class ControllerUtil {
+	
+	@Inject
+	private UserInfoBean userInfo;
 	
 	/**
 	 * Creates a {@link Response} object containing either a "no change" cached response
@@ -51,7 +58,7 @@ public enum ControllerUtil {
 	 * @throws IOException if there is a problem reading the attachment data
 	 * @throws NotFoundException if the attachment with that name doesn't exist
 	 */
-	public static Response fetchAttachment(AbstractAttachmentEntity entity, String fileName, Request request) throws IOException {
+	public Response fetchAttachment(AbstractAttachmentEntity entity, String fileName, Request request) throws IOException {
 		String expectedName = fileName.replace('+', ' ').toLowerCase();
         EntityAttachment att = entity.getAttachments()
         	.stream()
@@ -83,7 +90,7 @@ public enum ControllerUtil {
 	 * @param contextPath the app context path
 	 * @return a cleaned URL suitable for use in image sources
 	 */
-	public static String cleanThumbnailUrl(String url, String contextPath) {
+	public String cleanThumbnailUrl(String url, String contextPath) {
 		if(url != null && url.startsWith("/.ibmxspres")) {
 //			return PathUtil.concat("/xsp", url, '/');
 			return url;
@@ -94,12 +101,16 @@ public enum ControllerUtil {
 		}
 	}
 	
-	public static boolean isProjectEditable(Project project) {
-		// TODO figure out permissions
+	public boolean isProjectEditable(Project project) {
+		if(!userInfo.isApprovedContributor()) {
+			return false;
+		}
+		
+		// TODO figure out per-project permissions
 		return true;
 	}
 	
-	public static String toString(EntityPart part) {
+	public String toString(EntityPart part) {
 		try {
 			return part.getContent(String.class);
 		} catch (IllegalArgumentException | IllegalStateException | WebApplicationException | IOException e) {

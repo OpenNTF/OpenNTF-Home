@@ -90,6 +90,9 @@ public class ProjectsController {
     
     @PathParam("project")
     private Project project;
+    
+    @Inject
+    private ControllerUtil controllerUtil;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -143,7 +146,7 @@ public class ProjectsController {
 	public void getProject() {
 		models.put("project", project);
 		
-		models.put("editable", ControllerUtil.isProjectEditable(project));
+		models.put("editable", controllerUtil.isProjectEditable(project));
 	}
 	
 	@Path("{project}/edit")
@@ -197,7 +200,7 @@ public class ProjectsController {
 	public Response getProjectScreenshot(@PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
 		Screenshot shot = screenshotRepository.findById(screenshotId).orElseThrow(NotFoundException::new);
 
-    	return ControllerUtil.fetchAttachment(shot, fileName, request);
+    	return controllerUtil.fetchAttachment(shot, fileName, request);
 	}
 	
 	@Path("{project}/documentation")
@@ -238,7 +241,7 @@ public class ProjectsController {
 	public Response getProjectDocumentationFile(@PathParam("documentId") String documentId, @PathParam("fileName") String fileName) throws IOException {
 		Documentation doc = documentationRepository.findById(documentId).orElseThrow(NotFoundException::new);
     	
-    	return ControllerUtil.fetchAttachment(doc, fileName, request);
+    	return controllerUtil.fetchAttachment(doc, fileName, request);
 	}
 	
 	@Path("{project}/requests")

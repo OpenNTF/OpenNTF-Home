@@ -37,12 +37,15 @@ public class MediaResource {
 
     @Inject
     BlogPhoto.Repository mediaRepository;
+    
+    @Inject
+    private ControllerUtil controllerUtil;
 
     @GET
     @Path("{mediaId}/{mediaName}")
     public Response get(@PathParam("mediaId") final String mediaId, @PathParam("mediaName") final String mediaName) throws IOException {
     	BlogPhoto media = mediaRepository.findById(mediaId).orElseThrow(NotFoundException::new);
     	
-    	return ControllerUtil.fetchAttachment(media, mediaName, request);
+    	return controllerUtil.fetchAttachment(media, mediaName, request);
     }
 }

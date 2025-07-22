@@ -58,6 +58,9 @@ public class UsersController {
 	@Context
 	private HttpServletRequest request;
 	
+	@Inject
+	private ControllerUtil controllerUtil;
+	
 	@Path("@me")
 	@GET
 	@View("userProfile.jsp")
@@ -89,7 +92,7 @@ public class UsersController {
 		
 		if(!"Anonymous".equalsIgnoreCase(user)) {
 			String thumbnailUrl = AppUtil.getGravatarUrl(user);
-			models.put("thumbnailUrl", ControllerUtil.cleanThumbnailUrl(thumbnailUrl, request.getContextPath()));
+			models.put("thumbnailUrl", controllerUtil.cleanThumbnailUrl(thumbnailUrl, request.getContextPath()));
 			models.put("displayName", AppUtil.toCn(user));
 			models.put("webPage", AppUtil.getUserWebSite(user));
 		} else {
