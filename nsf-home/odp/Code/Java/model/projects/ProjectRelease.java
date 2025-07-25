@@ -46,7 +46,7 @@ import jakarta.nosql.Id;
 import model.AbstractAttachmentEntity;
 import model.blog.BooleanYNConveter;
 
-@Entity("Release")
+@Entity("release")
 public class ProjectRelease extends AbstractAttachmentEntity implements ProjectRelative {
 	public static final String VIEW_RELEASES = "ReleasesByDate"; //$NON-NLS-1$
 	public static final String VIEW_PENDING_RELEASES = "IP Management\\Pending Releases"; //$NON-NLS-1$
