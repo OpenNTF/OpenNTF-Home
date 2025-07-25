@@ -11,4 +11,8 @@ It's all done by sending HTML over the wire. And for those instances when that's
 
 Read more on [turbo.hotwired.dev](https://turbo.hotwired.dev).
 
-© 2021 Basecamp, LLC.
+## Contributing
+
+Please read [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+© 2024 37signals LLC.
