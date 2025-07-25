@@ -6,7 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+
+import com.ibm.commons.util.StringUtil;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
@@ -190,6 +193,7 @@ public class ReleasesController {
 			.filter(part -> "releaseFiles".equals(part.getName()))
 			.map(part -> {
 				String fileName = part.getFileName()
+					.map(name -> StringUtil.isEmpty(name) ? UUID.randomUUID().toString() : name)
 					.orElseGet(() -> UUID.randomUUID().toString());
 				String type = part.getMediaType().toString();
 				byte[] data;
@@ -199,8 +203,13 @@ public class ReleasesController {
 					throw new RuntimeException(e);
 				}
 				
-				return EntityAttachment.of(fileName, System.currentTimeMillis(), type, data);
+				if(data.length > 0) {
+					return EntityAttachment.of(fileName, System.currentTimeMillis(), type, data);
+				} else {
+					return null;
+				}
 			})
+			.filter(Objects::nonNull)
 			.toList();
 		release.setAttachments(attachments);
 		
