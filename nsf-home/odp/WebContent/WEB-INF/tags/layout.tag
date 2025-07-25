@@ -58,7 +58,7 @@
 			
 			<div class="user-info">
 				<c:if test="${userInfo.anonymous}">
-					<a href="/names.nsf?Login&RedirectTo=${encoder.urlEncode(mvc.basePath)}">Log In</a>
+					<a href="/names.nsf?Login&RedirectTo=${encoder.urlEncode(mvc.basePath)}"><c:out value="${translation.loginLink}"/></a>
 				</c:if>
 				<c:if test="${not userInfo.anonymous}">
 					<nav>
@@ -82,7 +82,7 @@
 			<c:if test="${not empty redirectMessages}">
 				<ul>
 					<c:forEach items="${redirectMessages}" var="message">
-						<li>${message}</li>
+						<li><c:out value="${message}"/></li>
 					</c:forEach>
 				</ul>
 			</c:if>
@@ -90,7 +90,7 @@
 			<jsp:doBody />
 		</main>
 		<footer id="pagefooter">
-			<p>${translation.copyright}</p>
+			<p><c:out value="${translation.copyright}"/></p>
 		</footer>
 	</body>
 </html>
