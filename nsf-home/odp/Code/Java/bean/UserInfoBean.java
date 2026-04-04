@@ -21,55 +21,44 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.ws.rs.core.SecurityContext;
-import lotus.domino.Name;
-import lotus.domino.NotesException;
-import lotus.domino.Session;
 import util.AppUtil;
 
-@RequestScoped @Named("userInfo")
+@RequestScoped
+@Named("userInfo")
 public class UserInfoBean {
 	public static final String ROLE_BLOGADMIN = "[BlogAdmin]";
 	public static final String ROLE_CONTRIBUTOR = "[Contributor]";
-	
+
 	@Inject
 	private SecurityContext securityContext;
-	
-	@Inject @Named("dominoSession")
-	private Session session;
-	
+
+	@Inject
+	private EncoderBean encoderBean;
+
 	public String getUserName() {
 		Principal principal = securityContext.getUserPrincipal();
 		return principal == null ? "Anonymous" : principal.getName();
 	}
-	
+
 	public String getDisplayName() {
 		Principal principal = securityContext.getUserPrincipal();
-		try {
-			if(principal != null) {
-				Name name = session.createName(principal.getName());
-				try {
-					return name.getCommon();
-				} finally {
-					name.recycle();
-				}
-			} else {
-				return "Anonymous";
-			}
-		} catch(NotesException e) {
-			throw new RuntimeException(e);
+		if (principal != null) {
+			return encoderBean.toCommonName(principal.getName());
+		} else {
+			return "Anonymous";
 		}
 	}
-	
+
 	public boolean isAnonymous() {
 		Principal principal = securityContext.getUserPrincipal();
 		return principal == null || "Anonymous".equalsIgnoreCase(principal.getName());
 	}
-	
+
 	public String getThumbnailUrl() {
 		String id = getUserName();
 		return AppUtil.getGravatarUrl(id);
 	}
-	
+
 	public boolean isApprovedContributor() {
 		return securityContext.isUserInRole(ROLE_CONTRIBUTOR);
 	}
