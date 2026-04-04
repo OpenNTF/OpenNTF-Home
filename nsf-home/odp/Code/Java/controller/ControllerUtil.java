@@ -23,9 +23,6 @@ import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
 import bean.UserInfoBean;
 
-import com.ibm.commons.util.PathUtil;
-import com.ibm.commons.util.StringUtil;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
@@ -37,6 +34,8 @@ import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 import model.AbstractAttachmentEntity;
 import model.projects.Project;
+import util.AppPathUtil;
+import util.StringUtil;
 
 /**
  * Utility methods useful for controller classes
@@ -92,10 +91,9 @@ public class ControllerUtil {
 	 */
 	public String cleanThumbnailUrl(String url, String contextPath) {
 		if(url != null && url.startsWith("/.ibmxspres")) {
-//			return PathUtil.concat("/xsp", url, '/');
 			return url;
 		} else if(url != null && url.startsWith("/")) {
-			return PathUtil.concat(contextPath, url, '/');
+			return AppPathUtil.concat(contextPath, url, '/');
 		} else {
 			return url;
 		}

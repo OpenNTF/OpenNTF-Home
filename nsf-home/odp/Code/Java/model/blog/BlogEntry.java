@@ -34,13 +34,12 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewDocuments;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
-import com.ibm.commons.util.StringUtil;
-
 import bean.MarkdownBean;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
+import util.StringUtil;
 import jakarta.data.page.PageRequest;
 
 @Entity("content_BlogEntry")

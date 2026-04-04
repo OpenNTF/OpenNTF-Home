@@ -17,13 +17,10 @@ package controller;
 
 import java.text.ParseException;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import com.ibm.commons.util.StringUtil;
 
 import api.external.discord.GuildApi;
 import api.external.discord.ScheduledEvent;
@@ -45,10 +42,10 @@ import net.fortuna.ical4j.model.property.DtStamp;
 import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
+import util.StringUtil;
 
 @Path("discord")
 public class DiscordController {
-	private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd'T'hhmmss'Z'");
 	
 	@Inject
 	@RestClient

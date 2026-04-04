@@ -22,9 +22,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import com.ibm.commons.util.PathUtil;
-import com.ibm.commons.util.StringUtil;
-
 import api.atompub.model.AtomCategory;
 import api.atompub.model.Author;
 import api.atompub.model.Content;
@@ -53,6 +50,8 @@ import jakarta.ws.rs.core.UriInfo;
 import model.blog.BlogEntry;
 import model.blog.BlogStatus;
 import model.util.PostUtil;
+import util.AppPathUtil;
+import util.StringUtil;
 
 @Path(AtomPubResource.BASE_PATH + "/{blogId}")
 @RolesAllowed(UserInfoBean.ROLE_BLOGADMIN)
@@ -206,9 +205,9 @@ public class BlogResource {
 
 	private String resolveUrl(final String... parts) {
 		URI baseUri = uriInfo.getBaseUri();
-		String uri = PathUtil.concat(baseUri.toString(), AtomPubResource.BASE_PATH, '/');
+		String uri = AppPathUtil.concat(baseUri.toString(), AtomPubResource.BASE_PATH, '/');
 		for (String part : parts) {
-			uri = PathUtil.concat(uri, part, '/');
+			uri = AppPathUtil.concat(uri, part, '/');
 		}
 		return uri;
 	}
@@ -217,7 +216,7 @@ public class BlogResource {
 		URI baseUri = uriInfo.getBaseUri();
 		String uri = baseUri.toString();
 		for (String part : parts) {
-			uri = PathUtil.concat(uri, part, '/');
+			uri = AppPathUtil.concat(uri, part, '/');
 		}
 		return uri;
 	}

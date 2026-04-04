@@ -19,12 +19,11 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.ibm.commons.util.StringUtil;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import model.webinars.Presenter;
+import util.StringUtil;
 
 /**
  * Bean intended to be used in UI elements to translate presenter

@@ -32,8 +32,6 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewDocuments;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 
-import com.ibm.commons.util.StringUtil;
-
 import bean.TranslationBean.Messages;
 import jakarta.data.Sort;
 import jakarta.data.page.PageRequest;
@@ -45,6 +43,7 @@ import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
 import model.AbstractAttachmentEntity;
 import model.blog.BooleanYNConveter;
+import util.StringUtil;
 
 @Entity("release")
 public class ProjectRelease extends AbstractAttachmentEntity implements ProjectRelative {

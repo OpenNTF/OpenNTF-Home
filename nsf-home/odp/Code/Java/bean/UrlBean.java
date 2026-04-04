@@ -19,11 +19,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
+import util.AppPathUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import com.ibm.commons.util.PathUtil;
 
 @ApplicationScoped
 @Named("urlBean")
@@ -42,7 +41,7 @@ public class UrlBean {
 		}
 		
 		if(url.charAt(0) == '/') {
-			return PathUtil.concat(req.getContextPath(), url, '/');
+			return AppPathUtil.concat(req.getContextPath(), url, '/');
 		} else {
 			return url;
 		}

@@ -25,13 +25,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import com.ibm.commons.util.StringUtil;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.data.page.PageRequest;
 import jakarta.ws.rs.NotFoundException;
 import model.blog.BlogEntry;
+import util.StringUtil;
 
 @RequestScoped
 public class BlogEntries {

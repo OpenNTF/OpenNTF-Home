@@ -23,12 +23,11 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
-import com.ibm.commons.util.StringUtil;
-
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
+import util.StringUtil;
 import jakarta.data.page.PageRequest;
 import jakarta.data.Sort;
 

@@ -24,8 +24,6 @@ import java.util.ResourceBundle;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
-import com.ibm.commons.util.StringUtil;
-
 import api.atompub.model.Author;
 import api.atompub.model.Content;
 import api.atompub.model.Entry;
@@ -50,6 +48,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import model.blog.BlogPhoto;
+import util.StringUtil;
 
 @Path(AtomPubResource.BASE_PATH + "/{blogId}/" + MediaResource.PATH)
 @RolesAllowed(UserInfoBean.ROLE_BLOGADMIN)

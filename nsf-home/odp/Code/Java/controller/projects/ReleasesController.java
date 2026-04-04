@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.ibm.commons.util.StringUtil;
-
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
 
@@ -42,6 +40,7 @@ import jakarta.ws.rs.ext.RuntimeDelegate;
 import model.projects.Project;
 import model.projects.ProjectRelease;
 import rest.ext.ValidProjectRelationship;
+import util.StringUtil;
 
 @Path("projects/{project}/releases")
 @ValidProjectRelationship

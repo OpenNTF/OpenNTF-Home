@@ -27,8 +27,7 @@ import jakarta.inject.Named;
 import lotus.domino.Name;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-
-import com.ibm.commons.util.StringUtil;
+import util.StringUtil;
 
 /**
  * This bean is intended to be a JSP utility bean for text encoding.
@@ -47,7 +46,7 @@ public class EncoderBean {
 	 */
 	public String urlEncode(final String value) {
 		if(StringUtil.isEmpty(value)) {
-			return StringUtil.EMPTY_STRING;
+			return "";
 		} else {
 			try {
 				return URLEncoder.encode(value, "UTF-8");

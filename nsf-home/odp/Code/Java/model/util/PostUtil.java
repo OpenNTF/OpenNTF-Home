@@ -18,10 +18,8 @@ package model.util;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
-import com.ibm.commons.util.StringUtil;
-
 import model.blog.BlogEntry;
-
+import util.StringUtil;
 import jakarta.enterprise.inject.spi.CDI;
 
 public enum PostUtil {
