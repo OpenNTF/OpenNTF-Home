@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
+import bean.EncoderBean;
 import bean.UserInfoBean;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.data.Sort;
@@ -61,6 +62,9 @@ public class UsersController {
 	@Inject
 	private ControllerUtil controllerUtil;
 	
+	@Inject
+	private EncoderBean encoderBean;
+	
 	@Path("@me")
 	@GET
 	@View("userProfile.jsp")
@@ -93,7 +97,7 @@ public class UsersController {
 		if(!"Anonymous".equalsIgnoreCase(user)) {
 			String thumbnailUrl = AppUtil.getGravatarUrl(user);
 			models.put("thumbnailUrl", controllerUtil.cleanThumbnailUrl(thumbnailUrl, request.getContextPath()));
-			models.put("displayName", AppUtil.toCn(user));
+			models.put("displayName", encoderBean.toCommonName(user));
 			models.put("webPage", AppUtil.getUserWebSite(user));
 		} else {
 			models.put("displayName", user);

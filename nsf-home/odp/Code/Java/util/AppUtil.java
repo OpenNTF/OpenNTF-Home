@@ -24,7 +24,6 @@ import jakarta.enterprise.inject.spi.CDI;
 import jakarta.xml.bind.DatatypeConverter;
 import lotus.domino.Directory;
 import lotus.domino.DirectoryNavigator;
-import lotus.domino.Name;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
 
@@ -77,19 +76,5 @@ public enum AppUtil {
 			}
 		}
 		return "";
-	}
-	
-	public static String toCn(String userName) {
-		Session session = CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
-		try {
-			Name name = session.createName(userName);
-			try {
-				return name.getCommon();
-			} finally {
-				name.recycle();
-			}
-		} catch(NotesException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }
