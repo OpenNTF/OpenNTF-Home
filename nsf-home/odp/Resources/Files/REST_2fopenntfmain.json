@@ -1,0 +1,499 @@
+{
+  "apiName" : "NONE",
+  "nsfPath" : "openntf\\mainjee.nsf",
+  "iconName" : "beach",
+  "icon" : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxyZWN0IHg9IjQ0OC4wMDkiIHk9IjI4NC41MTciIHRyYW5zZm9ybT0ibWF0cml4KC0wLjkwOCAwLjQxOTEgLTAuNDE5MSAtMC45MDggMTAxNS44OTkgNDY4LjA4MTIpIiBzdHlsZT0iZmlsbDojNzU0NjJFOyIgd2lkdGg9IjE3LjA2OCIgaGVpZ2h0PSIxMjIuMTg3Ii8+DQo8cmVjdCB4PSIxMzIuMjY3IiB5PSIxMjgiIHN0eWxlPSJmaWxsOiNDRkNGQ0Y7IiB3aWR0aD0iMTcuMDY3IiBoZWlnaHQ9IjM4NCIvPg0KPHJlY3QgeD0iMTMyLjI2NyIgeT0iMTI4IiBzdHlsZT0iZmlsbDojQkZCRkJGOyIgd2lkdGg9IjE3LjA2NyIgaGVpZ2h0PSI1MS4yIiAvPg0KPHJlY3QgeD0iNC4yNjciIHk9IjM4NCIgc3R5bGU9ImZpbGw6IzhGNTQzNjsiIHdpZHRoPSI0OTQuOTMzIiBoZWlnaHQ9IjM0LjEzMyIgLz4NCjxyZWN0IHg9IjQuMjY3IiB5PSI0MTguMTMzIiBzdHlsZT0iZmlsbDojOEY1NDM2OyIgd2lkdGg9IjM0LjEzMyIgaGVpZ2h0PSI4NS4zMzMiIC8+DQo8cmVjdCB4PSI0NjUuMDY3IiB5PSI0MTguMTMzIiBzdHlsZT0iZmlsbDojOEY1NDM2OyIgd2lkdGg9IjM0LjEzMyIgaGVpZ2h0PSI4NS4zMzMiIC8+DQo8cG9seWdvbiBzdHlsZT0iZmlsbDojOEY1NDM2OyIgcG9pbnRzPSI0NjUuMDY3LDI4MS42IDM1NC4xMzMsMzg0IDMwMi45MzMsMzg0IDQzOS40NjcsMjU2ICIgLz4NCjxwYXRoIHN0eWxlPSJmaWxsOiNERTRDM0M7IiBkPSJNMjc3LjMzMywxNjIuMTMzTDI3Ny4zMzMsMTYyLjEzM2MtMTguODUtMTguODUtNDkuNDE3LTE4Ljg1LTY4LjI2NywwbDAsMCBjLTE4Ljg1LTE4Ljg1LTQ5LjQxNy0xOC44NS02OC4yNjcsMGwwLDBjLTE4Ljg1LTE4Ljg1LTQ5LjQxNy0xOC44NS02OC4yNjcsMGwwLDBjLTE4Ljg1LTE4Ljg1LTQ5LjQxNy0xOC44NS02OC4yNjcsMGwwLDB2LTE3LjA2NyBDNC4yNjcsNjkuNjU4LDY1LjM5MSw4LjUzMywxNDAuOCw4LjUzM2wwLDBjNzUuNDA5LDAsMTM2LjUzMyw2MS4xMjQsMTM2LjUzMywxMzYuNTMzVjE2Mi4xMzN6IiAvPg0KPGNpcmNsZSBzdHlsZT0iZmlsbDojRkRCNjJGOyIgY3g9IjQxMy44NjciIGN5PSI5My44NjciIHI9IjQyLjY2NyIgLz4NCjxyZWN0IHg9IjQwNS4zMzMiIHN0eWxlPSJmaWxsOiNGREI2MkY7IiB3aWR0aD0iMTcuMDY3IiBoZWlnaHQ9IjI1LjYiIC8+DQo8cmVjdCB4PSI0ODIuMTMzIiB5PSI4NS4zMzMiIHN0eWxlPSJmaWxsOiNGREI2MkY7IiB3aWR0aD0iMjUuNiIgaGVpZ2h0PSIxNy4wNjciIC8+DQo8cmVjdCB4PSIzMjAiIHk9Ijg1LjMzMyIgc3R5bGU9ImZpbGw6I0ZEQjYyRjsiIHdpZHRoPSIyNS42IiBoZWlnaHQ9IjE3LjA2NyIgLz4NCjxyZWN0IHg9IjQ1OC4zODkiIHk9IjI4LjAxNiIgdHJhbnNmb3JtPSJtYXRyaXgoLTAuNzA3MSAwLjcwNzEgLTAuNzA3MSAtMC43MDcxIDgzMC4yMTQyIC0yNzAuNzg2OCkiIHN0eWxlPSJmaWxsOiNGREI2MkY7IiB3aWR0aD0iMjUuNiIgaGVpZ2h0PSIxNy4wNjciIC8+DQo8cmVjdCB4PSIzNDMuNzIzIiB5PSIxNDIuNjc1IiB0cmFuc2Zvcm09Im1hdHJpeCgtMC43MDcxIDAuNzA3MSAtMC43MDcxIC0wLjcwNzEgNzE1LjU0MzUgNi4wMjk1KSIgc3R5bGU9ImZpbGw6I0ZEQjYyRjsiIHdpZHRoPSIyNS42IiBoZWlnaHQ9IjE3LjA2NyIgLz4NCjxyZWN0IHg9IjQ2Mi42NzMiIHk9IjEzOC4zNDUiIHRyYW5zZm9ybT0ibWF0cml4KC0wLjcwNzEgMC43MDcxIC0wLjcwNzEgLTAuNzA3MSA5MTEuMjc1IC03NS4xNzE5KSIgc3R5bGU9ImZpbGw6I0ZEQjYyRjsiIHdpZHRoPSIxNy4wNjciIGhlaWdodD0iMjUuNiIgLz4NCjxyZWN0IHg9IjM0OC4wMDUiIHk9IjIzLjc0NiIgdHJhbnNmb3JtPSJtYXRyaXgoLTAuNzA3MSAwLjcwNzEgLTAuNzA3MSAtMC43MDcxIDYzNC40OTEzIC0xODkuNzIyNikiIHN0eWxlPSJmaWxsOiNGREI2MkY7IiB3aWR0aD0iMTcuMDY3IiBoZWlnaHQ9IjI1LjYiIC8+DQo8cmVjdCB4PSI0MDUuMzMzIiB5PSIxNjIuMTMzIiBzdHlsZT0iZmlsbDojRkRCNjJGOyIgd2lkdGg9IjE3LjA2NyIgaGVpZ2h0PSIyNS42IiAvPg0KPHBhdGggc3R5bGU9ImZpbGw6I0NGNDczNzsiIGQ9Ik0yMDkuNjksMjcuMzA3Yy0zMy4wNDEsNjQuNzY4LTk3LjE4NiwxMDUuNjM0LTE0NS4wNjcsMTI4LjQyN2MyLjg1OSwxLjg1Miw1LjUwNCwzLjk5NCw3LjkxLDYuNCBjMTguODUtMTguODUsNDkuNDE3LTE4Ljg1LDY4LjI2NywwYzE4Ljg1LTE4Ljg1LDQ5LjQxNy0xOC44NSw2OC4yNjcsMGMxOC44NS0xOC44NSw0OS40MTctMTguODUsNjguMjY3LDB2LTE3LjA2NyBDMjc3LjMzMyw5Ni41OCwyNTEuNTcxLDUxLjczOCwyMDkuNjksMjcuMzA3eiIvPg0KPC9zdmc+DQo=",
+  "description" : "Main JEE app",
+  "formulaEngine" : "domino",
+  "schemaName" : "openntfmain",
+  "requireRevisionToUpdate" : false,
+  "allowDecryption" : true,
+  "dqlAccess" : true,
+  "dqlFormula" : {
+    "formulaType" : "domino",
+    "formula" : "@True"
+  },
+  "allowCode" : true,
+  "openAccess" : true,
+  "maximumAccessLevel" : "Editor",
+  "forms" : [ {
+    "formName" : "Setting",
+    "alias" : [ ],
+    "formModes" : [ {
+      "modeName" : "default",
+      "validationRules" : [ ],
+      "readAccessFormula" : {
+        "formulaType" : "domino",
+        "formula" : "@True"
+      },
+      "writeAccessFormula" : {
+        "formulaType" : "domino",
+        "formula" : "@True"
+      },
+      "deleteAccessFormula" : {
+        "formulaType" : "domino",
+        "formula" : "@False"
+      },
+      "onLoad" : {
+        "formulaType" : "domino",
+        "formula" : ""
+      },
+      "onSave" : {
+        "formulaType" : "domino",
+        "formula" : ""
+      },
+      "computeWithForm" : false,
+      "continueOnError" : true,
+      "sign" : false,
+      "required" : [ ],
+      "fields" : [ {
+        "name" : "Comments",
+        "externalName" : "Comments",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Key",
+        "externalName" : "Key",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Value1",
+        "externalName" : "Value1",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value2",
+        "externalName" : "Value2",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value3",
+        "externalName" : "Value3",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      } ],
+      "readAccessFields" : [ {
+        "name" : "Comments",
+        "externalName" : "Comments",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Key",
+        "externalName" : "Key",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Value1",
+        "externalName" : "Value1",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value2",
+        "externalName" : "Value2",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value3",
+        "externalName" : "Value3",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      } ],
+      "writeAccessFields" : [ {
+        "name" : "Comments",
+        "externalName" : "Comments",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Key",
+        "externalName" : "Key",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Value1",
+        "externalName" : "Value1",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value2",
+        "externalName" : "Value2",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value3",
+        "externalName" : "Value3",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      } ]
+    }, {
+      "modeName" : "dql",
+      "validationRules" : [ ],
+      "readAccessFormula" : {
+        "formulaType" : "domino",
+        "formula" : "@True"
+      },
+      "writeAccessFormula" : {
+        "formulaType" : "domino",
+        "formula" : "@True"
+      },
+      "deleteAccessFormula" : {
+        "formulaType" : "domino",
+        "formula" : "@False"
+      },
+      "onLoad" : {
+        "formulaType" : "domino",
+        "formula" : ""
+      },
+      "onSave" : {
+        "formulaType" : "domino",
+        "formula" : ""
+      },
+      "computeWithForm" : false,
+      "continueOnError" : true,
+      "sign" : false,
+      "required" : [ ],
+      "fields" : [ {
+        "name" : "Comments",
+        "externalName" : "Comments",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Key",
+        "externalName" : "Key",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Name",
+        "externalName" : "Name",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Value1",
+        "externalName" : "Value1",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value2",
+        "externalName" : "Value2",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value3",
+        "externalName" : "Value3",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      } ],
+      "readAccessFields" : [ {
+        "name" : "Comments",
+        "externalName" : "Comments",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Key",
+        "externalName" : "Key",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Name",
+        "externalName" : "Name",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Value1",
+        "externalName" : "Value1",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value2",
+        "externalName" : "Value2",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value3",
+        "externalName" : "Value3",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      } ],
+      "writeAccessFields" : [ {
+        "name" : "Comments",
+        "externalName" : "Comments",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Key",
+        "externalName" : "Key",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Name",
+        "externalName" : "Name",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "format" : "string",
+        "type" : "string"
+      }, {
+        "name" : "Value1",
+        "externalName" : "Value1",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value2",
+        "externalName" : "Value2",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      }, {
+        "name" : "Value3",
+        "externalName" : "Value3",
+        "fieldAccess" : "RW",
+        "itemFlags" : [ "SUMMARY" ],
+        "summaryField" : true,
+        "protectedField" : false,
+        "encryptedField" : false,
+        "type" : "array",
+        "items" : {
+          "format" : "string",
+          "type" : "string"
+        }
+      } ]
+    } ],
+    "formValue" : "Setting"
+  } ],
+  "views" : [ {
+    "name" : "System\\Settings",
+    "alias" : [ "Settings" ],
+    "unid" : "01CE51CBEF3C5F2885258AD6005E9FD2",
+    "selectionFormula" : "SELECT Form = \"Setting\"",
+    "columns" : [ {
+      "name" : "Key",
+      "externalName" : "Key"
+    }, {
+      "name" : "Name",
+      "externalName" : "Name"
+    }, {
+      "name" : "Comments",
+      "externalName" : "Comments"
+    }, {
+      "name" : "Value1",
+      "externalName" : "Value1"
+    }, {
+      "name" : "Value2",
+      "externalName" : "Value2"
+    }, {
+      "name" : "Value3",
+      "externalName" : "Value3"
+    } ]
+  } ],
+  "agents" : [ ],
+  "qrpLayouts" : [ ],
+  "available" : true,
+  "isActive" : true,
+  "prohibitRefresh" : true
+}

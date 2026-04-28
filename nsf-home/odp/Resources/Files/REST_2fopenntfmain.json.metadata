@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<note class="form" xmlns="http://www.lotus.com/dxl">
+  <item name="$TITLE">
+    <textlist>
+      <text>REST/openntfmain.json</text>
+    </textlist>
+  </item>
+  <item name="$FileNames">
+    <text>REST/openntfmain.json</text>
+  </item>
+  <item name="$MimeType">
+    <text>application/octet-stream</text>
+  </item>
+  <item name="$Flags">
+    <text>345CgQP</text>
+  </item>
+  <item name="$FileModDT">
+    <datetime>20260405T124747,43-04</datetime>
+  </item>
+  <item name="$Comment" sign="true">
+    <text>REST API configuration openntfmain</text>
+  </item>
+</note>
