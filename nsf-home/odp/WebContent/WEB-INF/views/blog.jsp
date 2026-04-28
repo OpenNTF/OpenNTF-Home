@@ -26,7 +26,7 @@
 				<c:forEach items="${blogEntrySummaries[month.key]}" var="entrySummary">
 					<li>
 						<c:out value="${messages.format('datePrefix', temporalBean.formatDate(entrySummary.date))}"/>
-						<a href="${mvc.basePath}/blog/${entrySummary.unid}">${entrySummary.viewTitle}</a>
+						<a href="${mvc.basePath}/blog/${entrySummary.unid}"><c:out value="${entrySummary.viewTitle}"/></a>
 					</li>
 				</c:forEach>
 			</ul>
