@@ -37,15 +37,11 @@ public class ApplicationConfig {
 	
 	@PostConstruct
 	public void loadNsfConfig() {
-		try {
-			this.configEntries = configEntryRepository.findAll()
-				.collect(Collectors.toMap(
-					ConfigEntry::getKey,
-					Function.identity()
-				));
-		} catch(Throwable t) {
-			t.printStackTrace();
-		}
+		this.configEntries = configEntryRepository.findAll()
+			.collect(Collectors.toMap(
+				ConfigEntry::getKey,
+				Function.identity()
+			));
 	}
 	
 	public Map<String, ConfigEntry> getConfigEntries() {

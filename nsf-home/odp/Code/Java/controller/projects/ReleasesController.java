@@ -5,8 +5,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
@@ -104,6 +105,7 @@ public class ReleasesController {
 		models.put("release", release);
 		
 		models.put("projectEditable", controllerUtil.isProjectEditable(project));
+		models.put("releaseEditable", controllerUtil.isEditable(release));
 
 		if(anon) {
 			return Response.ok(new Viewable("project/releases.jsp"))
@@ -115,17 +117,33 @@ public class ReleasesController {
 		}
 	}
 	
+	@Path("{release}/@edit")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Controller
+	@View("project/release-edit.jsp")
+	@RolesAllowed("login")
+	public void editProjectRelease() {
+		if(!controllerUtil.isProjectEditable(project)) {
+			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
+		}
+		if(!controllerUtil.isEditable(release)) {
+			throw new NotAuthorizedException("You are not authorized to edit this release", Response.status(Status.UNAUTHORIZED).build());
+		}
+		
+		models.put("project", project);
+		
+		models.put("release", release);
+	}
+	
 	@Path("@new")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	@View("project/release-edit.jsp")
-	// Users who can edit may not have a specific role in this app, but this is a first check
 	@RolesAllowed("login")
 	public void composeProjectRelease() {
-		boolean projectEditable = controllerUtil.isProjectEditable(project);
-		
-		if(!projectEditable) {
+		if(!controllerUtil.isProjectEditable(project)) {
 			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
 		}
 		
@@ -140,57 +158,53 @@ public class ReleasesController {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Controller
-	// Users who can edit may not have a specific role in this app, but this is a first check
 	@RolesAllowed("login")
-	public String createProjectRelease(
-		List<EntityPart> entityParts
-//		@NotEmpty @FormParam("releaseVersion") String releaseVersion,
-//		@NotEmpty @FormParam("releaseLicense") String releaseLicense,
-//		@FormParam("releaseReleased") boolean releaseReleased,
-//		@FormParam("releaseFiles") EntityPart uploads,
-//		@FormParam("releaseDescription") String releaseDescription
-	) {
-		boolean projectEditable = controllerUtil.isProjectEditable(project);
-		
-		if(!projectEditable) {
+	public String createProjectRelease(List<EntityPart> entityParts) {
+		if(!controllerUtil.isProjectEditable(project)) {
 			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
 		}
 		
-		String releaseVersion = entityParts.stream()
-			.filter(part -> "releaseVersion".equals(part.getName()))
-			.findFirst()
-			.map(controllerUtil::toString)
-			.orElse(null);
-		String releaseLicense = entityParts.stream()
-			.filter(part -> "releaseLicense".equals(part.getName()))
-			.findFirst()
-			.map(controllerUtil::toString)
-			.orElse(null);
-		boolean releaseReleased = entityParts.stream()
-			.filter(part -> "releaseReleased".equals(part.getName()))
-			.findFirst()
-			.map(controllerUtil::toString)
-			.map(val -> "true".equals(val))
-			.orElse(null);
-		String releaseDescription = entityParts.stream()
-			.filter(part -> "releaseDescription".equals(part.getName()))
-			.findFirst()
-			.map(controllerUtil::toString)
-			.orElse(null);
+		var release = updateReleaseFromPayload(new ProjectRelease(), entityParts);
 		
-		var release = new ProjectRelease();
-		release.setVersion(releaseVersion);
-		release.setLicenseType(releaseLicense);
-		release.setReleased(releaseReleased);
-		release.setDescription(releaseDescription);
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
+	}
+	
+	@Path("{release}")
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Controller
+	@RolesAllowed("login")
+	public String updateProjectRelease(List<EntityPart> entityParts) {
+		if(!controllerUtil.isProjectEditable(project)) {
+			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
+		}
 		
-		release.setReleaseDate(LocalDate.now());
-		release.setProjectName(project.getName());
-		release.setMasterChef(List.of(userInfo.getDisplayName()));
+		var release = updateReleaseFromPayload(this.release, entityParts);
 		
-		List<EntityAttachment> attachments = entityParts.stream()
-			.filter(part -> "releaseFiles".equals(part.getName()))
-			.map(part -> {
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
+	}
+	
+	@Path("{release}/{fileName}")
+	@GET
+	public Response getProjectReleaseFile(@PathParam("fileName") String fileName) throws IOException {
+		return controllerUtil.fetchAttachment(release, fileName, request);
+	}
+	
+	private ProjectRelease updateReleaseFromPayload(ProjectRelease release, List<EntityPart> entityParts) {
+		String releaseVersion = null;
+		String releaseLicense = null;
+		boolean releaseReleased = false;
+		String releaseDescription = null;
+		Set<String> deleteAttachments = new HashSet<>();
+		List<EntityAttachment> attachments = new ArrayList<>();
+		for(EntityPart part : entityParts) {
+			switch(String.valueOf(part.getName())) {
+			case "releaseVersion" -> releaseVersion = controllerUtil.toString(part);
+			case "releaseLicense" -> releaseLicense = controllerUtil.toString(part);
+			case "releaseReleased" -> releaseReleased = "true".equals(controllerUtil.toString(part));
+			case "releaseDescription" -> releaseDescription = controllerUtil.toString(part);
+			case "deleteAttachments" -> deleteAttachments.add(controllerUtil.toString(part));
+			case "releaseFiles" -> {
 				String fileName = part.getFileName()
 					.map(name -> StringUtil.isEmpty(name) ? UUID.randomUUID().toString() : name)
 					.orElseGet(() -> UUID.randomUUID().toString());
@@ -203,23 +217,33 @@ public class ReleasesController {
 				}
 				
 				if(data.length > 0) {
-					return EntityAttachment.of(fileName, System.currentTimeMillis(), type, data);
-				} else {
-					return null;
+					attachments.add(EntityAttachment.of(fileName, System.currentTimeMillis(), type, data));
 				}
-			})
-			.filter(Objects::nonNull)
-			.toList();
+			}
+			}
+		}
+		
+		release.setVersion(releaseVersion);
+		release.setLicenseType(releaseLicense);
+		release.setReleased(releaseReleased);
+		release.setDescription(releaseDescription);
+		
+		release.setProjectName(project.getName());
+		
+		if(StringUtil.isEmpty(release.getDocumentId())) {
+			// Then it's new - configure some defaults
+			release.setReleaseDate(LocalDate.now());
+			release.setMasterChef(List.of(userInfo.getDisplayName()));
+		}
+		
+		var existingAttachments = release.getAttachments();
+		if(existingAttachments != null) {
+			existingAttachments.stream()
+				.filter(att -> !deleteAttachments.contains(att.getName()))
+				.forEach(attachments::add);
+		}
 		release.setAttachments(attachments);
 		
-		release = projectReleaseRepository.save(release, true);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
-	}
-	
-	@Path("{release}/{fileName}")
-	@GET
-	public Response getProjectReleaseFile(@PathParam("fileName") String fileName) throws IOException {
-		return controllerUtil.fetchAttachment(release, fileName, request);
+		return projectReleaseRepository.save(release, true);
 	}
 }
