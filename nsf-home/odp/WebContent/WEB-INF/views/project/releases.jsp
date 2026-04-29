@@ -91,6 +91,10 @@
 				
 				<h3><c:out value="${translation.description}"/></h3>
 				<p><c:out value="${markdown.toHtml(release.description)}" escapeXml="false"/></p>
+				
+				<c:if test="${releaseEditable}">
+					<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}/@edit" class="edit-button"><c:out value="${translation.editRelease}"/></a></p>
+				</c:if>
 			</fieldset>
 			</c:if>
 		</section>

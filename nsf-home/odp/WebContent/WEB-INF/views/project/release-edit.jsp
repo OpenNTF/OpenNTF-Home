@@ -23,10 +23,10 @@
 	<fieldset>
 		<legend><c:out value="${translation.newRelease}"/></legend>
 		
-		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/@new" enctype="multipart/form-data" data-turbo="false">
+		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${empty release.documentId ? '@new' : release.documentId}" enctype="multipart/form-data" data-turbo="false">
 			<dl>
 				<dt><c:out value="${translation.releaseName}"/></dt>
-				<dd><input type="text" name="releaseVersion" /></dd>
+				<dd><input type="text" name="releaseVersion" value="${fn:escapeXml(release.version)}" /></dd>
 				
 				<dt><c:out value="${translation.releaseLicense}"/></dt>
 				<dd>
@@ -57,11 +57,16 @@
 			<dl>
 				<dt><c:out value="${translation.downloadsLabel}"/></dt>
 				<dd>
-<!-- 					<ul> -->
-<%-- 					<c:forEach items="${release.downloads}" var="download"> --%>
-<%-- 						<li><a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}/releases/${release.documentId}/${encoder.urlEncode(download.name)}"><c:out value="${download.name}"/></a></li> --%>
-<%-- 					</c:forEach> --%>
-<!-- 					</ul> -->
+					<table class="attachments">
+					<tbody>
+ 					<c:forEach items="${release.downloads}" var="download">
+ 						<tr>
+ 							<td><a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}/releases/${release.documentId}/${encoder.urlEncode(download.name)}"><c:out value="${download.name}"/></a></td>
+ 							<td><label><input type="checkbox" name="deleteAttachments" value="${fn:escapeXml(download.name)}" /> <c:out value="${translation.deleteOnSave}"/></label></td>
+ 						</tr>
+ 					</c:forEach>
+					</tbody>
+					</table>
 					
 					<input type="file" multiple="multiple" name="releaseFiles"/>
 				</dd>
@@ -71,7 +76,7 @@
 			<p><textarea class="markdown-edit" id="releaseDescription" name="releaseDescription"><c:out value="${release.description}"/></textarea></p>
 			
 			<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
-			<p><input type="submit" value="${fn:escapeXml(translation.createRelease)}"/></p>
+			<p><input type="submit" value="${fn:escapeXml(translation.saveRelease)}"/></p>
 		</form>
 	</fieldset>
 </t:projectLayout>

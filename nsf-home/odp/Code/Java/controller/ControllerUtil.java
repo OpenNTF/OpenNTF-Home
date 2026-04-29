@@ -34,6 +34,7 @@ import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 import model.AbstractAttachmentEntity;
 import model.projects.Project;
+import model.projects.ProjectRelative;
 import util.AppPathUtil;
 import util.StringUtil;
 
@@ -100,6 +101,15 @@ public class ControllerUtil {
 	}
 	
 	public boolean isProjectEditable(Project project) {
+		if(!userInfo.isApprovedContributor()) {
+			return false;
+		}
+		
+		// TODO figure out per-project permissions
+		return true;
+	}
+	
+	public boolean isEditable(ProjectRelative release) {
 		if(!userInfo.isApprovedContributor()) {
 			return false;
 		}
