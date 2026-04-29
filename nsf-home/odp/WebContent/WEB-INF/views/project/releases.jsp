@@ -22,6 +22,11 @@
 <t:projectLayout project="${project}" current="releases">
 	<div class="lefthand-view-layout">
 		<section class="activity-feed">
+			
+			<c:if test="${projectEditable}">
+				<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/@new" class="edit-button"><c:out value="${translation.createRelease}"/></a></p>
+			</c:if>
+			
 			<table>
 				<thead>
 					<tr>
@@ -40,10 +45,6 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			
-			<c:if test="${projectEditable}">
-				<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/@new" class="edit-button"><c:out value="${translation.createRelease}"/></a></p>
-			</c:if>
 		</section>
 		<section>
 			<c:if test="${not empty release}">
