@@ -24,7 +24,9 @@
 		<section class="activity-feed">
 			
 			<c:if test="${projectEditable}">
-				<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/@new" class="edit-button"><c:out value="${translation.createRelease}"/></a></p>
+				<t:actionBar>
+					<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/@new" class="edit-button"><c:out value="${translation.createRelease}"/></a>
+				</t:actionBar>
 			</c:if>
 			
 			<table>
@@ -94,7 +96,14 @@
 				<p><c:out value="${markdown.toHtml(release.description)}" escapeXml="false"/></p>
 				
 				<c:if test="${releaseEditable}">
-					<p><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}/@edit" class="edit-button"><c:out value="${translation.editRelease}"/></a></p>
+					<t:actionBar>
+						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}/@edit" class="edit-button"><c:out value="${translation.editRelease}"/></a>
+						<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}">
+							<input type="hidden" name="${mvc.hiddenMethodFieldName}" value="DELETE"/>
+							<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
+							<input type="submit" class="delete-button" value="${translation.deleteRelease}" onclick="return confirm('${translation.confirmDeleteRelease}')"/>
+						</form>
+					</t:actionBar>
 				</c:if>
 			</fieldset>
 			</c:if>
