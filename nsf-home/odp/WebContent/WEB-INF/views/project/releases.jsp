@@ -98,11 +98,7 @@
 				<c:if test="${releaseEditable}">
 					<t:actionBar>
 						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}/@edit" class="edit-button"><c:out value="${translation.editRelease}"/></a>
-						<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}">
-							<input type="hidden" name="${mvc.hiddenMethodFieldName}" value="DELETE"/>
-							<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
-							<input type="submit" class="delete-button" value="${translation.deleteRelease}" onclick="return confirm('${translation.confirmDeleteRelease}')"/>
-						</form>
+						<t:deleteButton action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}" value="${translation.deleteRelease}" confirmation="${translation.confirmDeleteRelease}"/>
 					</t:actionBar>
 				</c:if>
 			</fieldset>
