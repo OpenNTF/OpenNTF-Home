@@ -68,7 +68,7 @@
 								<ul>
 									<li><a href="${mvc.basePath}/users/@me"><c:out value="${translation.profile}"/></a></li>
 									
-									<li><a href="${pageContext.request.contextPath}?Logout&RedirectTo=${encoder.urlEncode(mvc.basePath)}">
+									<li><a href="/names.nsf?Logout&RedirectTo=${encoder.urlEncode(mvc.basePath)}">
 										<c:out value="${translation.logoutLink}"/>
 									</a></li>
 								</ul>

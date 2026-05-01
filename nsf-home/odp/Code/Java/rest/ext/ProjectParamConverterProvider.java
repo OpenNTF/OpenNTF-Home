@@ -9,6 +9,7 @@ import jakarta.ws.rs.ext.ParamConverterProvider;
 import jakarta.ws.rs.ext.Provider;
 import model.projects.Project;
 import model.projects.ProjectRelease;
+import model.projects.Screenshot;
 
 @Provider
 public class ProjectParamConverterProvider implements ParamConverterProvider {
@@ -18,6 +19,9 @@ public class ProjectParamConverterProvider implements ParamConverterProvider {
 	
 	@Inject
 	private ProjectReleaseParamConverter releaseParamConverter;
+	
+	@Inject
+	private ScreenshotParamConverter screenshotParamConverter;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -26,6 +30,8 @@ public class ProjectParamConverterProvider implements ParamConverterProvider {
 			return (ParamConverter<T>)projectParamConverter;
 		} else if(ProjectRelease.class.equals(rawType)) {
 			return (ParamConverter<T>)releaseParamConverter;
+		} else if(Screenshot.class.equals(rawType)) {
+			return (ParamConverter<T>)screenshotParamConverter;
 		}
 		return null;
 	}

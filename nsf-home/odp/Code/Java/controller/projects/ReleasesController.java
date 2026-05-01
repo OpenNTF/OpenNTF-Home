@@ -75,8 +75,6 @@ public class ReleasesController {
 	public String showReleases() {
 		models.put("project", project);
 		
-		models.put("projectEditable", controllerUtil.isProjectEditable(project));
-		
 		return "project/releases.jsp";
 	}
 
@@ -104,9 +102,6 @@ public class ReleasesController {
 		models.put("project", project);
 		
 		models.put("release", release);
-		
-		models.put("projectEditable", controllerUtil.isProjectEditable(project));
-		models.put("releaseEditable", controllerUtil.isEditable(release));
 
 		if(anon) {
 			return Response.ok(new Viewable("project/releases.jsp"))

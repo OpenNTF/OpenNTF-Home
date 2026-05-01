@@ -2,8 +2,10 @@ package rest.ext;
 
 import java.text.MessageFormat;
 
+import controller.ControllerUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.mvc.Models;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.ext.ParamConverter;
 import model.projects.ProjectRelease;
@@ -13,10 +15,18 @@ public class ProjectReleaseParamConverter implements ParamConverter<ProjectRelea
 	@Inject
 	private ProjectRelease.Repository releaseRepository;
 	
+	@Inject
+	private Models models;
+	
+	@Inject
+	private ControllerUtil controllerUtil;
+	
 	@Override
 	public ProjectRelease fromString(String value) {
-		return releaseRepository.findById(value)
+		ProjectRelease release = releaseRepository.findById(value)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Release for ID {0}", value)));
+		models.put("releaseEditable", controllerUtil.isEditable(release));
+		return release;
 	}
 
 	@Override

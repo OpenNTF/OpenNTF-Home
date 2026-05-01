@@ -1,0 +1,41 @@
+<%--
+
+    Copyright (c) 2022-2025 Contributors to the OpenNTF Home App Project
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+--%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
+<%@taglib prefix="fn" uri="jakarta.tags.functions" %>
+<t:projectLayout project="${project}" current="screenshots">
+	<fieldset>
+		<legend><c:out value="${translation.screenshot}"/></legend>
+		
+		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/screenshots/${empty screenshot.documentId ? '@new' : screenshot.documentId}" enctype="multipart/form-data" data-turbo="false">
+			<dl>
+				<dt><c:out value="${translation.descriptionLabel}"/></dt>
+				<dd><input name="description" value="${fn:escapeXml(screenshot.description)}" required="required"/></dd>
+			
+				<dt><c:out value="${translation.screenshotLabel}"/></dt>
+				<dd>
+					<input type="file" name="files" multiple="multiple" required="required" accept="image/*"/>
+				</dd>
+			</dl>
+			
+			<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
+			<p><input type="submit" value="${fn:escapeXml(translation.saveScreenshot)}"/></p>
+		</form>
+	</fieldset>
+</t:projectLayout>

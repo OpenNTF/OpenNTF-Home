@@ -24,11 +24,23 @@
 		function displayScreenshotLightbox(a) {
 			var dialog = document.getElementById("lightbox");
 			dialog.querySelector("a").href = a.href;
-			dialog.querySelector("img").src = a.querySelector("img").src;
+			var img = a.querySelector("img");
+			dialog.querySelector("img").src = img.src;
+			dialog.querySelector("p").innerText = img.title;
+			var form = dialog.querySelector("form");
+			if(form) {
+				form.action = a.href;
+			}
 			dialog.showModal();
 			return false;
 		}
 	</script>
+	
+	<c:if test="${projectEditable}">
+		<t:actionBar>
+			<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/screenshots/@new" class="edit-button"><c:out value="${translation.createScreenshot}"/></a>
+		</t:actionBar>
+	</c:if>
 	
 	<c:set var="screenshots" value="${project.screenshots}"/>
 	<c:choose>
@@ -42,7 +54,8 @@
 						<c:if test="${shot.contentType.startsWith('image/')}">
 							<li>
 								<a href="${mvc.basePath}/projects/${fn:escapeXml(project.name)}/screenshots/${screenshot.documentId}/${fn:escapeXml(shot.name)}" onclick="return displayScreenshotLightbox(this)">
-									<img src="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/screenshots/${screenshot.documentId}/${encoder.urlEncode(shot.name)}" alt="${fn:escapeXml(shot.name)}"/>
+									<img src="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/screenshots/${screenshot.documentId}/${encoder.urlEncode(shot.name)}"
+										alt="${fn:escapeXml(screenshot.description)}" title="${fn:escapeXml(screenshot.description)}"/>
 								</a>
 							</li>
 						</c:if>
@@ -52,5 +65,13 @@
 		</c:otherwise>
 	</c:choose>
 	
-	<dialog id="lightbox" onclick="this.close()"><a><img/></a></dialog>
+	<dialog id="lightbox" onclick="this.close()">
+		<a><img/></a>
+		<p></p>
+		<c:if test="${projectEditable}">
+		<t:actionBar>
+			<t:deleteButton action="" value="${translation.deleteScreenshot}" confirmation="${translation.confirmDeleteScreenshot}"/>
+		</t:actionBar>
+		</c:if>
+	</dialog>
 </t:projectLayout>
