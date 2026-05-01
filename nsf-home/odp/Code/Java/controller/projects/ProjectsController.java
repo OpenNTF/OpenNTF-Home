@@ -56,7 +56,6 @@ import model.projects.Documentation;
 import model.projects.FeatureRequest;
 import model.projects.Project;
 import model.projects.Review;
-import model.projects.Screenshot;
 
 @Path("projects")
 public class ProjectsController {
@@ -81,9 +80,6 @@ public class ProjectsController {
 	
 	@Inject
 	private Review.Repository reviewRepository;
-	
-	@Inject
-	private Screenshot.Repository screenshotRepository;
 
     @Context
     private Request request;
@@ -181,26 +177,6 @@ public class ProjectsController {
 		project = projectRepository.save(project, true);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8);
-	}
-	
-	
-	
-	@Path("{project}/screenshots")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	@Controller
-	public String getProjectScreenshots() {
-		models.put("project", project);
-		
-		return "project/screenshots.jsp";
-	}
-	
-	@Path("{project}/screenshots/{screenshotId}/{fileName}")
-	@GET
-	public Response getProjectScreenshot(@PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
-		Screenshot shot = screenshotRepository.findById(screenshotId).orElseThrow(NotFoundException::new);
-
-    	return controllerUtil.fetchAttachment(shot, fileName, request);
 	}
 	
 	@Path("{project}/documentation")

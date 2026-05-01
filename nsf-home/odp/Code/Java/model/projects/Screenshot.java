@@ -15,6 +15,7 @@
  */
 package model.projects;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -22,6 +23,7 @@ import java.util.stream.Stream;
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ItemFlags;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
@@ -49,6 +51,13 @@ public class Screenshot extends AbstractAttachmentEntity implements ProjectRelat
 	private String replicaId;
 	@Column("ProjectName")
 	private String projectName;
+	@Column("EntryDate")
+	private OffsetDateTime date;
+	@Column("BriefDescription")
+	private String description;
+	@Column("DocAuthors")
+	@ItemFlags(authors=true)
+	private List<String> docAuthors;
 	
 	@Override
 	public String getDocumentId() {
@@ -80,5 +89,26 @@ public class Screenshot extends AbstractAttachmentEntity implements ProjectRelat
 	}
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	
+	public OffsetDateTime getDate() {
+		return date;
+	}
+	public void setDate(OffsetDateTime date) {
+		this.date = date;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public List<String> getDocAuthors() {
+		return docAuthors;
+	}
+	public void setDocAuthors(List<String> docAuthors) {
+		this.docAuthors = docAuthors;
 	}
 }
