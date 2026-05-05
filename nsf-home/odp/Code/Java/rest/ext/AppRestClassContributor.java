@@ -17,6 +17,7 @@ public class AppRestClassContributor implements RestClassContributor {
 	
 	@Override
 	public Map<String, Object> getProperties() {
+		// TODO see if this can be made to work properly
 		return Map.of(Csrf.CSRF_PROTECTION, Csrf.CsrfOptions.OFF);
 	}
 
