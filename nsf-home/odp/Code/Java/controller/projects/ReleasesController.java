@@ -23,7 +23,6 @@ import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -37,7 +36,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
-import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import model.projects.Project;
 import model.projects.ProjectRelease;
@@ -120,12 +118,7 @@ public class ReleasesController {
 	@View("project/release-edit.jsp")
 	@RolesAllowed("login")
 	public void editProjectRelease() {
-		if(!controllerUtil.isProjectEditable(project)) {
-			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
-		if(!controllerUtil.isEditable(release)) {
-			throw new NotAuthorizedException("You are not authorized to edit this release", Response.status(Status.UNAUTHORIZED).build());
-		}
+		controllerUtil.validateEditable(project, release);
 		
 		models.put("project", project);
 		
@@ -139,9 +132,7 @@ public class ReleasesController {
 	@View("project/release-edit.jsp")
 	@RolesAllowed("login")
 	public void composeProjectRelease() {
-		if(!controllerUtil.isProjectEditable(project)) {
-			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
+		controllerUtil.validateEditable(project);
 		
 		models.put("project", project);
 		
@@ -156,9 +147,7 @@ public class ReleasesController {
 	@Controller
 	@RolesAllowed("login")
 	public String createProjectRelease(List<EntityPart> entityParts) {
-		if(!controllerUtil.isProjectEditable(project)) {
-			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
+		controllerUtil.validateEditable(project);
 		
 		var release = updateReleaseFromPayload(new ProjectRelease(), entityParts);
 		
@@ -171,13 +160,7 @@ public class ReleasesController {
 	@Controller
 	@RolesAllowed("login")
 	public String updateProjectRelease(List<EntityPart> entityParts) {
-		if(!controllerUtil.isProjectEditable(project)) {
-			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
-		
-		if(!controllerUtil.isEditable(release)) {
-			throw new NotAuthorizedException("Release is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
+		controllerUtil.validateEditable(project, release);
 		
 		var release = updateReleaseFromPayload(this.release, entityParts);
 		
@@ -190,13 +173,7 @@ public class ReleasesController {
 	@Controller
 	@RolesAllowed("login")
 	public String deleteProjectRelease() {
-		if(!controllerUtil.isProjectEditable(project)) {
-			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
-		
-		if(!controllerUtil.isEditable(release)) {
-			throw new NotAuthorizedException("Release is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
+		controllerUtil.validateEditable(project, release);
 		
 		projectReleaseRepository.delete(release);
 		

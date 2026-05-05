@@ -25,6 +25,7 @@ import bean.UserInfoBean;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.CacheControl;
@@ -32,6 +33,7 @@ import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.EntityTag;
 import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import model.AbstractAttachmentEntity;
 import model.projects.Project;
 import model.projects.ProjectRelative;
@@ -116,6 +118,18 @@ public class ControllerUtil {
 		
 		// TODO figure out per-project permissions
 		return true;
+	}
+	
+	@SuppressWarnings("resource")
+	public void validateEditable(Project project, ProjectRelative... relatives) {
+		if(!isProjectEditable(project)) {
+			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
+		}
+		for(var relative : relatives) {
+			if(!isEditable(relative)) {
+				throw new NotAuthorizedException(MessageFormat.format("{0} is not editable", relative.getClass().getSimpleName()), Response.status(Status.UNAUTHORIZED).build());
+			}
+		}
 	}
 	
 	public String toString(EntityPart part) {

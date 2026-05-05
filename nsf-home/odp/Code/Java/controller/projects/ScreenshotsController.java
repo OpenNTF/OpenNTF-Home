@@ -19,7 +19,6 @@ import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -30,7 +29,6 @@ import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import model.projects.Project;
 import model.projects.Screenshot;
 import rest.ext.ValidProjectRelationship;
@@ -79,9 +77,7 @@ public class ScreenshotsController {
 	@View("project/screenshot-edit.jsp")
 	@RolesAllowed("login")
 	public void composeScreenshot() {
-		if(!controllerUtil.isProjectEditable(project)) {
-			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
+		controllerUtil.validateEditable(project);
 		
 		models.put("project", project);
 		
@@ -96,9 +92,7 @@ public class ScreenshotsController {
 	@Controller
 	@RolesAllowed("login")
 	public String createScreenshot(List<EntityPart> entityParts) {
-		if(!controllerUtil.isProjectEditable(project)) {
-			throw new NotAuthorizedException("Project is not editable", Response.status(Status.UNAUTHORIZED).build());
-		}
+		controllerUtil.validateEditable(project);
 		
 		String description = null;
 		List<EntityAttachment> attachments = new ArrayList<>();
@@ -142,6 +136,8 @@ public class ScreenshotsController {
 	@DELETE
 	@Controller
 	public String deleteProjectScreenshot(@PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
+		controllerUtil.validateEditable(project, screenshot);
+		
 		List<EntityAttachment> newAttachments = screenshot.getAttachments()
 			.stream()
 			.filter(att -> !fileName.equals(att.getName()))
