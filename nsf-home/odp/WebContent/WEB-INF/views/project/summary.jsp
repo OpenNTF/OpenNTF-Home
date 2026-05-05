@@ -39,6 +39,9 @@
 							<c:when test="${activity.form eq 'discussion'}">
 								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/discussion/${activity.documentId}"><c:out value="${messages.softFormat(activity.form)}"/></a>
 							</c:when>
+							<c:when test="${activity.form eq 'screenshot'}">
+								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/screenshots"><c:out value="${messages.softFormat(activity.form)}"/></a>
+							</c:when>
 							<c:otherwise>
 								<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}"><c:out value="${messages.softFormat(activity.form)}"/></a>
 							</c:otherwise>
