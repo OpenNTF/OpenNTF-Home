@@ -23,8 +23,18 @@
 <%@attribute name="urlPart" required="true" type="java.lang.String" %>
 <%@attribute name="project" required="true" type="java.lang.Object" %>
 <%@attribute name="titleProperty" required="true" type="java.lang.String" %>
+<%@attribute name="showCreate" required="false" type="java.lang.Boolean" %>
+<%@attribute name="createLink" required="false" type="java.lang.String" %>
+<%@attribute name="createText" required="false" type="java.lang.String" %>
 <%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <section class="activity-feed">
+			
+	<c:if test="${pageScope.showCreate}">
+		<t:actionBar>
+			<a href="${pageScope.createLink}" class="edit-button"><c:out value="${pageScope.createText}"/></a>
+		</t:actionBar>
+	</c:if>
+	
 	<table>
 		<thead>
 			<tr>

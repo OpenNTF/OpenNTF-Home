@@ -15,7 +15,6 @@
  */
 package controller.projects;
 
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
@@ -52,7 +51,6 @@ import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import model.projects.Defect;
 import model.projects.Discussion;
-import model.projects.Documentation;
 import model.projects.FeatureRequest;
 import model.projects.Project;
 import model.projects.Review;
@@ -68,9 +66,6 @@ public class ProjectsController {
 	
 	@Inject
 	private Discussion.Repository discussionRepository;
-	
-	@Inject
-	private Documentation.Repository documentationRepository;
 	
 	@Inject
 	private FeatureRequest.Repository requestRepository;
@@ -177,47 +172,6 @@ public class ProjectsController {
 		project = projectRepository.save(project, true);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8);
-	}
-	
-	@Path("{project}/documentation")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	@Controller
-	public String getProjectDocumentation() {
-		models.put("project", project);
-		
-		return "project/documentations.jsp";
-	}
-	
-	@Path("{project}/documentation/{documentId}")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	@Controller
-	public Response getProjectDocumentationEntry(@PathParam("documentId") String documentId) {
-		Documentation doc = documentationRepository.findById(documentId)
-			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Documentation for ID {0}", documentId)));
-		
-		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(doc.getEtag());
-		ResponseBuilder response = request.evaluatePreconditions(etag);
-		if(response != null) {
-			return response.build();
-		}
-		
-		models.put("project", project);
-		
-		models.put("doc", doc);
-		
-		return Response.ok(new Viewable("project/documentations.jsp"))
-			.header(HttpHeaders.ETAG,  etag.getValue())
-			.build();
-	}
-	
-	@Path("{project}/documentation/{documentId}/{fileName}")
-	@GET
-	public Response getProjectDocumentationFile(@PathParam("documentId") String documentId, @PathParam("fileName") String fileName) throws IOException {
-		Documentation doc = documentationRepository.findById(documentId).orElseThrow(NotFoundException::new);
-    	
-    	return controllerUtil.fetchAttachment(doc, fileName, request);
 	}
 	
 	@Path("{project}/requests")

@@ -21,7 +21,9 @@
 <t:projectLayout project="${project}" current="documentation">
 	<div class="lefthand-view-layout">
 		<t:activityFeed items="${project.documentation}" urlPart="documentation" activeEntry="${doc}" project="${project}"
-			titleProperty="description"/>
+			titleProperty="description"
+			showCreate="${projectEditable}" createText="${translation.createDocumentation}"
+			createLink="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/documentation/@new"/>
 		<section>
 			<c:if test="${not empty doc}">
 			<fieldset>
@@ -29,11 +31,21 @@
 				
 				<p><c:out value="${temporalBean.formatDate(doc.entryDate)}"/> | <t:personName value="${doc.entryAuthor}"/></p>
 				
+				<c:out value="${doc.body}" escapeXml="false"/>
+				
 				<ul>
 				<c:forEach items="${doc.downloads}" var="download">
 					<li><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/documentation/${doc.documentId}/${encoder.urlEncode(download.name)}"><c:out value="${download.name}"/></a></li>
 				</c:forEach>
 				</ul>
+				
+				
+				<c:if test="${docEditable}">
+					<t:actionBar>
+						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/documentation/${doc.documentId}/@edit" class="edit-button"><c:out value="${translation.editDocumentation}"/></a>
+						<t:deleteButton action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/documentation/${doc.documentId}" value="${translation.deleteDocumentation}" confirmation="${translation.confirmDeleteDocumentation}"/>
+					</t:actionBar>
+				</c:if>
 			</fieldset>
 			</c:if>
 		</section>
