@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ItemStorage;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 
 import jakarta.nosql.Column;
@@ -51,6 +52,11 @@ public class Documentation extends AbstractAttachmentEntity implements ProjectRe
 	private Temporal entryDate;
 	@Column("Entry_Person")
 	private String entryAuthor;
+	@Column
+	@ItemStorage(type = ItemStorage.Type.MIME)
+	private String body;
+	@Column
+	private String bodyMarkdown;
 	@Column(DominoConstants.FIELD_ETAG)
 	private String etag;
 
@@ -105,6 +111,20 @@ public class Documentation extends AbstractAttachmentEntity implements ProjectRe
 	}
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	
+	public String getBody() {
+		return body;
+	}
+	public void setBody(String body) {
+		this.body = body;
+	}
+	
+	public String getBodyMarkdown() {
+		return bodyMarkdown;
+	}
+	public void setBodyMarkdown(String bodyMarkdown) {
+		this.bodyMarkdown = bodyMarkdown;
 	}
 	
 	public String getEtag() {
