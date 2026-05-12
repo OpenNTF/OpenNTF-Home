@@ -61,9 +61,6 @@ public class ReleasesController {
     @PathParam("project")
     private Project project;
     
-    @PathParam("release")
-    private ProjectRelease release;
-    
     @Inject
     private ControllerUtil controllerUtil;
     
@@ -86,7 +83,7 @@ public class ReleasesController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response showRelease() {
+	public Response showRelease(@PathParam("release") ProjectRelease release) {
 		boolean anon = userInfo.isAnonymous();
 		EntityTag etag = null;
 		if(anon) {
@@ -117,7 +114,7 @@ public class ReleasesController {
 	@Controller
 	@View("project/release-edit.jsp")
 	@RolesAllowed("login")
-	public void editProjectRelease() {
+	public void editProjectRelease(@PathParam("release") ProjectRelease release) {
 		controllerUtil.validateEditable(project, release);
 		
 		models.put("project", project);
@@ -159,12 +156,12 @@ public class ReleasesController {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Controller
 	@RolesAllowed("login")
-	public String updateProjectRelease(List<EntityPart> entityParts) {
+	public String updateProjectRelease(@PathParam("release") ProjectRelease release, List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project, release);
 		
-		var release = updateReleaseFromPayload(this.release, entityParts);
+		var updatedRelease = updateReleaseFromPayload(release, entityParts);
 		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + updatedRelease.getDocumentId();
 	}
 	
 	@Path("{release}")
@@ -172,7 +169,7 @@ public class ReleasesController {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Controller
 	@RolesAllowed("login")
-	public String deleteProjectRelease() {
+	public String deleteProjectRelease(@PathParam("release") ProjectRelease release) {
 		controllerUtil.validateEditable(project, release);
 		
 		projectReleaseRepository.delete(release);
@@ -182,7 +179,7 @@ public class ReleasesController {
 	
 	@Path("{release}/{fileName}")
 	@GET
-	public Response getProjectReleaseFile(@PathParam("fileName") String fileName) throws IOException {
+	public Response getProjectReleaseFile(@PathParam("release") ProjectRelease release, @PathParam("fileName") String fileName) throws IOException {
 		return controllerUtil.fetchAttachment(release, fileName, request);
 	}
 	

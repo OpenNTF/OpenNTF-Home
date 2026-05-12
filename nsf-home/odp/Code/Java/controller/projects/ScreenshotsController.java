@@ -52,9 +52,6 @@ public class ScreenshotsController {
     
     @PathParam("project")
     private Project project;
-    
-    @PathParam("screenshot")
-    private Screenshot screenshot;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -67,7 +64,7 @@ public class ScreenshotsController {
 	
 	@Path("{screenshot}/{fileName}")
 	@GET
-	public Response getProjectScreenshot(@PathParam("fileName") String fileName) throws IOException {
+	public Response getProjectScreenshot(@PathParam("screenshot") Screenshot screenshot, @PathParam("fileName") String fileName) throws IOException {
 		return controllerUtil.fetchAttachment(screenshot, fileName, request);
 	}
 	
@@ -135,7 +132,7 @@ public class ScreenshotsController {
 	@Path("{screenshot}/{fileName}")
 	@DELETE
 	@Controller
-	public String deleteProjectScreenshot(@PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
+	public String deleteProjectScreenshot(@PathParam("screenshot") Screenshot screenshot, @PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
 		controllerUtil.validateEditable(project, screenshot);
 		
 		List<EntityAttachment> newAttachments = screenshot.getAttachments()
