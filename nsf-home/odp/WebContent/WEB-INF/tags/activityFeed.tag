@@ -50,7 +50,7 @@
 						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/${pageScope.urlPart}/${listEntry.documentId}">
 							<c:out value="${empty listEntry[pageScope.titleProperty] ? translation.noTitle : listEntry[pageScope.titleProperty]}"/>
 						</a>
-						<br /><c:out value="${listEntry.entryAuthor}"/>
+						<br /><t:personName value="${listEntry.entryAuthor}"/>
 					</td>
 				</tr>
 			</c:forEach>
