@@ -71,17 +71,16 @@ public class DocumentationController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String get() {
+	@View("project/documentations.jsp")
+	public void get() {
 		models.put("project", project);
-		
-		return "project/documentations.jsp";
 	}
 
     @Path("{doc}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response get(@PathParam("doc") Documentation doc) {
+	public Response getEntity(@PathParam("doc") Documentation doc) {
 		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(doc.getEtag());
 		ResponseBuilder response = request.evaluatePreconditions(etag);
 		if(response != null) {
@@ -157,7 +156,7 @@ public class DocumentationController {
 	public String update(@PathParam("doc") Documentation doc, List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project, doc);
 		
-		var updated = updateDocumentationFromPayload(doc, entityParts);
+		var updated = updateFromPayload(doc, entityParts);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/documentation/" + updated.getDocumentId();
 	}
@@ -170,12 +169,12 @@ public class DocumentationController {
 	public String create(List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project);
 		
-		var doc = updateDocumentationFromPayload(new Documentation(), entityParts);
+		var doc = updateFromPayload(new Documentation(), entityParts);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/documentation/" + doc.getDocumentId();
 	}
 	
-	private Documentation updateDocumentationFromPayload(Documentation doc, List<EntityPart> entityParts) {
+	private Documentation updateFromPayload(Documentation doc, List<EntityPart> entityParts) {
 		String docName = null;
 		String docBody = null;
 		Set<String> deleteAttachments = new HashSet<>();
