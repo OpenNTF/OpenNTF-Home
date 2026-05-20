@@ -72,7 +72,7 @@ public class DocumentationController {
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	@View("project/documentations.jsp")
-	public void get() {
+	public void list() {
 		models.put("project", project);
 	}
 
@@ -80,7 +80,7 @@ public class DocumentationController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response getEntity(@PathParam("doc") Documentation doc) {
+	public Response show(@PathParam("doc") Documentation doc) {
 		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(doc.getEtag());
 		ResponseBuilder response = request.evaluatePreconditions(etag);
 		if(response != null) {
@@ -140,7 +140,7 @@ public class DocumentationController {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Controller
 	@RolesAllowed("login")
-	public String deleteProjectRelease(@PathParam("doc") Documentation doc) {
+	public String delete(@PathParam("doc") Documentation doc) {
 		controllerUtil.validateEditable(project, doc);
 		
 		documentationRepository.delete(doc);

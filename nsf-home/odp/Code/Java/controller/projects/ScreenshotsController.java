@@ -56,15 +56,14 @@ public class ScreenshotsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProjectScreenshots() {
+	@View("project/screenshots.jsp")
+	public void list() {
 		models.put("project", project);
-		
-		return "project/screenshots.jsp";
 	}
 	
 	@Path("{screenshot}/{fileName}")
 	@GET
-	public Response getProjectScreenshot(@PathParam("screenshot") Screenshot screenshot, @PathParam("fileName") String fileName) throws IOException {
+	public Response show(@PathParam("screenshot") Screenshot screenshot, @PathParam("fileName") String fileName) throws IOException {
 		return controllerUtil.fetchAttachment(screenshot, fileName, request);
 	}
 	
@@ -73,7 +72,7 @@ public class ScreenshotsController {
 	@Controller
 	@View("project/screenshot-edit.jsp")
 	@RolesAllowed("login")
-	public void composeScreenshot() {
+	public void compose() {
 		controllerUtil.validateEditable(project);
 		
 		models.put("project", project);
@@ -88,7 +87,7 @@ public class ScreenshotsController {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Controller
 	@RolesAllowed("login")
-	public String createScreenshot(List<EntityPart> entityParts) {
+	public String create(List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project);
 		
 		String description = null;
@@ -132,7 +131,7 @@ public class ScreenshotsController {
 	@Path("{screenshot}/{fileName}")
 	@DELETE
 	@Controller
-	public String deleteProjectScreenshot(@PathParam("screenshot") Screenshot screenshot, @PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
+	public String delete(@PathParam("screenshot") Screenshot screenshot, @PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
 		controllerUtil.validateEditable(project, screenshot);
 		
 		List<EntityAttachment> newAttachments = screenshot.getAttachments()

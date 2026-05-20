@@ -71,10 +71,9 @@ public class ReleasesController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String showReleases() {
+	@View("project/releases.jsp")
+	public void list() {
 		models.put("project", project);
-		
-		return "project/releases.jsp";
 	}
 
 	@GET
@@ -87,7 +86,7 @@ public class ReleasesController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response showRelease(@PathParam("release") ProjectRelease release) {
+	public Response show(@PathParam("release") ProjectRelease release) {
 		boolean anon = userInfo.isAnonymous();
 		EntityTag etag = null;
 		if(anon) {
@@ -118,7 +117,7 @@ public class ReleasesController {
 	@Controller
 	@View("project/release-edit.jsp")
 	@RolesAllowed("login")
-	public void editProjectRelease(@PathParam("release") ProjectRelease release) {
+	public void edit(@PathParam("release") ProjectRelease release) {
 		controllerUtil.validateEditable(project, release);
 		
 		models.put("project", project);
@@ -135,7 +134,7 @@ public class ReleasesController {
 	@Controller
 	@View("project/release-edit.jsp")
 	@RolesAllowed("login")
-	public void composeProjectRelease() {
+	public void compose() {
 		controllerUtil.validateEditable(project);
 		
 		models.put("project", project);
@@ -150,10 +149,10 @@ public class ReleasesController {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Controller
 	@RolesAllowed("login")
-	public String createProjectRelease(List<EntityPart> entityParts) {
+	public String create(List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project);
 		
-		var release = updateReleaseFromPayload(new ProjectRelease(), entityParts);
+		var release = updateFromPayload(new ProjectRelease(), entityParts);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
 	}
@@ -163,10 +162,10 @@ public class ReleasesController {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Controller
 	@RolesAllowed("login")
-	public String updateProjectRelease(@PathParam("release") ProjectRelease release, List<EntityPart> entityParts) {
+	public String update(@PathParam("release") ProjectRelease release, List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project, release);
 		
-		var updatedRelease = updateReleaseFromPayload(release, entityParts);
+		var updatedRelease = updateFromPayload(release, entityParts);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + updatedRelease.getDocumentId();
 	}
@@ -176,7 +175,7 @@ public class ReleasesController {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Controller
 	@RolesAllowed("login")
-	public String deleteProjectRelease(@PathParam("release") ProjectRelease release) {
+	public String delete(@PathParam("release") ProjectRelease release) {
 		controllerUtil.validateEditable(project, release);
 		
 		projectReleaseRepository.delete(release);
@@ -186,11 +185,11 @@ public class ReleasesController {
 	
 	@Path("{release}/{fileName}")
 	@GET
-	public Response getProjectReleaseFile(@PathParam("release") ProjectRelease release, @PathParam("fileName") String fileName) throws IOException {
+	public Response getFile(@PathParam("release") ProjectRelease release, @PathParam("fileName") String fileName) throws IOException {
 		return controllerUtil.fetchAttachment(release, fileName, request);
 	}
 	
-	private ProjectRelease updateReleaseFromPayload(ProjectRelease release, List<EntityPart> entityParts) {
+	private ProjectRelease updateFromPayload(ProjectRelease release, List<EntityPart> entityParts) {
 		String releaseVersion = null;
 		String releaseLicense = null;
 		boolean releaseReleased = false;
