@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
+import jakarta.mvc.View;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -38,9 +39,8 @@ public class WebinarsController {
 	@GET
 	@Controller
 	@Produces(MediaType.TEXT_HTML)
-	public String getWebinarsPage() {
+	@View("webinars.jsp")
+	public void getWebinarsPage() {
 		models.put("webinars", webinarsRepository.getPublicWebinars().collect(Collectors.toList()));
-		
-		return "webinars.jsp";
 	}
 }

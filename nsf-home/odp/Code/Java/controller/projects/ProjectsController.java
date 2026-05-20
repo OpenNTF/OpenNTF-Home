@@ -88,7 +88,8 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String get(@QueryParam("page") Integer page, @QueryParam("sort") String sort) {
+	@View("projects.jsp")
+	public void get(@QueryParam("page") Integer page, @QueryParam("sort") String sort) {
 		String sortColumn;
 		Sort<Project> sorts = null;
 		switch(String.valueOf(sort)) {
@@ -125,8 +126,6 @@ public class ProjectsController {
 		models.put("projectList", projects);
 		models.put("nextPage", nextPage);
 		models.put("prevPage", prevPage);
-		
-		return "projects.jsp";
 	}
 
 	@Path("{project}")
@@ -178,10 +177,9 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProjectRequests() {
+	@View("project/requests.jsp")
+	public void getProjectRequests() {
 		models.put("project", project);
-		
-		return "project/requests.jsp";
 	}
 	
 	@Path("{project}/requests/{documentId}")
@@ -211,10 +209,9 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProjectDefects() {
+	@View("project/defects.jsp")
+	public void getProjectDefects() {
 		models.put("project", project);
-		
-		return "project/defects.jsp";
 	}
 	
 	@Path("{project}/defects/{documentId}")
@@ -244,10 +241,9 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProjectDiscussions() {
+	@View("project/discussions.jsp")
+	public void getProjectDiscussions() {
 		models.put("project", project);
-		
-		return "project/discussions.jsp";
 	}
 	
 	@Path("{project}/discussion/{discussionId}")
@@ -277,10 +273,9 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProjectReviews() {
+	@View("project/reviews.jsp")
+	public void getProjectReviews() {
 		models.put("project", project);
-		
-		return "project/reviews.jsp";
 	}
 	
 	@Path("{project}/reviews/{documentId}")
@@ -310,9 +305,8 @@ public class ProjectsController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String getProjectSourceControl() {
+	@View("project/sourceControl.jsp")
+	public void getProjectSourceControl() {
 		models.put("project", project);
-		
-		return "project/sourceControl.jsp";
 	}
 }

@@ -28,6 +28,7 @@ import bean.ApplicationConfig;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
+import jakarta.mvc.View;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -60,18 +61,18 @@ public class DiscordController {
 	@GET
 	@Controller
 	@Produces(MediaType.TEXT_HTML)
-	public String getGuild() {
+	@View("discord.jsp")
+	public void getGuild() {
 		models.put("guild", guildApi.getGuild(appConfig.getDiscordGuildId()));
-		return "discord.jsp";
 	}
 	
 	@Path("events")
 	@GET
 	@Controller
 	@Produces(MediaType.TEXT_HTML)
-	public String getScheduledEvents() {
+	@View("discord/events.jsp")
+	public void getScheduledEvents() {
 		models.put("events", guildApi.getEvents(appConfig.getDiscordGuildId()));
-		return "discord/events.jsp";
 	}
 	
 	@Path("events.ics")

@@ -25,6 +25,7 @@ import bean.ProjectReleases;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
+import jakarta.mvc.View;
 import jakarta.data.page.PageRequest;
 import jakarta.data.Sort;
 import jakarta.ws.rs.GET;
@@ -57,7 +58,8 @@ public class HomeController {
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String get() {
+	@View("home.jsp")
+	public void get() {
 		models.put("recentReleases", projectReleases.getRecentReleases(5)); //$NON-NLS-1$
 		models.put("upcomingEvents", //$NON-NLS-1$
 			discordBean.getUpcomingEvents()
@@ -68,8 +70,6 @@ public class HomeController {
 		models.put("recentCtPosts", ctEntries.listEntries(Sort.desc("creationDate"), PageRequest.ofPage(1).size(5)).collect(Collectors.toList()));
 		models.put("recentSnippets", snippetsRepository.findRecent(PageRequest.ofPage(1).size(3)).collect(Collectors.toList()));
 		models.put("blogEntries", blogEntries.getEntries(5)); //$NON-NLS-1$
-		
-		return "home.jsp"; //$NON-NLS-1$
 	}
 
 }

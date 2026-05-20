@@ -21,6 +21,7 @@ import bean.EncoderBean;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
+import jakarta.mvc.View;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
@@ -45,12 +46,12 @@ public class PagesController {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public String get(@PathParam("pageId") String pageId) {
+	@View("page.jsp")
+	public void get(@PathParam("pageId") String pageId) {
 		String key = encoderBean.cleanPageId(pageId);
 		Page page = pageRepository.findBySubject(key)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find page for ID: {0}", key)));
 		models.put("page", page); //$NON-NLS-1$
-		return "page.jsp"; //$NON-NLS-1$
 	}
 
 }
