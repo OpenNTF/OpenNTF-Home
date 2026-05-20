@@ -93,7 +93,7 @@
 				</dl>
 				
 				<h3><c:out value="${translation.description}"/></h3>
-				<p><c:out value="${markdown.toHtml(release.description)}" escapeXml="false"/></p>
+				<div><c:out value="${markdown.toHtml(release.description)}" escapeXml="false"/></div>
 				
 				<c:if test="${releaseEditable}">
 					<t:actionBar>
