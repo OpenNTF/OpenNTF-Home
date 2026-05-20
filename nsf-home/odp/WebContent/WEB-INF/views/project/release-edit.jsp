@@ -73,7 +73,7 @@
 			</dl>
 			
 			<h3><label for="releaseDescription"><c:out value="${translation.description}"/></label></h3>
-			<p><textarea class="markdown-edit" id="releaseDescription" name="releaseDescription"><c:out value="${release.description}"/></textarea></p>
+			<p><textarea class="markdown-edit" id="releaseDescription" name="releaseDescription"><c:out value="${release.descriptionMarkdown}"/></textarea></p>
 			
 			<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
 			<p><input type="submit" value="${fn:escapeXml(translation.saveRelease)}"/></p>

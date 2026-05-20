@@ -81,6 +81,8 @@ public class ProjectRelease extends AbstractAttachmentEntity implements ProjectR
 	@Column("WhatsNew")
 	@ItemStorage(type=ItemStorage.Type.MIME)
 	private String description;
+	@Column("WhatsNewMarkdown")
+	private String descriptionMarkdown;
 	@Column("DownloadsRelease")
 	private int downloadCount;
 	@Column("MainID")
@@ -146,6 +148,14 @@ public class ProjectRelease extends AbstractAttachmentEntity implements ProjectR
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getDescriptionMarkdown() {
+		return descriptionMarkdown;
+	}
+	
+	public void setDescriptionMarkdown(String descriptionMarkdown) {
+		this.descriptionMarkdown = descriptionMarkdown;
 	}
 
 	public Date getReleasedDate() {
