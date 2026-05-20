@@ -19,7 +19,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@taglib prefix="fn" uri="jakarta.tags.functions" %>
-<t:projectLayout project="${project}" current="releases">
+<t:projectLayout project="${project}" current="documentation">
 	<fieldset>
 		<legend><c:out value="${translation.newDocumentation}"/></legend>
 		
