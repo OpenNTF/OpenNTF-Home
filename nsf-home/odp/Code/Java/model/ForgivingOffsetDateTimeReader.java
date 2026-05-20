@@ -15,7 +15,9 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -82,7 +84,20 @@ public class ForgivingOffsetDateTimeReader implements ValueReader {
 	    		// Then it doesn't match - continue on
 	    	}
     	}
-
-        return OffsetDateTime.parse(value.toString());
+    	
+    	// Might be just a date value
+    	var stringVal = value.toString();
+    	try {
+    		return OffsetDateTime.parse(stringVal);
+    	} catch(DateTimeParseException e) {
+    		// ignore
+    	}
+    	try {
+    		LocalDate date = LocalDate.parse(stringVal);
+    		return ZonedDateTime.of(date, LocalTime.now(), ZoneId.systemDefault()).toOffsetDateTime();
+    	} catch(DateTimeParseException e) {
+    		// ignore
+    	}
+    	return null;
     }
 }
