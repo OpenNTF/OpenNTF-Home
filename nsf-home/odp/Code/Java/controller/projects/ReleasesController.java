@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
 
+import bean.MarkdownBean;
 import bean.UserInfoBean;
 import controller.ControllerUtil;
 import jakarta.annotation.security.RolesAllowed;
@@ -63,6 +64,9 @@ public class ReleasesController {
     
     @Inject
     private ControllerUtil controllerUtil;
+    
+    @Inject
+    private MarkdownBean markdownBean;
     
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -119,6 +123,9 @@ public class ReleasesController {
 		
 		models.put("project", project);
 		
+		if(StringUtil.isEmpty(release.getDescriptionMarkdown())) {
+			release.setDescriptionMarkdown(release.getDescription());
+		}
 		models.put("release", release);
 	}
 	
@@ -219,7 +226,8 @@ public class ReleasesController {
 		release.setVersion(releaseVersion);
 		release.setLicenseType(releaseLicense);
 		release.setReleased(releaseReleased);
-		release.setDescription(releaseDescription);
+		release.setDescriptionMarkdown(releaseDescription);
+		release.setDescription(markdownBean.toHtml(releaseDescription));
 		
 		release.setProjectName(project.getName());
 		
