@@ -3,7 +3,7 @@ package controller.projects;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -210,7 +210,7 @@ public class DocumentationController {
 		
 		if(StringUtil.isEmpty(doc.getDocumentId())) {
 			// Then it's new - configure some defaults
-			doc.setEntryDate(LocalDate.now());
+			doc.setEntryDate(OffsetDateTime.now());
 			doc.setEntryAuthor(userInfo.getDisplayName());
 		}
 		

@@ -3,7 +3,7 @@ package controller.projects;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -232,7 +232,7 @@ public class ReleasesController {
 		
 		if(StringUtil.isEmpty(release.getDocumentId())) {
 			// Then it's new - configure some defaults
-			release.setReleaseDate(LocalDate.now());
+			release.setReleaseDate(OffsetDateTime.now());
 			release.setMasterChef(List.of(userInfo.getDisplayName()));
 		}
 		
