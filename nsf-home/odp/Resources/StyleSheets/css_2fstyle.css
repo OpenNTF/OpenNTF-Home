@@ -522,7 +522,7 @@ legend {
 			grid-area: footer;
 		}
 		
-		+ .comment {
+		+ .comment, + .response-tree {
 			margin-top: 2em;
 		}
 	}

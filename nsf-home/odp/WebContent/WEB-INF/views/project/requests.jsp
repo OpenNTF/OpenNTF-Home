@@ -38,19 +38,7 @@
 						</footer>
 					</article>
 					
-					<c:forEach items="${responses}" var="resp">
-						<article class="comment" data-indent="${resp.indentLevel}">
-							<img class="avatar" alt="User avatar image" src="${usersBean[resp.author].getCleanThumbnailUrl()}"/>
-							
-							<header><c:out value="${resp.subject}"/></header>
-							<div class="body"><c:out value="${resp.body}" escapeXml="false"/></div>
-							<footer>
-								<c:out value="${encoder.toCommonName(resp.author)}"/>
-								|
-								<time-ago value="${fn:escapeXml(resp.date)}"></time-ago>
-							</footer>
-						</article>
-					</c:forEach>
+					<t:responseTree value="${responses}"/>
 				</div>
 			</c:if>
 		</section>
