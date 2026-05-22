@@ -32,7 +32,7 @@ class TimeAgo extends HTMLElement {
 
 	connectedCallback() {
 		let val = this.getAttribute("value");
-		if(!val) {
+		if(!val || val == "null") {
 			return;
 		}
 		let date = new Date(val);
@@ -68,7 +68,11 @@ class FutureTime extends HTMLElement {
 	}
 
 	connectedCallback() {
-		let date = new Date(this.getAttribute("value"));
+		let val = this.getAttribute("value");
+		if(!val || val == "null") {
+			return;
+		}
+		let date = new Date(val);
 
 		if (this.getAttribute("value").indexOf("T") > -1) {
 			this.title = this.innerText = FutureTime.dateTimeFormat.format(date);
