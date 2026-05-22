@@ -18,13 +18,40 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" session="false" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
+<%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <t:projectLayout project="${project}" current="requests">
 	<div class="lefthand-view-layout">
 		<t:activityFeed items="${project.featureRequests}" urlPart="requests" activeEntry="${featureRequest}" project="${project}"
 			titleProperty="subject"/>
 		<section>
 			<c:if test="${not empty featureRequest}">
-				<c:out value="${markdown.toHtml(featureRequest.body)}" escapeXml="false"/>
+				<div class="comment-tree">
+					<article class="comment" data-indent="0">
+						<img class="avatar" alt="User avatar image" src="${usersBean[featureRequest.entryAuthor].getCleanThumbnailUrl()}"/>
+						
+						<header><c:out value="${featureRequest.subject}"/></header>
+						<div class="body"><c:out value="${featureRequest.body}" escapeXml="false"/></div>
+						<footer>
+							<c:out value="${encoder.toCommonName(featureRequest.entryAuthor)}"/>
+							|
+							<time-ago value="${fn:escapeXml(featureRequest.entryDate)}"></time-ago>
+						</footer>
+					</article>
+					
+					<c:forEach items="${responses}" var="resp">
+						<article class="comment" data-indent="${resp.indentLevel}">
+							<img class="avatar" alt="User avatar image" src="${usersBean[resp.author].getCleanThumbnailUrl()}"/>
+							
+							<header><c:out value="${resp.subject}"/></header>
+							<div class="body"><c:out value="${resp.body}" escapeXml="false"/></div>
+							<footer>
+								<c:out value="${encoder.toCommonName(resp.author)}"/>
+								|
+								<time-ago value="${fn:escapeXml(resp.date)}"></time-ago>
+							</footer>
+						</article>
+					</c:forEach>
+				</div>
 			</c:if>
 		</section>
 	</div>

@@ -51,7 +51,6 @@ import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import model.projects.Defect;
 import model.projects.Discussion;
-import model.projects.FeatureRequest;
 import model.projects.Project;
 import model.projects.Review;
 
@@ -66,9 +65,6 @@ public class ProjectsController {
 	
 	@Inject
 	private Discussion.Repository discussionRepository;
-	
-	@Inject
-	private FeatureRequest.Repository requestRepository;
 	
 	@Inject
 	private Defect.Repository defectRepository;
@@ -171,38 +167,6 @@ public class ProjectsController {
 		project = projectRepository.save(project, true);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8);
-	}
-	
-	@Path("{project}/requests")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	@Controller
-	@View("project/requests.jsp")
-	public void getProjectRequests() {
-		models.put("project", project);
-	}
-	
-	@Path("{project}/requests/{documentId}")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	@Controller
-	public Response getProjectRequestEntry(@PathParam("documentId") String documentId) {
-		FeatureRequest featureRequest = requestRepository.findById(documentId)
-			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Request for ID {0}", documentId)));
-		
-		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(featureRequest.getEtag());
-		ResponseBuilder response = request.evaluatePreconditions(etag);
-		if(response != null) {
-			return response.build();
-		}
-		
-		models.put("project", project);
-		
-		models.put("featureRequest", featureRequest);
-		
-		return Response.ok(new Viewable("project/requests.jsp"))
-			.header(HttpHeaders.ETAG,  etag.getValue())
-			.build();
 	}
 	
 	@Path("{project}/defects")

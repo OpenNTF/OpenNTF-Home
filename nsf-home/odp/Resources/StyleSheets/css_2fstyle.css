@@ -321,17 +321,31 @@ legend {
 /* User profile */
 .user-card {
 	display: grid;
+	
+	.user-photo {
+		grid-area: photo;
+	}
+	.user-details {
+		grid-area: details;
+	}
+	img {
+		width: 100%;
+		max-width: 100%;
+		object-fit: contain;
+	}
 }
-.user-card .user-photo {
-	grid-area: photo;
-}
-.user-card .user-details {
-	grid-area: details;
-}
-.user-card img {
-	width: 100%;
-	max-width: 100%;
-	object-fit: contain;
+
+/* Responses/comments */
+.response {
+	.avatar {
+		max-width: 75px;
+	}
+	header {
+		font-weight: bold;
+	}
+	footer {
+		color: #777;
+	}
 }
 
 /* Document edit forms */
@@ -484,5 +498,32 @@ legend {
 	
 	.user-projects-list {
 		columns: 2
+	}
+	
+	.comment {
+		display: grid;
+		grid-template-columns: 75px 1fr;
+		grid-template-areas: "avatar title"
+		                     "avatar body"
+		                     "avatar footer";
+		column-gap: 1em;
+		row-gap: 0.5em;
+
+		.avatar {
+			grid-area: avatar;
+		}
+		header {
+			grid-area: title;
+		}
+		.body {
+			grid-area: body;
+		}
+		footer {
+			grid-area: footer;
+		}
+		
+		+ .comment {
+			margin-top: 2em;
+		}
 	}
 }

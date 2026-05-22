@@ -18,6 +18,8 @@ package util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
@@ -57,24 +59,40 @@ public enum AppUtil {
 				Session session = CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
 				Directory dir = session.getDirectory();
 				DirectoryNavigator nav = dir.lookupNames("($Users)", id, "InternetAddress");
+				String email = null;
 				if(nav.findFirstMatch()) {
 					List<?> vals = nav.getFirstItemValue();
 					if(vals != null && !vals.isEmpty()) {
-						String email = StringUtil.toString(vals.get(0));
-						if(StringUtil.isNotEmpty(email)) {
-							// If found, send them to Gravatar
-							MessageDigest md = MessageDigest.getInstance("MD5");
-						    md.update(email.getBytes());
-						    byte[] digest = md.digest();
-						    String md5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
-							return "http://www.gravatar.com/avatar/" + md5 + "?d=wavatar&s=256";
-						}
+						email = StringUtil.toString(vals.get(0));
 					}
 				}
+				if(StringUtil.isEmpty(email)) {
+					// Then just do a hash of their name
+					email = id;
+				}
+
+				MessageDigest md = MessageDigest.getInstance("MD5");
+			    md.update(email.getBytes());
+			    byte[] digest = md.digest();
+			    String md5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
+				return "http://www.gravatar.com/avatar/" + md5 + "?d=wavatar&s=256";
 			} catch(NotesException | NoSuchAlgorithmException e) {
 				throw new RuntimeException(e);
 			}
 		}
 		return "";
+	}
+	
+	public static <S, T> T computeIfAbsent(final Map<S, T> map, final S key, final Function<S, T> sup) {
+		synchronized(map) {
+			T result;
+			if(!map.containsKey(key)) {
+				result = sup.apply(key);
+				map.put(key, result);
+			} else {
+				result = map.get(key);
+			}
+			return result;
+		}
 	}
 }
