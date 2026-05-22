@@ -30,92 +30,103 @@ a {
 	color: #019bdb;
 }
 
-header {
+body > header {
     grid-area: header;
 	color: #ddd;
     background-color: #222;
 	padding-left: 1em;
 	display: grid;
-}
-header a {
-	color: #ddd;
+	
+	a {
+		color: #ddd;
+	}
+
+	.logo {
+		grid-area: logo;
+	}
+	.logo img {
+		max-height: 90%;
+	}
+	nav {
+		grid-area: links;
+		
+		li > ul {
+			display: none;
+		}
+	}
+	div.user-info {
+		grid-area: login;
+	}
 }
 
-header .logo {
-	grid-area: logo;
-}
-header .logo img {
-	max-height: 90%;
-}
-
-nav {
-	grid-area: links;
-}
-nav li > ul {
-	display: none;
-}
-
-header div.user-info {
-	grid-area: login;
-}
-
-main {
+body > main {
     grid-area: main;
     background-color: white;
 	display: grid;
-}
-main > .main-header {
-	grid-area: main-header;
-	background-color: #019bdb;
-	color: white;
-	padding: 1em;
-}
-main > .main-header h2 {
-	margin: 0;
-}
-main > .main-header h3 {
-	margin-top: 0;
-	font-weight: normal;
-}
-main > .main-header h2 + .info {
-	margin-top: 1em;
-}
-main > .main-header a {
-	color: white;
-}
-main > .main-header nav {
-	background-color: #efefef;
-	margin: -1em;
-	margin-top: 1em;
-	display: flex;
-	justify-content: center;
-	gap: 1em;
-	padding-top: 0.5em;
-}
-main > .main-header nav a {
-	color: #337ab7;
-	display: block;
-	padding: 0.5em 1em;
-}
-main > .main-header nav a.current {
-	color: #555;
-	border: 1px solid #ddd;
-	border-bottom-color: transparent;
-	cursor: default;
-	background-color: white;
-	border-top-left-radius: 0.5em;
-	border-top-right-radius: 0.5em;
-}
-main > .main-content {
-	grid-area: main-content;
-}
-main img {
-	max-width: 100%;
-}
-main pre {
-	white-space: pre-wrap;
+	
+	> .main-header {
+		grid-area: main-header;
+		background-color: #019bdb;
+		color: white;
+		padding: 1em;
+	}
+	> .main-header h2 {
+		margin: 0;
+	}
+	> .main-header h3 {
+		margin-top: 0;
+		font-weight: normal;
+	}
+	> .main-header h2 + .info {
+		margin-top: 1em;
+	}
+	> .main-header a {
+		color: white;
+	}
+	> .main-header nav {
+		background-color: #efefef;
+		margin: -1em;
+		margin-top: 1em;
+		display: flex;
+		justify-content: center;
+		gap: 1em;
+		padding-top: 0.5em;
+	}
+	> .main-header nav a {
+		color: #337ab7;
+		display: block;
+		padding: 0.5em 1em;
+	}
+	> .main-header nav a.current {
+		color: #555;
+		border: 1px solid #ddd;
+		border-bottom-color: transparent;
+		cursor: default;
+		background-color: white;
+		border-top-left-radius: 0.5em;
+		border-top-right-radius: 0.5em;
+	}
+	> .main-content {
+		grid-area: main-content;
+	}
+	img {
+		max-width: 100%;
+	}
+	pre {
+		white-space: pre-wrap;
+	}
 }
 
+body > footer {
+    grid-area: footer;
+    background-color: #efefef;
+	padding: 1em;
+	color: black;
+	
+	p {
+		margin: 0;
+	}
+}
 
 .activity-feed {
 	border: 1px solid lightgrey;
@@ -206,16 +217,6 @@ dl > div {
 }
 dt {
 	font-weight: bold;
-}
-
-footer {
-    grid-area: footer;
-    background-color: #efefef;
-	padding: 1em;
-	color: black;
-}
-footer p {
-	margin: 0;
 }
 
 .home-layout, .project-layout {
