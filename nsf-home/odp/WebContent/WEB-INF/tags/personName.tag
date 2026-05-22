@@ -17,7 +17,13 @@
 --%>
 <%@tag description="Individual header nav link" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@attribute name="value" required="true" type="java.lang.String" %>
+<%@attribute name="link" required="false" type="java.lang.Boolean" %>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 <c:if test="${not empty pageScope.value}">
-	<a href="${mvc.basePath}/users/${encoder.urlEncode(pageScope.value)}"><c:out value="${encoder.abbreviateName(pageScope.value)}"/></a>
+	<c:if test="${link != false}">
+		<a href="${mvc.basePath}/users/${encoder.urlEncode(pageScope.value)}"><c:out value="${encoder.abbreviateName(pageScope.value)}"/></a>
+	</c:if>
+	<c:if test="${link == false}">
+		<c:out value="${encoder.abbreviateName(pageScope.value)}"/>
+	</c:if>
 </c:if>
