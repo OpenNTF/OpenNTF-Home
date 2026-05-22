@@ -31,7 +31,11 @@ class TimeAgo extends HTMLElement {
 	}
 
 	connectedCallback() {
-		let date = new Date(this.getAttribute("value"));
+		let val = this.getAttribute("value");
+		if(!val) {
+			return;
+		}
+		let date = new Date(val);
 
 		this.innerText = this._relativize(date);
 		if (this.getAttribute("value").indexOf("T") > -1) {
