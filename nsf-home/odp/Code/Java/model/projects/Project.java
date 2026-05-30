@@ -181,7 +181,7 @@ public class Project {
 	
 	public List<FeatureRequest> getFeatureRequests() {
 		FeatureRequest.Repository repo = CDI.current().select(FeatureRequest.Repository.class).get();
-		return repo.findByProjectName(getName(), Sort.desc("entryDate"))
+		return repo.listAll(ViewQuery.query().category(getName()))
 			.collect(Collectors.toList());
 	}
 	

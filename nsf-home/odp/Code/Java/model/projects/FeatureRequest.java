@@ -24,30 +24,41 @@ import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ItemStorage;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewDocuments;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
-import jakarta.data.Sort;
+import jakarta.nosql.Id;
 import model.AbstractAttachmentEntity;
 
 @Entity("feature")
 public class FeatureRequest extends AbstractAttachmentEntity implements ProjectRelative {
+	public static final String VIEW_ALL = "FeatureRequests";
+	public static final String VIEW_ADDED = "Project\\Feature Requests-Added";
+	public static final String VIEW_INVESTIGATING = "Project\\Feature Requests-Investigating";
+	public static final String VIEW_REJECTED = "Project\\Feature Requests-Rejected";
+	public static final String VIEW_SUBMITTED = "Project\\Feature Requests-Submitted";
+	
 	@RepositoryProvider("projectsRepository")
 	public interface Repository extends DominoRepository<FeatureRequest, String> {
-		Stream<FeatureRequest> findByProjectName(String projectName, Sort<FeatureRequest> sorts);
+		@ViewDocuments(value=VIEW_ALL, maxLevel = 2)
+		Stream<FeatureRequest> listAll(ViewQuery query);
 	}
 	
-	@Column(DominoConstants.FIELD_ID)
+	@Id
 	private String documentId;
 	@Column(DominoConstants.FIELD_ATTACHMENTS)
 	private List<EntityAttachment> attachments;
 	@Column(DominoConstants.FIELD_REPLICAID)
 	private String replicaId;
-	@Column("Subject")
-	private String subject;
+	@Column("Description")
+	private String description;
 	@Column("Details")
 	@ItemStorage(type=ItemStorage.Type.MIME)
 	private String body;
+	@Column("DetailsMarkdown")
+	private String bodyMarkdown;
 	@Column("Entry_Date")
 	private Temporal entryDate;
 	@Column("Entry_Person")
@@ -80,11 +91,11 @@ public class FeatureRequest extends AbstractAttachmentEntity implements ProjectR
 		this.replicaId = replicaId;
 	}
 	
-	public String getSubject() {
-		return subject;
+	public String getDescription() {
+		return description;
 	}
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setSubject(String description) {
+		this.description = description;
 	}
 	
 	public String getBody() {
@@ -92,6 +103,13 @@ public class FeatureRequest extends AbstractAttachmentEntity implements ProjectR
 	}
 	public void setBody(String body) {
 		this.body = body;
+	}
+	
+	public String getBodyMarkdown() {
+		return bodyMarkdown;
+	}
+	public void setBodyMarkdown(String bodyMarkdown) {
+		this.bodyMarkdown = bodyMarkdown;
 	}
 	
 	public Temporal getEntryDate() {
