@@ -21,15 +21,17 @@
 <%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <t:projectLayout project="${project}" current="requests">
 	<div class="lefthand-view-layout">
-		<t:activityFeed items="${project.featureRequests}" urlPart="requests" activeEntry="${featureRequest}" project="${project}"
-			titleProperty="subject"/>
+		<t:activityFeed items="${featureRequests}" urlPart="requests" activeEntry="${featureRequest}" project="${project}"
+			titleProperty="description"
+			showCreate="${projectEditable}" createText="${translation.createFeatureRequest}"
+			createLink="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/@new"/>
 		<section>
 			<c:if test="${not empty featureRequest}">
 				<div class="comment-tree">
 					<article class="comment" data-indent="0">
 						<img class="avatar" alt="User avatar image" src="${usersBean[featureRequest.entryAuthor].getCleanThumbnailUrl()}"/>
 						
-						<header><c:out value="${featureRequest.subject}"/></header>
+						<header><c:out value="${featureRequest.description}"/></header>
 						<div class="body"><c:out value="${featureRequest.body}" escapeXml="false"/></div>
 						<footer>
 							<c:out value="${encoder.toCommonName(featureRequest.entryAuthor)}"/>
