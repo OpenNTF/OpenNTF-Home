@@ -25,6 +25,7 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
 import jakarta.data.Sort;
 
 @Entity("discussion")
@@ -34,7 +35,7 @@ public class Discussion implements ProjectRelative {
 		Stream<Discussion> findByProjectName(String projectName, Sort<Discussion> sorts);
 	}
 	
-	@Column(DominoConstants.FIELD_ID)
+	@Id
 	private String documentId;
 	@Column("Subject")
 	private String subject;

@@ -18,7 +18,6 @@ package model.projects;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
-import org.openntf.xsp.jakarta.nosql.communication.driver.DominoConstants;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
@@ -26,6 +25,7 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
 
 // NB: this entity represents many types of forms in the database
 //     and should not be created or saved
@@ -39,7 +39,7 @@ public class ProjectActivity implements ProjectRelative {
 		Stream<ProjectActivity> findByDate(ViewQuery viewQuery);
 	}
 
-	@Column(DominoConstants.FIELD_ID)
+	@Id
 	private String documentId;
 	@Column("$10")
 	private String projectName;
