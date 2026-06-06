@@ -19,39 +19,22 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@taglib prefix="fn" uri="jakarta.tags.functions" %>
-<t:projectLayout project="${project}" current="documentation">
+<t:projectLayout project="${project}" current="requests">
 	<fieldset>
-		<legend><c:out value="${translation.newDocumentation}"/></legend>
+		<legend><c:out value="${translation.newFeatureRequest}"/></legend>
 		
-		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/documentation/${empty doc.documentId ? '@new' : doc.documentId}" enctype="multipart/form-data" data-turbo="false">
+		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${empty doc.documentId ? '@new' : doc.documentId}" enctype="multipart/form-data" data-turbo="false">
 			<dl>
-				<dt><c:out value="${translation.documentationName}"/></dt>
-				<dd><input type="text" name="docName" value="${fn:escapeXml(doc.description)}" /></dd>
+				<dt><c:out value="${translation.featureRequestSubject}"/></dt>
+				<dd><input type="text" name="subject" value="${fn:escapeXml(featureRequest.description)}" /></dd>
 				
-			</dl>
-			<dl>
-				<dt><c:out value="${translation.downloadsLabel}"/></dt>
-				<dd>
-					<table class="attachments">
-					<tbody>
- 					<c:forEach items="${doc.downloads}" var="download">
- 						<tr>
- 							<td><a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}/documentation/${doc.documentId}/${encoder.urlEncode(download.name)}"><c:out value="${download.name}"/></a></td>
- 							<td><label><input type="checkbox" name="deleteAttachments" value="${fn:escapeXml(download.name)}" /> <c:out value="${translation.deleteOnSave}"/></label></td>
- 						</tr>
- 					</c:forEach>
-					</tbody>
-					</table>
-					
-					<input type="file" multiple="multiple" name="files"/>
-				</dd>
 			</dl>
 			
 			<h3><label for="docDescription"><c:out value="${translation.description}"/></label></h3>
-			<p><textarea class="markdown-edit" id="docBody" name="docBody"><c:out value="${doc.bodyMarkdown}"/></textarea></p>
+			<p><textarea class="markdown-edit" id="body" name="body"><c:out value="${featureRequest.bodyMarkdown}"/></textarea></p>
 			
 			<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
-			<p><input type="submit" value="${fn:escapeXml(translation.saveDocumentation)}"/></p>
+			<p><input type="submit" value="${fn:escapeXml(translation.saveFeatureRequest)}"/></p>
 		</form>
 	</fieldset>
 </t:projectLayout>
