@@ -185,6 +185,36 @@ body > footer {
 	}
 }
 
+/* Filter toggles used to control activity-feed-type elements */
+ul.filter-selector {
+	display: flex;
+	flex-direction: row;
+	margin: 0;
+	
+	li {
+		margin: 0;
+		list-style-type: none;
+		padding: 0.5rem;
+		margin: 0.5rem;
+		
+		&[data-count="0"] a {
+			color: grey;
+		}
+		a {
+			text-decoration: none;
+		}
+	}
+	li.active {
+		background-color: #019bdb;
+		border: 1px solid #337ab7;
+		border-radius: 0.3rem;
+		
+		a {
+			color: white;
+		}
+	}
+}
+
 .screenshots {
 	display: flex;
 	flex-wrap: wrap;

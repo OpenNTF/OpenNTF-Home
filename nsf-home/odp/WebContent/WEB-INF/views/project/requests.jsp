@@ -20,9 +20,14 @@
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <t:projectLayout project="${project}" current="requests">
+	<ul class="filter-selector">
+	<c:forEach items="${filters}" var="filter">
+		<li ${filter.active ? 'class="active"' : '' } data-count="${filter.count}"><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests?filter=${filter.filter}"><c:out value="${messages.format(filter.messageKey, filter.count)}"/></a></li>
+	</c:forEach>
+	</ul>
 	<div class="lefthand-view-layout">
 		<t:activityFeed items="${featureRequests}" urlPart="requests" activeEntry="${featureRequest}" project="${project}"
-			titleProperty="description"
+			titleProperty="description" query="${filterQuery}"
 			showCreate="${projectEditable}" createText="${translation.createFeatureRequest}"
 			createLink="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/@new"/>
 		<section>

@@ -25,8 +25,10 @@ import org.openntf.xsp.jakarta.nosql.mapping.extension.DominoRepository;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ItemStorage;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.RepositoryProvider;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewDocuments;
+import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewEntries;
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
@@ -34,16 +36,45 @@ import model.AbstractAttachmentEntity;
 
 @Entity("feature")
 public class FeatureRequest extends AbstractAttachmentEntity implements ProjectRelative {
-	public static final String VIEW_ALL = "FeatureRequests";
-	public static final String VIEW_ADDED = "Project\\Feature Requests-Added";
-	public static final String VIEW_INVESTIGATING = "Project\\Feature Requests-Investigating";
-	public static final String VIEW_REJECTED = "Project\\Feature Requests-Rejected";
-	public static final String VIEW_SUBMITTED = "Project\\Feature Requests-Submitted";
+	public static final String VIEW_ALL = "FeatureRequests"; //$NON-NLS-1$
+	public static final String VIEW_ADDED = "Project\\Feature Requests-Added"; //$NON-NLS-1$
+	public static final String VIEW_INVESTIGATING = "Project\\Feature Requests-Investigating"; //$NON-NLS-1$
+	public static final String VIEW_REJECTED = "Project\\Feature Requests-Rejected"; //$NON-NLS-1$
+	public static final String VIEW_SUBMITTED = "Project\\Feature Requests-Submitted"; //$NON-NLS-1$
 	
 	@RepositoryProvider("projectsRepository")
 	public interface Repository extends DominoRepository<FeatureRequest, String> {
-		@ViewDocuments(value=VIEW_ALL, maxLevel = 2)
+		// TODO add a view in pmt.nsf that we can use for all of these
+		
+		@ViewDocuments(value=VIEW_ALL, maxLevel=2)
 		Stream<FeatureRequest> listAll(ViewQuery query);
+		
+		@ViewEntries(value=VIEW_ALL, maxLevel=2)
+		Stream<FeatureRequest> listAllEntries(ViewQuery query);
+		
+		@ViewDocuments(value=VIEW_ADDED, maxLevel=2)
+		Stream<FeatureRequest> listAdded(ViewQuery query);
+		
+		@ViewEntries(value=VIEW_ADDED, maxLevel=2)
+		Stream<FeatureRequest> listAddedEntries(ViewQuery query);
+		
+		@ViewDocuments(value=VIEW_INVESTIGATING, maxLevel=2)
+		Stream<FeatureRequest> listInvestigating(ViewQuery query);
+		
+		@ViewEntries(value=VIEW_INVESTIGATING, maxLevel=2)
+		Stream<FeatureRequest> listInvestigatingEntries(ViewQuery query);
+		
+		@ViewDocuments(value=VIEW_REJECTED, maxLevel=2)
+		Stream<FeatureRequest> listRejected(ViewQuery query);
+		
+		@ViewEntries(value=VIEW_REJECTED, maxLevel=2)
+		Stream<FeatureRequest> listRejectedEntries(ViewQuery query);
+		
+		@ViewDocuments(value=VIEW_SUBMITTED, maxLevel=2)
+		Stream<FeatureRequest> listSubmitted(ViewQuery query);
+		
+		@ViewEntries(value=VIEW_SUBMITTED, maxLevel=2)
+		Stream<FeatureRequest> listSubmittedEntries(ViewQuery query);
 	}
 	
 	@Id
@@ -67,6 +98,9 @@ public class FeatureRequest extends AbstractAttachmentEntity implements ProjectR
 	private String projectName;
 	@Column(DominoConstants.FIELD_ETAG)
 	private String etag;
+	@Column(DominoConstants.FIELD_SIBLINGCOUNT)
+	@JsonbTransient
+	private int siblingCount;
 	
 	public String getDocumentId() {
 		return documentId;
@@ -139,5 +173,9 @@ public class FeatureRequest extends AbstractAttachmentEntity implements ProjectR
 	}
 	public void setEtag(String etag) {
 		this.etag = etag;
+	}
+	
+	public int getSiblingCount() {
+		return siblingCount;
 	}
 }
