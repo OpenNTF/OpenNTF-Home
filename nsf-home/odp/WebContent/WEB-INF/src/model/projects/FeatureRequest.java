@@ -77,6 +77,26 @@ public class FeatureRequest extends AbstractAttachmentEntity implements ProjectR
 		Stream<FeatureRequest> listSubmittedEntries(ViewQuery query);
 	}
 	
+	public enum Status {
+		Submitted,
+		Investigating,
+		Added("Added to app"), //$NON-NLS-1$
+		Rejected;
+		
+		private final String value;
+		
+		private Status() {
+			this.value = name();
+		}
+		private Status(String value) {
+			this.value = value;
+		}
+		
+		public String getValue() {
+			return value;
+		}
+	}
+	
 	@Id
 	private String documentId;
 	@Column(DominoConstants.FIELD_ATTACHMENTS)
@@ -96,6 +116,8 @@ public class FeatureRequest extends AbstractAttachmentEntity implements ProjectR
 	private String entryAuthor;
 	@Column("ProjectName")
 	private String projectName;
+	@Column("Status")
+	private Status status;
 	@Column(DominoConstants.FIELD_ETAG)
 	private String etag;
 	@Column(DominoConstants.FIELD_SIBLINGCOUNT)
@@ -166,6 +188,13 @@ public class FeatureRequest extends AbstractAttachmentEntity implements ProjectR
 	}
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 	
 	public String getEtag() {

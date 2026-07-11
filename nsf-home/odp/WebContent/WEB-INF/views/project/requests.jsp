@@ -32,6 +32,19 @@
 			createLink="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/@new"/>
 		<section>
 			<c:if test="${not empty featureRequest}">
+				<c:if test="${requestEditable}">
+				<form class="doc-state-change" method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${featureRequest.documentId}/@changeStatus">
+					<select name="status">
+						<option ${featureRequest.status == 'Submitted' ? 'selected' : ''}><c:out value="${translation.submitted}"/></option>
+						<option ${featureRequest.status == 'Investigating' ? 'selected' : ''}><c:out value="${translation.investigating}"/></option>
+						<option ${featureRequest.status == 'Rejected' ? 'selected' : ''}><c:out value="${translation.rejected}"/></option>
+						<option ${featureRequest.status == 'Added' ? 'selected' : ''}><c:out value="${translation.addedToApp}"/></option>
+					</select>
+					<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
+					<input type="submit" value="${fn:escapeXml(translation.changeStatus)}" />
+				</form>
+				</c:if>
+			
 				<div class="comment-tree">
 					<article class="comment" data-indent="0">
 						<img class="avatar" alt="User avatar image" src="${usersBean[featureRequest.entryAuthor].getCleanThumbnailUrl()}"/>

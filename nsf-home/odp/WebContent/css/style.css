@@ -563,4 +563,26 @@ legend {
 			margin-top: 2em;
 		}
 	}
+	
+
+	form.doc-state-change {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		gap: 1rem;
+		
+		select {
+			appearance: menulist-button;
+			padding: 0.5rem;
+			border: 1px solid darkgray;
+			background: lightgray;
+			border-radius: 3px;
+		}
+		input[type="submit"] {
+			padding: 0.5rem;
+			border: 1px solid darkgray;
+			background-color: #ffa500;
+			border-radius: 3px;
+		}
+	}
 }

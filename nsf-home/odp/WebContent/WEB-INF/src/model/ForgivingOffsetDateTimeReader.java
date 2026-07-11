@@ -30,6 +30,7 @@ import java.util.Date;
 import org.eclipse.jnosql.communication.ValueReader;
 
 import jakarta.annotation.Priority;
+import model.projects.FeatureRequest;
 
 /**
  * This {@link ValueReader} overrides the default {@link OffsetDateTime} reader
@@ -44,12 +45,16 @@ public class ForgivingOffsetDateTimeReader implements ValueReader {
 
     @Override
     public boolean test(Class<?> type) {
-        return OffsetDateTime.class.equals(type);
+    	// TODO remove workaround once the other class loading is fixed
+        return OffsetDateTime.class.equals(type) || FeatureRequest.Status.class.equals(type);
     }
 
     @SuppressWarnings("unchecked")
 	@Override
     public <T> T read(Class<T> typeClass, Object value) {
+    	if(FeatureRequest.Status.class.equals(typeClass)) {
+    		return new FeatureRequestStatusProcessor().read(typeClass, value);
+    	}
         return (T) getOffSetDateTime(value);
     }
 

@@ -18,11 +18,11 @@ import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityPart;
@@ -76,14 +76,28 @@ public class FeatureRequestsController {
 		pushRequestsContext(filterParam);
 	}
 	
+	@Path("@new")
+	@GET
+	@View("project/request-edit.jsp")
+	@RolesAllowed("login")
+	public void compose() {
+		controllerUtil.validateEditable(project);
+		
+		models.put("project", project); //$NON-NLS-1$
+		
+		var featureRequest = new FeatureRequest();
+		featureRequest.setAttachments(new ArrayList<>());
+		models.put("featureRequest", featureRequest); //$NON-NLS-1$
+	}
+	
 	@Path("{request}")
 	@GET
-	@Produces(MediaType.TEXT_HTML)
 	@View("project/requests.jsp")
 	public void show(@PathParam("request") FeatureRequest featureRequest, @QueryParam("filter") String filterParam) {
 		pushRequestsContext(filterParam);
 		
-		models.put("featureRequest", featureRequest);
+		models.put("featureRequest", featureRequest); //$NON-NLS-1$
+		models.put("requestEditable", controllerUtil.isEditable(featureRequest)); //$NON-NLS-1$
 		
 		var responses = responseRepository.findTree(ViewQuery.query().category(featureRequest.getDocumentId()))
 			.skip(1) // the main doc
@@ -93,21 +107,18 @@ public class FeatureRequestsController {
 				doc.setViewPosition(entry.getViewPosition());
 				return doc;
 			}).toList();
-		models.put("responses", responses);
+		models.put("responses", responses); //$NON-NLS-1$
 	}
 	
-	@Path("@new")
-	@GET
-	@View("project/request-edit.jsp")
-	@RolesAllowed("login")
-	public void compose() {
-		controllerUtil.validateEditable(project);
+	@Path("{request}/@changeStatus")
+	@POST
+	public String changeStatus(@PathParam("request") FeatureRequest featureRequest, @FormParam("status") FeatureRequest.Status status) {
+		controllerUtil.validateEditable(project, featureRequest);
 		
-		models.put("project", project);
+		featureRequest.setStatus(status);
+		requestRepository.save(featureRequest, true);
 		
-		var featureRequest = new FeatureRequest();
-		featureRequest.setAttachments(new ArrayList<>());
-		models.put("featureRequest", featureRequest);
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + featureRequest.getDocumentId(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	@Path("@new")
@@ -119,7 +130,7 @@ public class FeatureRequestsController {
 		
 		var featureRequest = updateFromPayload(new FeatureRequest(), entityParts);
 		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + featureRequest.getDocumentId();
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + featureRequest.getDocumentId(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private FeatureRequest updateFromPayload(FeatureRequest doc, List<EntityPart> entityParts) {
