@@ -18,13 +18,24 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" session="false" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
+<%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <t:projectLayout project="${project}" current="defects">
 	<div class="lefthand-view-layout">
 		<t:activityFeed items="${project.defects}" urlPart="defects" activeEntry="${defect}" project="${project}"
 			titleProperty="subject"/>
 		<section>
 			<c:if test="${not empty defect}">
-				<c:out value="${markdown.toHtml(defect.body)}" escapeXml="false"/>
+				<article class="comment" data-indent="0">
+					<img class="avatar" alt="User avatar image" src="${usersBean[defect.entryAuthor].getCleanThumbnailUrl()}"/>
+					
+					<header><c:out value="${defect.subject}"/></header>
+					<div class="body"><c:out value="${defect.body}" escapeXml="false"/></div>
+					<footer>
+						<c:out value="${encoder.toCommonName(defect.entryAuthor)}"/>
+						|
+						<time-ago value="${fn:escapeXml(defect.entryDate)}"></time-ago>
+					</footer>
+				</article>
 			</c:if>
 		</section>
 	</div>
