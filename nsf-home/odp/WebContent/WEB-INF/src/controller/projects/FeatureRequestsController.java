@@ -18,16 +18,19 @@ import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Request;
+import model.projects.Documentation;
 import model.projects.FeatureRequest;
 import model.projects.Project;
 import rest.ext.ValidProjectRelationship;
@@ -88,6 +91,49 @@ public class FeatureRequestsController {
 		var featureRequest = new FeatureRequest();
 		featureRequest.setAttachments(new ArrayList<>());
 		models.put("featureRequest", featureRequest); //$NON-NLS-1$
+	}
+	
+	@Path("{request}/@edit")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Controller
+	@View("project/request-edit.jsp")
+	@RolesAllowed("login")
+	public void edit(@PathParam("request") FeatureRequest featureRequest) {
+		controllerUtil.validateEditable(project, featureRequest);
+		
+		models.put("project", project); //$NON-NLS-1$
+		
+		if(StringUtil.isEmpty(featureRequest.getBodyMarkdown())) {
+			featureRequest.setBodyMarkdown(featureRequest.getBody());
+		}
+		models.put("featureRequest", featureRequest); //$NON-NLS-1$
+	}
+	
+	@Path("{request}")
+	@DELETE
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Controller
+	@RolesAllowed("login")
+	public String delete(@PathParam("request") FeatureRequest featureRequest) {
+		controllerUtil.validateEditable(project, featureRequest);
+		
+		requestRepository.delete(featureRequest);
+		
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests";
+	}
+	
+	@Path("{request}")
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Controller
+	@RolesAllowed("login")
+	public String update(@PathParam("request") FeatureRequest featureRequest, List<EntityPart> entityParts) {
+		controllerUtil.validateEditable(project, featureRequest);
+		
+		var updated = updateFromPayload(featureRequest, entityParts);
+		
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + updated.getDocumentId();
 	}
 	
 	@Path("{request}")

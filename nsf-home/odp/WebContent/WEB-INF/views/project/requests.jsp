@@ -35,13 +35,13 @@
 				<c:if test="${requestEditable}">
 				<form class="doc-state-change" method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${featureRequest.documentId}/@changeStatus">
 					<select name="status">
-						<option ${featureRequest.status == 'Submitted' ? 'selected' : ''}><c:out value="${translation.submitted}"/></option>
-						<option ${featureRequest.status == 'Investigating' ? 'selected' : ''}><c:out value="${translation.investigating}"/></option>
-						<option ${featureRequest.status == 'Rejected' ? 'selected' : ''}><c:out value="${translation.rejected}"/></option>
-						<option ${featureRequest.status == 'Added' ? 'selected' : ''}><c:out value="${translation.addedToApp}"/></option>
+						<option ${featureRequest.status == 'Submitted' ? 'selected' : ''}><c:out value="${translation.Submitted}"/></option>
+						<option ${featureRequest.status == 'Investigating' ? 'selected' : ''}><c:out value="${translation.Investigating}"/></option>
+						<option ${featureRequest.status == 'Rejected' ? 'selected' : ''}><c:out value="${translation.Rejected}"/></option>
+						<option ${featureRequest.status == 'Added' ? 'selected' : ''}><c:out value="${translation.Added}"/></option>
 					</select>
 					<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
-					<input type="submit" value="${fn:escapeXml(translation.changeStatus)}" />
+					<input type="submit" class="edit-button" value="${fn:escapeXml(translation.changeStatus)}" />
 				</form>
 				</c:if>
 			
@@ -55,8 +55,17 @@
 							<c:out value="${encoder.toCommonName(featureRequest.entryAuthor)}"/>
 							|
 							<time-ago value="${fn:escapeXml(featureRequest.entryDate)}"></time-ago>
+							|
+							<c:out value="${translation[featureRequest.status]}"/>
 						</footer>
 					</article>
+						
+					<c:if test="${requestEditable}">
+						<t:actionBar>
+							<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${featureRequest.documentId}/@edit" class="edit-button"><c:out value="${translation.editRequest}"/></a>
+							<t:deleteButton action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${featureRequest.documentId}" value="${translation.deleteRequest}" confirmation="${translation.confirmDeleteRequest}"/>
+						</t:actionBar>
+					</c:if>
 					
 					<t:responseTree value="${responses}"/>
 				</div>

@@ -21,9 +21,9 @@
 <%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <t:projectLayout project="${project}" current="requests">
 	<fieldset>
-		<legend><c:out value="${translation.newFeatureRequest}"/></legend>
+		<legend><c:out value="${translation.featureRequest}"/></legend>
 		
-		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${empty doc.documentId ? '@new' : doc.documentId}" enctype="multipart/form-data" data-turbo="false">
+		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${empty featureRequest.documentId ? '@new' : featureRequest.documentId}" enctype="multipart/form-data" data-turbo="false">
 			<dl>
 				<dt><c:out value="${translation.featureRequestSubject}"/></dt>
 				<dd><input type="text" name="subject" value="${fn:escapeXml(featureRequest.description)}" /></dd>
