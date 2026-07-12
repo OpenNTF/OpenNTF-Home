@@ -26,19 +26,19 @@
 	</c:forEach>
 	</ul>
 	<div class="lefthand-view-layout">
-		<t:activityFeed items="${featureRequests}" urlPart="requests" activeEntry="${featureRequest}" project="${project}"
+		<t:activityFeed items="${featureRequests}" urlPart="requests" activeEntry="${doc}" project="${project}"
 			titleProperty="description" query="${filterQuery}"
 			showCreate="${projectEditable}" createText="${translation.createFeatureRequest}"
 			createLink="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/@new"/>
 		<section>
-			<c:if test="${not empty featureRequest}">
-				<c:if test="${requestEditable}">
-				<form class="doc-state-change" method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${featureRequest.documentId}/@changeStatus">
+			<c:if test="${not empty doc}">
+				<c:if test="${docEditable}">
+				<form class="doc-state-change" method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${doc.documentId}/@changeStatus">
 					<select name="status">
-						<option ${featureRequest.status == 'Submitted' ? 'selected' : ''}><c:out value="${translation.Submitted}"/></option>
-						<option ${featureRequest.status == 'Investigating' ? 'selected' : ''}><c:out value="${translation.Investigating}"/></option>
-						<option ${featureRequest.status == 'Rejected' ? 'selected' : ''}><c:out value="${translation.Rejected}"/></option>
-						<option ${featureRequest.status == 'Added' ? 'selected' : ''}><c:out value="${translation.Added}"/></option>
+						<option ${doc.status == 'Submitted' ? 'selected' : ''}><c:out value="${translation.Submitted}"/></option>
+						<option ${doc.status == 'Investigating' ? 'selected' : ''}><c:out value="${translation.Investigating}"/></option>
+						<option ${doc.status == 'Rejected' ? 'selected' : ''}><c:out value="${translation.Rejected}"/></option>
+						<option ${doc.status == 'Added' ? 'selected' : ''}><c:out value="${translation.Added}"/></option>
 					</select>
 					<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
 					<input type="submit" class="edit-button" value="${fn:escapeXml(translation.changeStatus)}" />
@@ -47,23 +47,23 @@
 			
 				<div class="comment-tree">
 					<article class="comment" data-indent="0">
-						<img class="avatar" alt="User avatar image" src="${usersBean[featureRequest.entryAuthor].getCleanThumbnailUrl()}"/>
+						<img class="avatar" alt="User avatar image" src="${usersBean[doc.entryAuthor].getCleanThumbnailUrl()}"/>
 						
-						<header><c:out value="${featureRequest.description}"/></header>
-						<div class="body"><c:out value="${featureRequest.body}" escapeXml="false"/></div>
+						<header><c:out value="${doc.description}"/></header>
+						<div class="body"><c:out value="${doc.body}" escapeXml="false"/></div>
 						<footer>
-							<c:out value="${encoder.toCommonName(featureRequest.entryAuthor)}"/>
+							<c:out value="${encoder.toCommonName(doc.entryAuthor)}"/>
 							|
-							<time-ago value="${fn:escapeXml(featureRequest.entryDate)}"></time-ago>
+							<time-ago value="${fn:escapeXml(doc.entryDate)}"></time-ago>
 							|
-							<c:out value="${translation[featureRequest.status]}"/>
+							<c:out value="${translation[doc.status]}"/>
 						</footer>
 					</article>
 						
-					<c:if test="${requestEditable}">
+					<c:if test="${docEditable}">
 						<t:actionBar>
-							<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${featureRequest.documentId}/@edit" class="edit-button"><c:out value="${translation.editRequest}"/></a>
-							<t:deleteButton action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${featureRequest.documentId}" value="${translation.deleteRequest}" confirmation="${translation.confirmDeleteRequest}"/>
+							<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${doc.documentId}/@edit" class="edit-button"><c:out value="${translation.editRequest}"/></a>
+							<t:deleteButton action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${doc.documentId}" value="${translation.deleteRequest}" confirmation="${translation.confirmDeleteRequest}"/>
 						</t:actionBar>
 					</c:if>
 					

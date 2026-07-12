@@ -30,7 +30,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Request;
-import model.projects.Documentation;
 import model.projects.FeatureRequest;
 import model.projects.Project;
 import rest.ext.ValidProjectRelationship;
@@ -88,83 +87,82 @@ public class FeatureRequestsController {
 		
 		models.put("project", project); //$NON-NLS-1$
 		
-		var featureRequest = new FeatureRequest();
-		featureRequest.setAttachments(new ArrayList<>());
-		models.put("featureRequest", featureRequest); //$NON-NLS-1$
+		var doc = new FeatureRequest();
+		doc.setAttachments(new ArrayList<>());
+		models.put("doc", doc); //$NON-NLS-1$
 	}
 	
-	@Path("{request}/@edit")
+	@Path("{doc}/@edit")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	@View("project/request-edit.jsp")
 	@RolesAllowed("login")
-	public void edit(@PathParam("request") FeatureRequest featureRequest) {
-		controllerUtil.validateEditable(project, featureRequest);
+	public void edit(@PathParam("doc") FeatureRequest doc) {
+		controllerUtil.validateEditable(project, doc);
 		
 		models.put("project", project); //$NON-NLS-1$
 		
-		if(StringUtil.isEmpty(featureRequest.getBodyMarkdown())) {
-			featureRequest.setBodyMarkdown(featureRequest.getBody());
+		if(StringUtil.isEmpty(doc.getBodyMarkdown())) {
+			doc.setBodyMarkdown(doc.getBody());
 		}
-		models.put("featureRequest", featureRequest); //$NON-NLS-1$
+		models.put("doc", doc); //$NON-NLS-1$
 	}
 	
-	@Path("{request}")
+	@Path("{doc}")
 	@DELETE
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Controller
 	@RolesAllowed("login")
-	public String delete(@PathParam("request") FeatureRequest featureRequest) {
-		controllerUtil.validateEditable(project, featureRequest);
+	public String delete(@PathParam("doc") FeatureRequest doc) {
+		controllerUtil.validateEditable(project, doc);
 		
-		requestRepository.delete(featureRequest);
+		requestRepository.delete(doc);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests";
 	}
 	
-	@Path("{request}")
+	@Path("{doc}")
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Controller
 	@RolesAllowed("login")
-	public String update(@PathParam("request") FeatureRequest featureRequest, List<EntityPart> entityParts) {
-		controllerUtil.validateEditable(project, featureRequest);
+	public String update(@PathParam("doc") FeatureRequest doc, List<EntityPart> entityParts) {
+		controllerUtil.validateEditable(project, doc);
 		
-		var updated = updateFromPayload(featureRequest, entityParts);
+		var updated = updateFromPayload(doc, entityParts);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + updated.getDocumentId();
 	}
 	
-	@Path("{request}")
+	@Path("{doc}")
 	@GET
 	@View("project/requests.jsp")
-	public void show(@PathParam("request") FeatureRequest featureRequest, @QueryParam("filter") String filterParam) {
+	public void show(@PathParam("doc") FeatureRequest doc, @QueryParam("filter") String filterParam) {
 		pushRequestsContext(filterParam);
 		
-		models.put("featureRequest", featureRequest); //$NON-NLS-1$
-		models.put("requestEditable", controllerUtil.isEditable(featureRequest)); //$NON-NLS-1$
+		models.put("doc", doc); //$NON-NLS-1$
 		
-		var responses = responseRepository.findTree(ViewQuery.query().category(featureRequest.getDocumentId()))
+		var responses = responseRepository.findTree(ViewQuery.query().category(doc.getDocumentId()))
 			.skip(1) // the main doc
 			.map(entry -> {
 				// Re-fetch the doc to get all the data
-				var doc = responseRepository.findById(entry.getDocumentId()).get();
-				doc.setViewPosition(entry.getViewPosition());
-				return doc;
+				var responseDoc = responseRepository.findById(entry.getDocumentId()).get();
+				responseDoc.setViewPosition(entry.getViewPosition());
+				return responseDoc;
 			}).toList();
 		models.put("responses", responses); //$NON-NLS-1$
 	}
 	
-	@Path("{request}/@changeStatus")
+	@Path("{doc}/@changeStatus")
 	@POST
-	public String changeStatus(@PathParam("request") FeatureRequest featureRequest, @FormParam("status") FeatureRequest.Status status) {
-		controllerUtil.validateEditable(project, featureRequest);
+	public String changeStatus(@PathParam("doc") FeatureRequest doc, @FormParam("status") FeatureRequest.Status status) {
+		controllerUtil.validateEditable(project, doc);
 		
-		featureRequest.setStatus(status);
-		requestRepository.save(featureRequest, true);
+		doc.setStatus(status);
+		requestRepository.save(doc, true);
 		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + featureRequest.getDocumentId(); //$NON-NLS-1$ //$NON-NLS-2$
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + doc.getDocumentId(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	@Path("@new")
@@ -174,9 +172,9 @@ public class FeatureRequestsController {
 	public String create(List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project);
 		
-		var featureRequest = updateFromPayload(new FeatureRequest(), entityParts);
+		var doc = updateFromPayload(new FeatureRequest(), entityParts);
 		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + featureRequest.getDocumentId(); //$NON-NLS-1$ //$NON-NLS-2$
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + doc.getDocumentId(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private FeatureRequest updateFromPayload(FeatureRequest doc, List<EntityPart> entityParts) {

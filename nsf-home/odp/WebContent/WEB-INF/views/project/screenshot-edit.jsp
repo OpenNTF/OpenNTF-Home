@@ -23,10 +23,10 @@
 	<fieldset>
 		<legend><c:out value="${translation.screenshot}"/></legend>
 		
-		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/screenshots/${empty screenshot.documentId ? '@new' : screenshot.documentId}" enctype="multipart/form-data" data-turbo="false">
+		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/screenshots/${empty doc.documentId ? '@new' : doc.documentId}" enctype="multipart/form-data" data-turbo="false">
 			<dl>
 				<dt><c:out value="${translation.descriptionLabel}"/></dt>
-				<dd><input name="description" value="${fn:escapeXml(screenshot.description)}" required="required"/></dd>
+				<dd><input name="description" value="${fn:escapeXml(doc.description)}" required="required"/></dd>
 			
 				<dt><c:out value="${translation.screenshotLabel}"/></dt>
 				<dd>

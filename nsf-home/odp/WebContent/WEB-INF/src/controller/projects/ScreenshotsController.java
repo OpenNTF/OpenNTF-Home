@@ -61,10 +61,10 @@ public class ScreenshotsController {
 		models.put("project", project);
 	}
 	
-	@Path("{screenshot}/{fileName}")
+	@Path("{doc}/{fileName}")
 	@GET
-	public Response show(@PathParam("screenshot") Screenshot screenshot, @PathParam("fileName") String fileName) throws IOException {
-		return controllerUtil.fetchAttachment(screenshot, fileName, request);
+	public Response show(@PathParam("doc") Screenshot doc, @PathParam("fileName") String fileName) throws IOException {
+		return controllerUtil.fetchAttachment(doc, fileName, request);
 	}
 	
 	@Path("@new")
@@ -77,9 +77,9 @@ public class ScreenshotsController {
 		
 		models.put("project", project);
 		
-		var screenshot = new Screenshot();
-		screenshot.setAttachments(new ArrayList<>());
-		models.put("screenshot", screenshot);
+		var doc = new Screenshot();
+		doc.setAttachments(new ArrayList<>());
+		models.put("doc", doc);
 	}
 
 	@Path("@new")
@@ -114,35 +114,35 @@ public class ScreenshotsController {
 			}
 		}
 		
-		var screenshot = new Screenshot();
-		screenshot.setProjectName(project.getName());
-		screenshot.setAttachments(attachments);
-		screenshot.setDescription(description);
+		var doc = new Screenshot();
+		doc.setProjectName(project.getName());
+		doc.setAttachments(attachments);
+		doc.setDescription(description);
 		
-		if(StringUtil.isEmpty(screenshot.getDocumentId())) {
-			screenshot.setDate(OffsetDateTime.now());
+		if(StringUtil.isEmpty(doc.getDocumentId())) {
+			doc.setDate(OffsetDateTime.now());
 		}
 		
-		screenshotRepository.save(screenshot, true);
+		screenshotRepository.save(doc, true);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/screenshots";
 	}
 	
-	@Path("{screenshot}/{fileName}")
+	@Path("{doc}/{fileName}")
 	@DELETE
 	@Controller
-	public String delete(@PathParam("screenshot") Screenshot screenshot, @PathParam("screenshotId") String screenshotId, @PathParam("fileName") String fileName) throws IOException {
-		controllerUtil.validateEditable(project, screenshot);
+	public String delete(@PathParam("doc") Screenshot doc, @PathParam("fileName") String fileName) throws IOException {
+		controllerUtil.validateEditable(project, doc);
 		
-		List<EntityAttachment> newAttachments = screenshot.getAttachments()
+		List<EntityAttachment> newAttachments = doc.getAttachments()
 			.stream()
 			.filter(att -> !fileName.equals(att.getName()))
 			.toList();
 		if(newAttachments.isEmpty()) {
-			screenshotRepository.delete(screenshot);
+			screenshotRepository.delete(doc);
 		} else {
-			screenshot.setAttachments(newAttachments);
-			screenshotRepository.save(screenshot, true);
+			doc.setAttachments(newAttachments);
+			screenshotRepository.save(doc, true);
 		}
 
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/screenshots";

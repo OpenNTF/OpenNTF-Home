@@ -82,15 +82,15 @@ public class ReleasesController {
 		return project.getReleasesByDate();
 	}
 	
-	@Path("{release}")
+	@Path("{doc}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
-	public Response show(@PathParam("release") ProjectRelease release) {
+	public Response show(@PathParam("doc") ProjectRelease doc) {
 		boolean anon = userInfo.isAnonymous();
 		EntityTag etag = null;
 		if(anon) {
-			etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(release.getEtag());
+			etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(doc.getEtag());
 			ResponseBuilder response = request.evaluatePreconditions(etag);
 			if(response != null) {
 				return response.build();
@@ -99,7 +99,7 @@ public class ReleasesController {
 		
 		models.put("project", project);
 		
-		models.put("release", release);
+		models.put("doc", doc);
 
 		if(anon) {
 			return Response.ok(new Viewable("project/releases.jsp"))
@@ -111,21 +111,21 @@ public class ReleasesController {
 		}
 	}
 	
-	@Path("{release}/@edit")
+	@Path("{doc}/@edit")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	@View("project/release-edit.jsp")
 	@RolesAllowed("login")
-	public void edit(@PathParam("release") ProjectRelease release) {
-		controllerUtil.validateEditable(project, release);
+	public void edit(@PathParam("doc") ProjectRelease doc) {
+		controllerUtil.validateEditable(project, doc);
 		
 		models.put("project", project);
 		
-		if(StringUtil.isEmpty(release.getDescriptionMarkdown())) {
-			release.setDescriptionMarkdown(release.getDescription());
+		if(StringUtil.isEmpty(doc.getDescriptionMarkdown())) {
+			doc.setDescriptionMarkdown(doc.getDescription());
 		}
-		models.put("release", release);
+		models.put("doc", doc);
 	}
 	
 	@Path("@new")
@@ -139,9 +139,9 @@ public class ReleasesController {
 		
 		models.put("project", project);
 		
-		var release = new ProjectRelease();
-		release.setAttachments(new ArrayList<>());
-		models.put("release", release);
+		var doc = new ProjectRelease();
+		doc.setAttachments(new ArrayList<>());
+		models.put("doc", doc);
 	}
 	
 	@Path("@new")
@@ -152,41 +152,41 @@ public class ReleasesController {
 	public String create(List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project);
 		
-		var release = updateFromPayload(new ProjectRelease(), entityParts);
+		var doc = updateFromPayload(new ProjectRelease(), entityParts);
 		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + release.getDocumentId();
+		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + doc.getDocumentId();
 	}
 	
-	@Path("{release}")
+	@Path("{doc}")
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Controller
 	@RolesAllowed("login")
-	public String update(@PathParam("release") ProjectRelease release, List<EntityPart> entityParts) {
-		controllerUtil.validateEditable(project, release);
+	public String update(@PathParam("doc") ProjectRelease doc, List<EntityPart> entityParts) {
+		controllerUtil.validateEditable(project, doc);
 		
-		var updatedRelease = updateFromPayload(release, entityParts);
+		var updatedRelease = updateFromPayload(doc, entityParts);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + updatedRelease.getDocumentId();
 	}
 	
-	@Path("{release}")
+	@Path("{doc}")
 	@DELETE
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Controller
 	@RolesAllowed("login")
-	public String delete(@PathParam("release") ProjectRelease release) {
-		controllerUtil.validateEditable(project, release);
+	public String delete(@PathParam("doc") ProjectRelease doc) {
+		controllerUtil.validateEditable(project, doc);
 		
-		projectReleaseRepository.delete(release);
+		projectReleaseRepository.delete(doc);
 		
 		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases";
 	}
 	
-	@Path("{release}/{fileName}")
+	@Path("{doc}/{fileName}")
 	@GET
-	public Response getFile(@PathParam("release") ProjectRelease release, @PathParam("fileName") String fileName) throws IOException {
-		return controllerUtil.fetchAttachment(release, fileName, request);
+	public Response getFile(@PathParam("doc") ProjectRelease doc, @PathParam("fileName") String fileName) throws IOException {
+		return controllerUtil.fetchAttachment(doc, fileName, request);
 	}
 	
 	private ProjectRelease updateFromPayload(ProjectRelease release, List<EntityPart> entityParts) {

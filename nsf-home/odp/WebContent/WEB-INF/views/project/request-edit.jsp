@@ -23,15 +23,15 @@
 	<fieldset>
 		<legend><c:out value="${translation.featureRequest}"/></legend>
 		
-		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${empty featureRequest.documentId ? '@new' : featureRequest.documentId}" enctype="multipart/form-data" data-turbo="false">
+		<form method="POST" action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/requests/${empty doc.documentId ? '@new' : doc.documentId}" enctype="multipart/form-data" data-turbo="false">
 			<dl>
 				<dt><c:out value="${translation.featureRequestSubject}"/></dt>
-				<dd><input type="text" name="subject" value="${fn:escapeXml(featureRequest.description)}" /></dd>
+				<dd><input type="text" name="subject" value="${fn:escapeXml(doc.description)}" /></dd>
 				
 			</dl>
 			
 			<h3><label for="docDescription"><c:out value="${translation.description}"/></label></h3>
-			<p><textarea class="markdown-edit" id="body" name="body"><c:out value="${featureRequest.bodyMarkdown}"/></textarea></p>
+			<p><textarea class="markdown-edit" id="body" name="body"><c:out value="${doc.bodyMarkdown}"/></textarea></p>
 			
 			<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
 			<p><input type="submit" value="${fn:escapeXml(translation.saveFeatureRequest)}"/></p>

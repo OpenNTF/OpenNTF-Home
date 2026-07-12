@@ -25,7 +25,7 @@ public class ProjectReleaseParamConverter implements ParamConverter<ProjectRelea
 	public ProjectRelease fromString(String value) {
 		ProjectRelease release = releaseRepository.findById(value)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Release for ID {0}", value)));
-		models.put("releaseEditable", controllerUtil.isEditable(release));
+		models.put("docEditable", controllerUtil.isEditable(release));
 		return release;
 	}
 

@@ -183,10 +183,10 @@ public class ProjectsController {
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	public Response getProjectDefect(@PathParam("documentId") String documentId) {
-		Defect defect = defectRepository.findById(documentId)
+		var doc = defectRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Defect for ID {0}", documentId)));
 		
-		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(defect.getEtag());
+		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(doc.getEtag());
 		ResponseBuilder response = request.evaluatePreconditions(etag);
 		if(response != null) {
 			return response.build();
@@ -194,7 +194,7 @@ public class ProjectsController {
 		
 		models.put("project", project);
 		
-		models.put("defect", defect);
+		models.put("doc", doc);
 		
 		return Response.ok(new Viewable("project/defects.jsp"))
 			.header(HttpHeaders.ETAG,  etag.getValue())
