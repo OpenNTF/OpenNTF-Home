@@ -8,12 +8,9 @@ import java.util.UUID;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
-import bean.EncoderBean;
-import controller.ControllerUtil;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
-import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -23,44 +20,27 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
-import model.projects.Project;
 import model.projects.Screenshot;
 import rest.ext.ValidProjectRelationship;
 import util.StringUtil;
 
 @Path("projects/{project}/screenshots")
 @ValidProjectRelationship
-public class ScreenshotsController {
-	
-	@Inject
-	private Models models;
+public class ScreenshotsController extends AbstractProjectController<Screenshot> {
 	
 	@Inject
 	private Screenshot.Repository screenshotRepository;
-	
-	@Inject
-	private ControllerUtil controllerUtil;
-
-    @Context
-    private Request request;
-    
-    @PathParam("project")
-    private Project project;
-    
-    @Inject
-    private EncoderBean encoder;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	@View("project/screenshots.jsp")
+	@Override
 	public void list() {
-		models.put("project", project);
+		super.list();
 	}
 	
 	@Path("{doc}/{fileName}")
@@ -77,13 +57,9 @@ public class ScreenshotsController {
 	@View("project/screenshot-edit.jsp")
 	@RolesAllowed("login")
 	public void compose() {
-		controllerUtil.validateEditable(project);
-		
-		models.put("project", project);
-		
 		var doc = new Screenshot();
 		doc.setAttachments(new ArrayList<>());
-		models.put("doc", doc);
+		super.compose(doc);
 	}
 
 	@Path("@new")
@@ -98,8 +74,8 @@ public class ScreenshotsController {
 		List<EntityAttachment> attachments = new ArrayList<>();
 		for(EntityPart part : entityParts) {
 			switch(String.valueOf(part.getName())) {
-			case "description" -> description = controllerUtil.toString(part);
-			case "files" -> {
+			case "description" -> description = controllerUtil.toString(part); //$NON-NLS-1$
+			case "files" -> { //$NON-NLS-1$
 				String fileName = part.getFileName()
 					.map(name -> StringUtil.isEmpty(name) ? UUID.randomUUID().toString() : name)
 					.orElseGet(() -> UUID.randomUUID().toString());
@@ -129,7 +105,7 @@ public class ScreenshotsController {
 		
 		screenshotRepository.save(doc, true);
 		
-		return encoder.urlFormat("redirect:projects/%s/screenshots", project.getName()); //$NON-NLS-1$
+		return redirect();
 	}
 	
 	@Path("{doc}/{fileName}")
@@ -149,6 +125,6 @@ public class ScreenshotsController {
 			screenshotRepository.save(doc, true);
 		}
 
-		return encoder.urlFormat("redirect:projects/%s/screenshots", project.getName()); //$NON-NLS-1$
+		return redirect();
 	}
 }

@@ -11,14 +11,11 @@ import java.util.UUID;
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
 
-import bean.EncoderBean;
 import bean.MarkdownBean;
 import bean.UserInfoBean;
-import controller.ControllerUtil;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
-import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -28,54 +25,36 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.EntityTag;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.ext.RuntimeDelegate;
-import model.projects.Project;
 import model.projects.ProjectRelease;
 import rest.ext.ValidProjectRelationship;
 import util.StringUtil;
 
 @Path("projects/{project}/releases")
 @ValidProjectRelationship
-public class ReleasesController {
-	
-	@Inject
-	private Models models;
+public class ReleasesController extends AbstractProjectController<ProjectRelease> {
 	
 	@Inject
 	private ProjectRelease.Repository projectReleaseRepository;
-
-    @Context
-    private Request request;
     
     @Inject
     private UserInfoBean userInfo;
-
-    @PathParam("project")
-    private Project project;
-    
-    @Inject
-    private ControllerUtil controllerUtil;
     
     @Inject
     private MarkdownBean markdownBean;
-    
-    @Inject
-    private EncoderBean encoder;
     
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	@View("project/releases.jsp")
 	public void list() {
-		models.put("project", project);
+		super.list();
 	}
 
 	@GET
@@ -101,16 +80,16 @@ public class ReleasesController {
 			}
 		}
 		
-		models.put("project", project);
+		models.put("project", project); //$NON-NLS-1$
 		
-		models.put("doc", doc);
+		models.put("doc", doc); //$NON-NLS-1$
 
 		if(anon) {
-			return Response.ok(new Viewable("project/releases.jsp"))
+			return Response.ok(new Viewable("project/releases.jsp")) //$NON-NLS-1$
 				.header(HttpHeaders.ETAG,  etag.getValue())
 				.build();
 		} else {
-			return Response.ok(new Viewable("project/releases.jsp"))
+			return Response.ok(new Viewable("project/releases.jsp")) //$NON-NLS-1$
 				.build();
 		}
 	}
@@ -122,14 +101,10 @@ public class ReleasesController {
 	@View("project/release-edit.jsp")
 	@RolesAllowed("login")
 	public void edit(@PathParam("doc") ProjectRelease doc) {
-		controllerUtil.validateEditable(project, doc);
-		
-		models.put("project", project);
-		
 		if(StringUtil.isEmpty(doc.getDescriptionMarkdown())) {
 			doc.setDescriptionMarkdown(doc.getDescription());
 		}
-		models.put("doc", doc);
+		super.edit(doc);
 	}
 	
 	@Path("@new")
@@ -139,13 +114,9 @@ public class ReleasesController {
 	@View("project/release-edit.jsp")
 	@RolesAllowed("login")
 	public void compose() {
-		controllerUtil.validateEditable(project);
-		
-		models.put("project", project);
-		
 		var doc = new ProjectRelease();
 		doc.setAttachments(new ArrayList<>());
-		models.put("doc", doc);
+		super.compose(doc);
 	}
 	
 	@Path("@new")
@@ -158,7 +129,7 @@ public class ReleasesController {
 		
 		var doc = updateFromPayload(new ProjectRelease(), entityParts);
 
-		return encoder.urlFormat("redirect:projects/%s/releases/%s", project.getName(), doc.getDocumentId()); //$NON-NLS-1$
+		return redirect(doc);
 	}
 	
 	@Path("{doc}")
@@ -171,7 +142,7 @@ public class ReleasesController {
 		
 		var updated = updateFromPayload(doc, entityParts);
 
-		return encoder.urlFormat("redirect:projects/%s/releases/%s", project.getName(), updated.getDocumentId()); //$NON-NLS-1$
+		return redirect(updated);
 	}
 	
 	@Path("{doc}")
@@ -184,7 +155,7 @@ public class ReleasesController {
 		
 		projectReleaseRepository.delete(doc);
 
-		return encoder.urlFormat("redirect:projects/%s/releases", project.getName()); //$NON-NLS-1$
+		return redirect();
 	}
 	
 	@Path("{doc}/{fileName}")
@@ -202,12 +173,12 @@ public class ReleasesController {
 		List<EntityAttachment> attachments = new ArrayList<>();
 		for(EntityPart part : entityParts) {
 			switch(String.valueOf(part.getName())) {
-			case "releaseVersion" -> releaseVersion = controllerUtil.toString(part);
-			case "releaseLicense" -> releaseLicense = controllerUtil.toString(part);
-			case "releaseReleased" -> releaseReleased = "true".equals(controllerUtil.toString(part));
-			case "releaseDescription" -> releaseDescription = controllerUtil.toString(part);
-			case "deleteAttachments" -> deleteAttachments.add(controllerUtil.toString(part));
-			case "releaseFiles" -> {
+			case "releaseVersion" -> releaseVersion = controllerUtil.toString(part); //$NON-NLS-1$
+			case "releaseLicense" -> releaseLicense = controllerUtil.toString(part); //$NON-NLS-1$
+			case "releaseReleased" -> releaseReleased = Boolean.parseBoolean(controllerUtil.toString(part)); //$NON-NLS-1$
+			case "releaseDescription" -> releaseDescription = controllerUtil.toString(part); //$NON-NLS-1$
+			case "deleteAttachments" -> deleteAttachments.add(controllerUtil.toString(part)); //$NON-NLS-1$
+			case "releaseFiles" -> { //$NON-NLS-1$
 				String fileName = part.getFileName()
 					.map(name -> StringUtil.isEmpty(name) ? UUID.randomUUID().toString() : name)
 					.orElseGet(() -> UUID.randomUUID().toString());

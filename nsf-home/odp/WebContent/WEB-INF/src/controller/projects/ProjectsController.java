@@ -168,7 +168,7 @@ public class ProjectsController {
 		
 		project = projectRepository.save(project, true);
 
-		return encoder.urlFormat("redirect:projects/%s", project.getName()); //$NON-NLS-1$
+		return String.format("redirect:projects/%s", encoder.urlEncode(project.getName())); //$NON-NLS-1$
 	}
 	
 	@Path("{project}/defects")

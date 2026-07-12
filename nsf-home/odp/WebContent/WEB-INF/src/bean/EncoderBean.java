@@ -15,12 +15,10 @@
  */
 package bean;
 
-import java.io.UncheckedIOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -47,27 +45,10 @@ public class EncoderBean {
 	 */
 	public String urlEncode(final String value) {
 		if(StringUtil.isEmpty(value)) {
-			return "";
+			return ""; //$NON-NLS-1$
 		} else {
-			try {
-				return URLEncoder.encode(value, "UTF-8");
-			} catch(UnsupportedEncodingException e) {
-				throw new UncheckedIOException(e);
-			}
+			return URLEncoder.encode(value, StandardCharsets.UTF_8);
 		}
-	}
-	
-	/**
-	 * Formats the pattern as with {@link String#format}, URL-encoding each
-	 * of {@code parts} as it does.
-	 * 
-	 * @param pattern the pattern to format
-	 * @param parts the parts to place in the format
-	 * @return the formatted URL
-	 */
-	public String urlFormat(final String pattern, String... parts) {
-		String[] formattedParts = Stream.of(parts).map(this::urlEncode).toArray(String[]::new);
-		return String.format(pattern, (Object[])formattedParts);
 	}
 	
 	/**

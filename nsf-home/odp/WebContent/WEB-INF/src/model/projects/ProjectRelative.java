@@ -6,4 +6,6 @@ package model.projects;
  */
 public interface ProjectRelative {
 	String getProjectName();
+	
+	String getDocumentId();
 }

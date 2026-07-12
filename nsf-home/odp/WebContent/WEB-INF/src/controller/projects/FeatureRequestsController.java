@@ -7,14 +7,11 @@ import java.util.List;
 
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
-import bean.EncoderBean;
 import bean.MarkdownBean;
 import bean.UserInfoBean;
-import controller.ControllerUtil;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
-import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -25,19 +22,16 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Request;
 import model.projects.FeatureRequest;
-import model.projects.Project;
 import rest.ext.ValidProjectRelationship;
 import util.StringUtil;
 
 @Path("projects/{project}/requests")
 @ValidProjectRelationship
 @Controller
-public class FeatureRequestsController {
+public class FeatureRequestsController extends AbstractProjectController<FeatureRequest> {
 	public enum Filter {
 		submitted,
 		investigating,
@@ -48,22 +42,10 @@ public class FeatureRequestsController {
 	public static record FilterNode(Filter filter, boolean active, long count, String messageKey) {}
 	
 	@Inject
-	private Models models;
-	
-	@Inject
 	private FeatureRequest.Repository requestRepository;
 	
 	@Inject
 	private model.projects.Response.Repository responseRepository;
-
-    @Context
-    private Request request;
-
-    @PathParam("project")
-    private Project project;
-	
-	@Inject
-	private ControllerUtil controllerUtil;
 	
 	@Inject
 	private MarkdownBean markdownBean;
@@ -71,12 +53,10 @@ public class FeatureRequestsController {
 	@Inject
 	private UserInfoBean userInfo;
 	
-	@Inject
-	private EncoderBean encoder;
-	
 	@GET
 	@View("project/requests.jsp")
 	public void list(@QueryParam("filter") String filterParam) {
+		super.list();
 		pushRequestsContext(filterParam);
 	}
 	
@@ -85,13 +65,9 @@ public class FeatureRequestsController {
 	@View("project/request-edit.jsp")
 	@RolesAllowed("login")
 	public void compose() {
-		controllerUtil.validateEditable(project);
-		
-		models.put("project", project); //$NON-NLS-1$
-		
 		var doc = new FeatureRequest();
 		doc.setAttachments(new ArrayList<>());
-		models.put("doc", doc); //$NON-NLS-1$
+		super.compose(doc);
 	}
 	
 	@Path("{doc}/@edit")
@@ -101,14 +77,10 @@ public class FeatureRequestsController {
 	@View("project/request-edit.jsp")
 	@RolesAllowed("login")
 	public void edit(@PathParam("doc") FeatureRequest doc) {
-		controllerUtil.validateEditable(project, doc);
-		
-		models.put("project", project); //$NON-NLS-1$
-		
 		if(StringUtil.isEmpty(doc.getBodyMarkdown())) {
 			doc.setBodyMarkdown(doc.getBody());
 		}
-		models.put("doc", doc); //$NON-NLS-1$
+		super.edit(doc);
 	}
 	
 	@Path("{doc}")
@@ -121,7 +93,7 @@ public class FeatureRequestsController {
 		
 		requestRepository.delete(doc);
 
-		return encoder.urlFormat("redirect:projects/%s/requests", project.getName()); //$NON-NLS-1$
+		return redirect();
 	}
 	
 	@Path("{doc}")
@@ -134,7 +106,7 @@ public class FeatureRequestsController {
 		
 		var updated = updateFromPayload(doc, entityParts);
 
-		return encoder.urlFormat("redirect:projects/%s/requests/%s", project.getName(), updated.getDocumentId()); //$NON-NLS-1$
+		return redirect(updated);
 	}
 	
 	@Path("{doc}")
@@ -166,7 +138,7 @@ public class FeatureRequestsController {
 		doc.setStatus(status);
 		requestRepository.save(doc, true);
 
-		return encoder.urlFormat("redirect:projects/%s/requests/%s", project.getName(), doc.getDocumentId()); //$NON-NLS-1$//$NON-NLS-1$ //$NON-NLS-2$
+		return redirect(doc);
 	}
 	
 	@Path("@new")
@@ -178,7 +150,7 @@ public class FeatureRequestsController {
 		
 		var doc = updateFromPayload(new FeatureRequest(), entityParts);
 
-		return encoder.urlFormat("redirect:projects/%s/requests/%s", project.getName(), doc.getDocumentId()); //$NON-NLS-1$//$NON-NLS-1$ //$NON-NLS-2$
+		return redirect(doc);
 	}
 	
 	private FeatureRequest updateFromPayload(FeatureRequest doc, List<EntityPart> entityParts) {
@@ -237,7 +209,6 @@ public class FeatureRequestsController {
 			models.put("filterQuery", "filter=" + activeFilter[0]); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
-		models.put("project", project); //$NON-NLS-1$
 		var requests = switch(activeFilter[0]) {
 			case added -> requestRepository.listAdded(query).toList();
 			case all -> requestRepository.listAll(query).toList();

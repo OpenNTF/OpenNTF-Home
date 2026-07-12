@@ -11,14 +11,11 @@ import java.util.UUID;
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
 
-import bean.EncoderBean;
 import bean.MarkdownBean;
 import bean.UserInfoBean;
-import controller.ControllerUtil;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
-import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -28,54 +25,36 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.EntityTag;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import model.projects.Documentation;
-import model.projects.Project;
 import rest.ext.ValidProjectRelationship;
 import util.StringUtil;
 
 @Path("projects/{project}/documentation")
 @ValidProjectRelationship
-public class DocumentationController {
-	
-	@Inject
-	private Models models;
+public class DocumentationController extends AbstractProjectController<Documentation> {
 	
 	@Inject
 	private Documentation.Repository documentationRepository;
-	
-	@Inject
-	private ControllerUtil controllerUtil;
-
-    @Context
-    private Request request;
-    
-    @PathParam("project")
-    private Project project;
     
     @Inject
     private MarkdownBean markdownBean;
     
     @Inject
     private UserInfoBean userInfo;
-    
-    @Inject
-    private EncoderBean encoder;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	@View("project/documentations.jsp")
 	public void list() {
-		models.put("project", project);
+		super.list();
 	}
 
     @Path("{doc}")
@@ -91,11 +70,11 @@ public class DocumentationController {
 			return response.build();
 		}
 		
-		models.put("project", project);
+		models.put("project", project); //$NON-NLS-1$
 		
-		models.put("doc", doc);
+		models.put("doc", doc); //$NON-NLS-1$
 		
-		return Response.ok(new Viewable("project/documentations.jsp"))
+		return Response.ok(new Viewable("project/documentations.jsp")) //$NON-NLS-1$
 			.header(HttpHeaders.ETAG,  etag.getValue())
 			.build();
 	}
@@ -115,12 +94,12 @@ public class DocumentationController {
 	public void edit(@PathParam("doc") Documentation doc) {
 		controllerUtil.validateEditable(project, doc);
 		
-		models.put("project", project);
+		models.put("project", project); //$NON-NLS-1$
 		
 		if(StringUtil.isEmpty(doc.getBodyMarkdown())) {
 			doc.setBodyMarkdown(doc.getBody());
 		}
-		models.put("doc", doc);
+		models.put("doc", doc); //$NON-NLS-1$
 	}
 	
 	@Path("@new")
@@ -130,13 +109,9 @@ public class DocumentationController {
 	@View("project/documentation-edit.jsp")
 	@RolesAllowed("login")
 	public void compose() {
-		controllerUtil.validateEditable(project);
-		
-		models.put("project", project);
-		
 		var doc = new Documentation();
 		doc.setAttachments(new ArrayList<>());
-		models.put("doc", doc);
+		super.compose(doc);
 	}
 	
 	@Path("{doc}")
@@ -149,7 +124,7 @@ public class DocumentationController {
 		
 		documentationRepository.delete(doc);
 
-		return encoder.urlFormat("redirect:projects/%s/documentation", project.getName()); //$NON-NLS-1$
+		return redirect();
 	}
 	
 	@Path("{doc}")
@@ -162,7 +137,7 @@ public class DocumentationController {
 		
 		var updated = updateFromPayload(doc, entityParts);
 
-		return encoder.urlFormat("redirect:projects/%s/documentation/%s", project.getName(), updated.getDocumentId()); //$NON-NLS-1$
+		return redirect(updated);
 	}
 	
 	@Path("@new")
@@ -175,7 +150,7 @@ public class DocumentationController {
 		
 		var doc = updateFromPayload(new Documentation(), entityParts);
 
-		return encoder.urlFormat("redirect:projects/%s/documentation/%s", project.getName(), doc.getDocumentId()); //$NON-NLS-1$
+		return redirect(doc);
 	}
 	
 	private Documentation updateFromPayload(Documentation doc, List<EntityPart> entityParts) {
@@ -185,10 +160,10 @@ public class DocumentationController {
 		List<EntityAttachment> attachments = new ArrayList<>();
 		for(EntityPart part : entityParts) {
 			switch(String.valueOf(part.getName())) {
-			case "docName" -> docName = controllerUtil.toString(part);
-			case "docBody" -> docBody = controllerUtil.toString(part);
-			case "deleteAttachments" -> deleteAttachments.add(controllerUtil.toString(part));
-			case "files" -> {
+			case "docName" -> docName = controllerUtil.toString(part); //$NON-NLS-1$
+			case "docBody" -> docBody = controllerUtil.toString(part); //$NON-NLS-1$
+			case "deleteAttachments" -> deleteAttachments.add(controllerUtil.toString(part)); //$NON-NLS-1$
+			case "files" -> { //$NON-NLS-1$
 				String fileName = part.getFileName()
 					.map(name -> StringUtil.isEmpty(name) ? UUID.randomUUID().toString() : name)
 					.orElseGet(() -> UUID.randomUUID().toString());

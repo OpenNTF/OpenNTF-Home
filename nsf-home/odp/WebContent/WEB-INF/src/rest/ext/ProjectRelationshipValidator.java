@@ -16,13 +16,11 @@ public class ProjectRelationshipValidator implements ConstraintValidator<ValidPr
 
 	@Override
 	public boolean isValid(Object value, ConstraintValidatorContext context) {
-		System.out.println("Validating " + value.getClass());
-		
 		Project project = null;
 		List<ProjectRelative> relatives = new ArrayList<>();
 		
 		Class<?> clazz = value.getClass();
-		if(clazz.getName().contains("$Proxy$")) {
+		if(clazz.getName().contains("$Proxy$")) { //$NON-NLS-1$
 			clazz = clazz.getSuperclass();
 		}
 		Field[] fields = clazz.getDeclaredFields();
