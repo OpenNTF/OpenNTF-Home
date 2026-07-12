@@ -187,6 +187,8 @@ public class ProjectsController {
 	public Response getProjectDefect(@PathParam("documentId") String documentId) {
 		var doc = defectRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Defect for ID {0}", documentId)));
+
+		controllerUtil.validateRelatives(project, doc);
 		
 		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(doc.getEtag());
 		ResponseBuilder response = request.evaluatePreconditions(etag);
@@ -219,6 +221,8 @@ public class ProjectsController {
 	public Response getProjectDiscussion(@PathParam("discussionId") String discussionId) {
 		Discussion discussion = discussionRepository.findById(discussionId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Discussion for ID {0}", discussionId)));
+
+		controllerUtil.validateRelatives(project, discussion);
 		
 		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(discussion.getEtag());
 		ResponseBuilder response = request.evaluatePreconditions(etag);
@@ -251,6 +255,8 @@ public class ProjectsController {
 	public Response getProjectReview(@PathParam("documentId") String documentId) {
 		Review review = reviewRepository.findById(documentId)
 			.orElseThrow(() -> new NotFoundException(MessageFormat.format("Unable to find Review for ID {0}", documentId)));
+
+		controllerUtil.validateRelatives(project, review);
 		
 		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(review.getEtag());
 		ResponseBuilder response = request.evaluatePreconditions(etag);

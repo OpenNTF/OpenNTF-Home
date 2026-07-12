@@ -141,6 +141,8 @@ public class FeatureRequestsController {
 	@GET
 	@View("project/requests.jsp")
 	public void show(@PathParam("doc") FeatureRequest doc, @QueryParam("filter") String filterParam) {
+		controllerUtil.validateRelatives(project, doc);
+		
 		pushRequestsContext(filterParam);
 		
 		models.put("doc", doc); //$NON-NLS-1$

@@ -16,6 +16,8 @@ public class ProjectRelationshipValidator implements ConstraintValidator<ValidPr
 
 	@Override
 	public boolean isValid(Object value, ConstraintValidatorContext context) {
+		System.out.println("Validating " + value.getClass());
+		
 		Project project = null;
 		List<ProjectRelative> relatives = new ArrayList<>();
 		
@@ -38,6 +40,7 @@ public class ProjectRelationshipValidator implements ConstraintValidator<ValidPr
 					}
 				}
 			}
+			
 		} catch(IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
@@ -45,6 +48,7 @@ public class ProjectRelationshipValidator implements ConstraintValidator<ValidPr
 		if(project == null) {
 			return relatives.isEmpty();
 		}
+		
 		
 		String projectName = project.getName();
 		for(ProjectRelative rel : relatives) {

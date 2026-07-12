@@ -89,6 +89,8 @@ public class ReleasesController {
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	public Response show(@PathParam("doc") ProjectRelease doc) {
+		controllerUtil.validateRelatives(project, doc);
+		
 		boolean anon = userInfo.isAnonymous();
 		EntityTag etag = null;
 		if(anon) {

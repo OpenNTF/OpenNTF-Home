@@ -66,6 +66,8 @@ public class ScreenshotsController {
 	@Path("{doc}/{fileName}")
 	@GET
 	public Response show(@PathParam("doc") Screenshot doc, @PathParam("fileName") String fileName) throws IOException {
+		controllerUtil.validateRelatives(project, doc);
+		
 		return controllerUtil.fetchAttachment(doc, fileName, request);
 	}
 	

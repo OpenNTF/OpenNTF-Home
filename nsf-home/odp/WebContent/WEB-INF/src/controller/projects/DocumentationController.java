@@ -83,6 +83,8 @@ public class DocumentationController {
 	@Produces(MediaType.TEXT_HTML)
 	@Controller
 	public Response show(@PathParam("doc") Documentation doc) {
+    	controllerUtil.validateRelatives(project, doc);
+    	
 		EntityTag etag = RuntimeDelegate.getInstance().createHeaderDelegate(EntityTag.class).fromString(doc.getEtag());
 		ResponseBuilder response = request.evaluatePreconditions(etag);
 		if(response != null) {

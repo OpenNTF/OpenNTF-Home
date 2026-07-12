@@ -120,6 +120,16 @@ public class ControllerUtil {
 		return true;
 	}
 	
+	/**
+	 * Validates that the project and any provided relatives are editable.
+	 * 
+	 * <p>When called with relatives, this also implicitly calls {@link #validateRelatives}.</p>
+	 * 
+	 * @param project the project to check
+	 * @param relatives the relatives to check
+	 * @throws NotAuthorizedException if any elements are not editable
+	 * @throws IllegalArgumentException if any relatives are not attached to the project
+	 */
 	@SuppressWarnings("resource")
 	public void validateEditable(Project project, ProjectRelative... relatives) {
 		if(!isProjectEditable(project)) {
@@ -128,6 +138,15 @@ public class ControllerUtil {
 		for(var relative : relatives) {
 			if(!isEditable(relative)) {
 				throw new NotAuthorizedException(MessageFormat.format("{0} is not editable", relative.getClass().getSimpleName()), Response.status(Status.UNAUTHORIZED).build());
+			}
+		}
+	}
+	
+	public void validateRelatives(Project project, ProjectRelative... relatives) {
+		String projectName = project.getName();
+		for(ProjectRelative rel : relatives) {
+			if(!projectName.equals(rel.getProjectName())) {
+				throw new IllegalArgumentException("Project relatives must be for the named project");
 			}
 		}
 	}
