@@ -1,8 +1,6 @@
 package controller.projects;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,6 +11,7 @@ import java.util.UUID;
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
 
+import bean.EncoderBean;
 import bean.MarkdownBean;
 import bean.UserInfoBean;
 import controller.ControllerUtil;
@@ -67,6 +66,9 @@ public class ReleasesController {
     
     @Inject
     private MarkdownBean markdownBean;
+    
+    @Inject
+    private EncoderBean encoder;
     
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -153,8 +155,8 @@ public class ReleasesController {
 		controllerUtil.validateEditable(project);
 		
 		var doc = updateFromPayload(new ProjectRelease(), entityParts);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + doc.getDocumentId();
+
+		return encoder.urlFormat("redirect:projects/%s/releases/%s", project.getName(), doc.getDocumentId()); //$NON-NLS-1$
 	}
 	
 	@Path("{doc}")
@@ -165,9 +167,9 @@ public class ReleasesController {
 	public String update(@PathParam("doc") ProjectRelease doc, List<EntityPart> entityParts) {
 		controllerUtil.validateEditable(project, doc);
 		
-		var updatedRelease = updateFromPayload(doc, entityParts);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases/" + updatedRelease.getDocumentId();
+		var updated = updateFromPayload(doc, entityParts);
+
+		return encoder.urlFormat("redirect:projects/%s/releases/%s", project.getName(), updated.getDocumentId()); //$NON-NLS-1$
 	}
 	
 	@Path("{doc}")
@@ -179,8 +181,8 @@ public class ReleasesController {
 		controllerUtil.validateEditable(project, doc);
 		
 		projectReleaseRepository.delete(doc);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/releases";
+
+		return encoder.urlFormat("redirect:projects/%s/releases", project.getName()); //$NON-NLS-1$
 	}
 	
 	@Path("{doc}/{fileName}")

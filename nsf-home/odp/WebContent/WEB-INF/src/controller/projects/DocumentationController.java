@@ -1,8 +1,6 @@
 package controller.projects;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,6 +11,7 @@ import java.util.UUID;
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 import org.eclipse.krazo.engine.Viewable;
 
+import bean.EncoderBean;
 import bean.MarkdownBean;
 import bean.UserInfoBean;
 import controller.ControllerUtil;
@@ -67,6 +66,9 @@ public class DocumentationController {
     
     @Inject
     private UserInfoBean userInfo;
+    
+    @Inject
+    private EncoderBean encoder;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -144,8 +146,8 @@ public class DocumentationController {
 		controllerUtil.validateEditable(project, doc);
 		
 		documentationRepository.delete(doc);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/documentation";
+
+		return encoder.urlFormat("redirect:projects/%s/documentation", project.getName()); //$NON-NLS-1$
 	}
 	
 	@Path("{doc}")
@@ -157,8 +159,8 @@ public class DocumentationController {
 		controllerUtil.validateEditable(project, doc);
 		
 		var updated = updateFromPayload(doc, entityParts);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/documentation/" + updated.getDocumentId();
+
+		return encoder.urlFormat("redirect:projects/%s/documentation/%s", project.getName(), updated.getDocumentId()); //$NON-NLS-1$
 	}
 	
 	@Path("@new")
@@ -170,8 +172,8 @@ public class DocumentationController {
 		controllerUtil.validateEditable(project);
 		
 		var doc = updateFromPayload(new Documentation(), entityParts);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/documentation/" + doc.getDocumentId();
+
+		return encoder.urlFormat("redirect:projects/%s/documentation/%s", project.getName(), doc.getDocumentId()); //$NON-NLS-1$
 	}
 	
 	private Documentation updateFromPayload(Documentation doc, List<EntityPart> entityParts) {

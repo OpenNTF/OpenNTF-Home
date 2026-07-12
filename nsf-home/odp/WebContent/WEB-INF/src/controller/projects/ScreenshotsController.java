@@ -1,8 +1,6 @@
 package controller.projects;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +8,7 @@ import java.util.UUID;
 
 import org.eclipse.jnosql.communication.driver.attachment.EntityAttachment;
 
+import bean.EncoderBean;
 import controller.ControllerUtil;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -52,6 +51,9 @@ public class ScreenshotsController {
     
     @PathParam("project")
     private Project project;
+    
+    @Inject
+    private EncoderBean encoder;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -125,7 +127,7 @@ public class ScreenshotsController {
 		
 		screenshotRepository.save(doc, true);
 		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/screenshots";
+		return encoder.urlFormat("redirect:projects/%s/screenshots", project.getName()); //$NON-NLS-1$
 	}
 	
 	@Path("{doc}/{fileName}")
@@ -145,6 +147,6 @@ public class ScreenshotsController {
 			screenshotRepository.save(doc, true);
 		}
 
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/screenshots";
+		return encoder.urlFormat("redirect:projects/%s/screenshots", project.getName()); //$NON-NLS-1$
 	}
 }

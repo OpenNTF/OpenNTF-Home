@@ -15,8 +15,6 @@
  */
 package controller.projects;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +22,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.krazo.engine.Viewable;
 
+import bean.EncoderBean;
 import controller.ControllerUtil;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.data.Sort;
@@ -80,6 +79,9 @@ public class ProjectsController {
     
     @Inject
     private ControllerUtil controllerUtil;
+    
+    @Inject
+    private EncoderBean encoder;
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -165,8 +167,8 @@ public class ProjectsController {
 		project.setDetails(newProjectDetails);
 		
 		project = projectRepository.save(project, true);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8);
+
+		return encoder.urlFormat("redirect:projects/%s", project.getName()); //$NON-NLS-1$
 	}
 	
 	@Path("{project}/defects")

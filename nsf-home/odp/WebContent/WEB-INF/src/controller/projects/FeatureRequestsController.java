@@ -1,7 +1,5 @@
 package controller.projects;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +7,7 @@ import java.util.List;
 
 import org.openntf.xsp.jakarta.nosql.mapping.extension.ViewQuery;
 
+import bean.EncoderBean;
 import bean.MarkdownBean;
 import bean.UserInfoBean;
 import controller.ControllerUtil;
@@ -72,6 +71,9 @@ public class FeatureRequestsController {
 	@Inject
 	private UserInfoBean userInfo;
 	
+	@Inject
+	private EncoderBean encoder;
+	
 	@GET
 	@View("project/requests.jsp")
 	public void list(@QueryParam("filter") String filterParam) {
@@ -118,8 +120,8 @@ public class FeatureRequestsController {
 		controllerUtil.validateEditable(project, doc);
 		
 		requestRepository.delete(doc);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests";
+
+		return encoder.urlFormat("redirect:projects/%s/requests", project.getName()); //$NON-NLS-1$
 	}
 	
 	@Path("{doc}")
@@ -131,8 +133,8 @@ public class FeatureRequestsController {
 		controllerUtil.validateEditable(project, doc);
 		
 		var updated = updateFromPayload(doc, entityParts);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + updated.getDocumentId();
+
+		return encoder.urlFormat("redirect:projects/%s/requests/%s", project.getName(), updated.getDocumentId()); //$NON-NLS-1$
 	}
 	
 	@Path("{doc}")
@@ -161,8 +163,8 @@ public class FeatureRequestsController {
 		
 		doc.setStatus(status);
 		requestRepository.save(doc, true);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + doc.getDocumentId(); //$NON-NLS-1$ //$NON-NLS-2$
+
+		return encoder.urlFormat("redirect:projects/%s/requests/%s", project.getName(), doc.getDocumentId()); //$NON-NLS-1$//$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	@Path("@new")
@@ -173,8 +175,8 @@ public class FeatureRequestsController {
 		controllerUtil.validateEditable(project);
 		
 		var doc = updateFromPayload(new FeatureRequest(), entityParts);
-		
-		return "redirect:projects/" + URLEncoder.encode(project.getName(), StandardCharsets.UTF_8) + "/requests/" + doc.getDocumentId(); //$NON-NLS-1$ //$NON-NLS-2$
+
+		return encoder.urlFormat("redirect:projects/%s/requests/%s", project.getName(), doc.getDocumentId()); //$NON-NLS-1$//$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private FeatureRequest updateFromPayload(FeatureRequest doc, List<EntityPart> entityParts) {
