@@ -20,6 +20,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 import util.AppPathUtil;
+import util.StringUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,6 +33,23 @@ public class UrlBean {
 	
 	public URI getRequestUri() throws URISyntaxException {
 		return new URI(req.getRequestURL().toString()).resolve(req.getContextPath() + "/"); //$NON-NLS-1$
+	}
+	
+	/**
+	 * Utility method for getting the actual requested path and query string
+	 * for e.g. post-action redirection.
+	 * 
+	 * @return the original requested path, e.g. {@code "/foo/bar?baz=hello"}
+	 */
+	public String getRequestedPathAndQuery() {
+		var result = new StringBuilder();
+		result.append(req.getRequestURI());
+		var query = req.getQueryString();
+		if(StringUtil.isNotEmpty(query)) {
+			result.append('?');
+			result.append(query);
+		}
+		return result.toString();
 	}
 	
 	public String relativizeUrl(String url) {

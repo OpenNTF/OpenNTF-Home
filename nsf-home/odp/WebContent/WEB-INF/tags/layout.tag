@@ -58,7 +58,7 @@
 			
 			<div class="user-info">
 				<c:if test="${userInfo.anonymous}">
-					<a href="/names.nsf?Login&RedirectTo=${encoder.urlEncode(mvc.basePath)}"><c:out value="${translation.loginLink}"/></a>
+					<a href="/names.nsf?Login&RedirectTo=${encoder.urlEncode(urlBean.requestedPathAndQuery)}"><c:out value="${translation.loginLink}"/></a>
 				</c:if>
 				<c:if test="${not userInfo.anonymous}">
 					<nav>
@@ -68,7 +68,7 @@
 								<ul>
 									<li><a href="${mvc.basePath}/users/@me"><c:out value="${translation.profile}"/></a></li>
 									
-									<li><a href="/names.nsf?Logout&RedirectTo=${encoder.urlEncode(mvc.basePath)}">
+									<li><a href="/names.nsf?Logout&RedirectTo=${encoder.urlEncode(urlBean.requestedPathAndQuery)}">
 										<c:out value="${translation.logoutLink}"/>
 									</a></li>
 								</ul>
