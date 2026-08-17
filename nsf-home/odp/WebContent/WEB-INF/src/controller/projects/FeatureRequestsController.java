@@ -114,6 +114,7 @@ public class FeatureRequestsController extends AbstractProjectController<Feature
 	@View("project/requests.jsp")
 	public void show(@PathParam("doc") FeatureRequest doc, @QueryParam("filter") String filterParam) {
 		controllerUtil.validateRelatives(project, doc);
+		models.put("project", project); //$NON-NLS-1$
 		
 		pushRequestsContext(filterParam);
 		
