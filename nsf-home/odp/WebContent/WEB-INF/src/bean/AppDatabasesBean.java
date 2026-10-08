@@ -22,8 +22,6 @@ import java.util.Map;
 
 import org.openntf.xsp.jakarta.nosql.communication.driver.DominoDocumentManager;
 
-import com.ibm.xsp.model.domino.DominoUtils;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.Produces;
@@ -137,7 +135,16 @@ public class AppDatabasesBean {
 	private Database openDatabase(String apiPath) {
 		return openDatabases.computeIfAbsent(apiPath, key -> {
 			try {
-				return DominoUtils.openDatabaseByName(getSession(), key);
+				int bangIndex = key.indexOf("!!");
+				String server = "";
+				String filePath;
+				if(bangIndex > -1) {
+					server = key.substring(0, bangIndex);
+					filePath = key.substring(bangIndex+2);
+				} else {
+					filePath = key;
+				}
+				return getSession().getDatabase(server, filePath);
 			} catch(NotesException e) {
 				throw new RuntimeException(e);
 			}
