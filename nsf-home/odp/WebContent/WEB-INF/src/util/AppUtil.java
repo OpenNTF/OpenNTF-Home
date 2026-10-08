@@ -1,0 +1,98 @@
+/**
+ * Copyright (c) 2022-2025 Contributors to the OpenNTF Home App Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package util;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.xml.bind.DatatypeConverter;
+import lotus.domino.Directory;
+import lotus.domino.DirectoryNavigator;
+import lotus.domino.NotesException;
+import lotus.domino.Session;
+
+public enum AppUtil {
+	;
+	
+	public static String getUserWebSite(String id) {
+		if(StringUtil.isNotEmpty(id) && !"anonymous".equalsIgnoreCase(id)) {
+			// Try to find their email address
+			try {
+				Session session = CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
+				Directory dir = session.getDirectory();
+				DirectoryNavigator nav = dir.lookupNames("($Users)", id, "WebSite");
+				if(nav.findFirstMatch()) {
+					List<?> vals = nav.getFirstItemValue();
+					if(vals != null && !vals.isEmpty()) {
+						return StringUtil.toString(vals.get(0));
+					}
+				}
+			} catch(NotesException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return null;
+	}
+	
+	public static String getGravatarUrl(String id) {
+		if(StringUtil.isNotEmpty(id) && !"anonymous".equalsIgnoreCase(id)) {
+			// Try to find their email address
+			try {
+				Session session = CDI.current().select(Session.class, NamedLiteral.of("dominoSession")).get();
+				Directory dir = session.getDirectory();
+				DirectoryNavigator nav = dir.lookupNames("($Users)", id, "InternetAddress");
+				String email = null;
+				if(nav.findFirstMatch()) {
+					List<?> vals = nav.getFirstItemValue();
+					if(vals != null && !vals.isEmpty()) {
+						email = StringUtil.toString(vals.get(0));
+					}
+				}
+				if(StringUtil.isEmpty(email)) {
+					// Then just do a hash of their name
+					email = id;
+				}
+
+				MessageDigest md = MessageDigest.getInstance("MD5");
+			    md.update(email.getBytes());
+			    byte[] digest = md.digest();
+			    String md5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
+				return "https://www.gravatar.com/avatar/" + md5 + "?d=wavatar&s=256";
+			} catch(NotesException | NoSuchAlgorithmException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return "";
+	}
+	
+	public static <S, T> T computeIfAbsent(final Map<S, T> map, final S key, final Function<S, T> sup) {
+		synchronized(map) {
+			T result;
+			if(!map.containsKey(key)) {
+				result = sup.apply(key);
+				map.put(key, result);
+			} else {
+				result = map.get(key);
+			}
+			return result;
+		}
+	}
+}

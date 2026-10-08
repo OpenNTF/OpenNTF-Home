@@ -26,6 +26,7 @@
 <%@attribute name="showCreate" required="false" type="java.lang.Boolean" %>
 <%@attribute name="createLink" required="false" type="java.lang.String" %>
 <%@attribute name="createText" required="false" type="java.lang.String" %>
+<%@attribute name="query" required="false" type="java.lang.String" %>
 <%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <section class="activity-feed">
 			
@@ -47,7 +48,7 @@
 				<tr class="${pageScope.activeEntry ne null and pageScope.activeEntry.documentId eq listEntry.documentId ? 'active' : ''}">
 					<td><c:out value="${fn:escapeXml(temporalBean.formatDate(listEntry.entryDate))}"/></td>
 					<td>
-						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/${pageScope.urlPart}/${listEntry.documentId}">
+						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/${pageScope.urlPart}/${listEntry.documentId}${not empty pageScope.query ? '?' : ''}${pageScope.query}">
 							<c:out value="${empty listEntry[pageScope.titleProperty] ? translation.noTitle : listEntry[pageScope.titleProperty]}"/>
 						</a>
 						<br /><t:personName value="${listEntry.entryAuthor}" link="false"/>

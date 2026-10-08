@@ -39,7 +39,7 @@
 				</thead>
 				<tbody>
 					<c:forEach items="${project.releasesByDate}" var="listRelease">
-						<tr class="${release ne null and release.documentId eq listRelease.documentId ? 'active' : ''}">
+						<tr class="${doc ne null and doc.documentId eq listRelease.documentId ? 'active' : ''}">
 							<td><a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${listRelease.documentId}"><c:out value="${fn:escapeXml(temporalBean.formatDate(listRelease.releaseDate))}"/></a></td>
 							<td><c:out value="${listRelease.version}"/></td>
 							<td>${listRelease.downloadCount}</td>
@@ -49,56 +49,56 @@
 			</table>
 		</section>
 		<section>
-			<c:if test="${not empty release}">
+			<c:if test="${not empty doc}">
 			<fieldset>
-				<legend><c:out value="${release.version}"/></legend>
+				<legend><c:out value="${doc.version}"/></legend>
 				
 				<dl class="release-info">
 					<dt><c:out value="${translation.releaseName}"/></dt>
-					<dd><c:out value="${release.version}"/></dd>
+					<dd><c:out value="${doc.version}"/></dd>
 					
 					<dt><c:out value="${translation.releaseLicense}"/></dt>
-					<dd><c:out value="${release.licenseType}"/></dd>
+					<dd><c:out value="${doc.licenseType}"/></dd>
 					
 					<dt><c:out value="${translation.status}"/></dt>
-					<dd><c:out value="${release.released ? translation.statusReleased : translation.statusNotReleased}"/></dd>
+					<dd><c:out value="${doc.released ? translation.statusReleased : translation.statusNotReleased}"/></dd>
 					
 					<div>
 						<dt><c:out value="${translation.cleared}"/></dt>
-						<dd><c:out value="${release.releaseStatus}"/></dd>
+						<dd><c:out value="${doc.releaseStatus}"/></dd>
 					</div>
 					
 					<dt><c:out value="${translation.releasedOn}"/></dt>
-					<dd><time-ago value="${fn:escapeXml(release.releaseDate)}"></time-ago></dd>
+					<dd><time-ago value="${fn:escapeXml(doc.releaseDate)}"></time-ago></dd>
 					
 					<dt><c:out value="${translation.releaseBy}"/></dt>
 					<dd>
-						<c:forEach items="${release.masterChef}" var="name">
+						<c:forEach items="${doc.masterChef}" var="name">
 							<t:personName value="${name}"/>
 						</c:forEach>
 					</dd>
 					
 					<dt><c:out value="${translation.downloadCountLabel}"/></dt>
-					<dd><c:out value="${release.downloadCount}"/></dd>
+					<dd><c:out value="${doc.downloadCount}"/></dd>
 				</dl>
 				<dl>
 					<dt><c:out value="${translation.downloadsLabel}"/></dt>
 					<dd>
 						<ul>
-						<c:forEach items="${release.downloads}" var="download">
-							<li><a href="${mvc.basePath}/projects/${encoder.urlEncode(release.projectName)}/releases/${release.documentId}/${encoder.urlEncode(download.name)}"><c:out value="${download.name}"/></a></li>
+						<c:forEach items="${doc.downloads}" var="download">
+							<li><a href="${mvc.basePath}/projects/${encoder.urlEncode(doc.projectName)}/releases/${doc.documentId}/${encoder.urlEncode(download.name)}"><c:out value="${download.name}"/></a></li>
 						</c:forEach>
 						</ul>
 					</dd>
 				</dl>
 				
 				<h3><c:out value="${translation.description}"/></h3>
-				<div><c:out value="${markdown.toHtml(release.description)}" escapeXml="false"/></div>
+				<div><c:out value="${markdown.toHtml(doc.description)}" escapeXml="false"/></div>
 				
-				<c:if test="${releaseEditable}">
+				<c:if test="${docEditable}">
 					<t:actionBar>
-						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}/@edit" class="edit-button"><c:out value="${translation.editRelease}"/></a>
-						<t:deleteButton action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${release.documentId}" value="${translation.deleteRelease}" confirmation="${translation.confirmDeleteRelease}"/>
+						<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${doc.documentId}/@edit" class="edit-button"><c:out value="${translation.editRelease}"/></a>
+						<t:deleteButton action="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/releases/${doc.documentId}" value="${translation.deleteRelease}" confirmation="${translation.confirmDeleteRelease}"/>
 					</t:actionBar>
 				</c:if>
 			</fieldset>

@@ -18,13 +18,24 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" session="false" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
+<%@taglib prefix="fn" uri="jakarta.tags.functions" %>
 <t:projectLayout project="${project}" current="defects">
 	<div class="lefthand-view-layout">
-		<t:activityFeed items="${project.defects}" urlPart="defects" activeEntry="${defect}" project="${project}"
+		<t:activityFeed items="${project.defects}" urlPart="defects" activeEntry="${doc}" project="${project}"
 			titleProperty="subject"/>
 		<section>
-			<c:if test="${not empty defect}">
-				<c:out value="${markdown.toHtml(defect.body)}" escapeXml="false"/>
+			<c:if test="${not empty doc}">
+				<article class="comment" data-indent="0">
+					<img class="avatar" alt="User avatar image" src="${usersBean[doc.entryAuthor].getCleanThumbnailUrl()}"/>
+					
+					<header><c:out value="${doc.subject}"/></header>
+					<div class="body"><c:out value="${doc.body}" escapeXml="false"/></div>
+					<footer>
+						<c:out value="${encoder.toCommonName(doc.entryAuthor)}"/>
+						|
+						<time-ago value="${fn:escapeXml(doc.entryDate)}"></time-ago>
+					</footer>
+				</article>
 			</c:if>
 		</section>
 	</div>
