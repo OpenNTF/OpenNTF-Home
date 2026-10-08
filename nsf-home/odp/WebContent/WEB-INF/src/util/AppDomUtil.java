@@ -113,11 +113,8 @@ public enum AppDomUtil {
     /**
      * Parses the provided XML reader into a {@link Document} instance.
      * 
-     * @param xml the XML reader to parse
+     * @param r the XML reader to parse
      * @return a parsed {@link Document} instance
-     * @throws ParserConfigurationException if there is a problem initializng the
-     *       {@link DocumentBuilder}
-     * @throws SAXException if there is a problem parsing the XML
      */
     public static Document parseXml(Reader r) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -223,7 +220,7 @@ public enum AppDomUtil {
      * Creates a new child element beneath the provided element.
      * 
      * @param parent the parent document to append to
-     * @param nodeName the name of the new element
+     * @param name the name of the new element
      * @return the created element
      * @since 3.7.1
      */
@@ -251,7 +248,7 @@ public enum AppDomUtil {
      * 
      * <p>If {@code transformer} is {@code null}, this will use default formatting.</p>
      * 
-     * @param os the destination writer
+     * @param w the destination writer
      * @param node the node to serialize
      * @param transformer the transformer to use; may be {@code null}
      */
@@ -302,6 +299,7 @@ public enum AppDomUtil {
         return parent.insertBefore(newChild, refChild);
     }
     
+    @SuppressWarnings("HttpUrlsUsage")
     public static Transformer createTransformer(final InputStream xsltStream) {
         Transformer transformer = null;
         try {
