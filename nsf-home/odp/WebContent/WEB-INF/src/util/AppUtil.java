@@ -75,7 +75,7 @@ public enum AppUtil {
 			    md.update(email.getBytes());
 			    byte[] digest = md.digest();
 			    String md5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
-				return "http://www.gravatar.com/avatar/" + md5 + "?d=wavatar&s=256";
+				return "https://www.gravatar.com/avatar/" + md5 + "?d=wavatar&s=256";
 			} catch(NotesException | NoSuchAlgorithmException e) {
 				throw new RuntimeException(e);
 			}

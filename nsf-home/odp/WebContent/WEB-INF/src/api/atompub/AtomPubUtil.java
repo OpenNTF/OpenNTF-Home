@@ -20,6 +20,7 @@ import org.w3c.dom.Element;
 
 import util.AppDomUtil;
 
+@SuppressWarnings("HttpUrlsUsage")
 enum AtomPubUtil {
     ;
 

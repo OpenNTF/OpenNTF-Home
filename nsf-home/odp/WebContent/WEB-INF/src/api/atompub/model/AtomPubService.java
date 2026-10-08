@@ -18,6 +18,7 @@ package api.atompub.model;
 import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+@SuppressWarnings("HttpUrlsUsage")
 @XmlRootElement(name="service", namespace=AtomPubService.NS_ATOMPUB)
 public class AtomPubService {
 	public static final String NS_ATOMPUB = "http://purl.org/atom/app#";

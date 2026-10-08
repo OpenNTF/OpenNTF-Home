@@ -19,6 +19,7 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+@SuppressWarnings("HttpUrlsUsage")
 @XmlRootElement(name="rss")
 public class Rss {
 	public static final String NS_CONTENT = "http://purl.org/rss/1.0/modules/content/";
