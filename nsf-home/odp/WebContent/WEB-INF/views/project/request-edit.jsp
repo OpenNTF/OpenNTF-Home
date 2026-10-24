@@ -30,7 +30,7 @@
 				
 			</dl>
 			
-			<h3><label for="docDescription"><c:out value="${translation.description}"/></label></h3>
+			<h3><label for="body"><c:out value="${translation.description}"/></label></h3>
 			<p><textarea class="markdown-edit" id="body" name="body"><c:out value="${doc.bodyMarkdown}"/></textarea></p>
 			
 			<input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>

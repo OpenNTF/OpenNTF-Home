@@ -38,8 +38,14 @@
 		<link rel="EditURI" type="application/rsd+xml" href="${mvc.basePath}/rsd.xml" />
 		
 		<script type="text/javascript" src="webjars/hotwired__turbo/8.0.13/dist/turbo.es2017-umd.js"></script>
-				
+
 		<script type="text/javascript" src="customElements.js"></script>
+
+        <meta name="twitter:creator" content="@openntf">
+        <meta name="og:type" content="website">
+        <meta name="og:image" content="${urlBean.requestUri}img/OpenNTF_Logo_social.png">
+        <meta name="og:title" content="OpenNTF.org - The Open Source Community for Collaboration Solutions">
+        <meta name="og:url" content="https://openntf.org">
 		
 		<title><c:out value="${translation.appTitle}"/></title>
 	</head>

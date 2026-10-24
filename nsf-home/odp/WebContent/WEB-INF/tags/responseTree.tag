@@ -30,6 +30,8 @@
 				<c:out value="${encoder.toCommonName(resp.author)}"/>
 				|
 				<time-ago value="${fn:escapeXml(resp.date)}"></time-ago>
+				|
+				<a href="${mvc.basePath}/projects/${encoder.urlEncode(project.name)}/responses/${resp.documentId}/@new"><c:out value="${translation.reply}"/></a>
 			</footer>
 		</article>
 	</c:forEach>
